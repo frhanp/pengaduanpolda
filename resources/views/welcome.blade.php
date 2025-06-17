@@ -110,6 +110,44 @@
             </a>
         </div>
     </section>
+    <section id="laporkan" class="p-10 max-w-7xl mx-auto">
+        <h2 class="text-4xl font-bold mb-6 text-blue-700 animate-fadeInUp">
+            Laporkan Pengaduan Anda
+        </h2>
+    
+        @if (session('success'))
+            <div class="p-4 mb-4 text-green-800 bg-green-200 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+    
+        <form action="{{ route('pengaduans.store') }}" method="POST" class="glass p-6 rounded-2xl space-y-4">
+            @csrf
+            <div>
+                <label for="title" class="block font-semibold mb-2">Judul Pengaduan</label>
+                <input id="title" name="title" type="text" required
+                       class="w-full p-3 border rounded-md">
+            </div>
+    
+            <div>
+                <label for="location" class="block font-semibold mb-2">Lokasi Kejadian</label>
+                <input id="location" name="location" type="text" required
+                       class="w-full p-3 border rounded-md">
+            </div>
+    
+            <div>
+                <label for="description" class="block font-semibold mb-2">Deskripsi</label>
+                <textarea id="description" name="description" rows="5" required
+                          class="w-full p-3 border rounded-md"></textarea>
+            </div>
+    
+            <button type="submit"
+                    class="px-6 py-2.5 font-semibold text-gray-100 bg-blue-600 rounded-full shadow-lg transition transform hover:bg-blue-500 hover:shadow-blue-500/50 hover:scale-105">
+                Kirim Pengaduan
+            </button>
+        </form>
+    </section>
+    
 
 
 
