@@ -15,6 +15,7 @@
     <style>[x-cloak] { display: none !important; }</style>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 
 <body x-data="{ sidebarOpen: false }" class="font-sans antialiased bg-gray-100">
@@ -72,6 +73,7 @@
             </main>
         </div>
     </div>
+    @stack('scripts')
 </body>
 
 </html>
