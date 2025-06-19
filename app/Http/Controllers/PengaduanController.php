@@ -22,6 +22,19 @@ class PengaduanController extends Controller
         return view('welcome', ['laporan' => $laporanDiPeta]);
     }
 
+    public function petaRawan()
+{
+    // Logika ini sama persis dengan controller 'index' Anda yang sudah berfungsi.
+    $laporanDiPeta = Pengaduan::select('latitude', 'longitude', 'isi_laporan', 'status')
+        ->whereNotNull('latitude')
+        ->whereNotNull('longitude')
+        ->latest()
+        ->get();
+        
+    // Kirim data ke view baru 'peta-rawan' dengan nama variabel 'laporan'.
+    return view('peta-rawan', ['laporan' => $laporanDiPeta]);
+}
+
     public function store(StorePengaduanRequest $request)
     {
         // Controller menjadi sangat simpel! Hanya menyimpan data yang sudah divalidasi.

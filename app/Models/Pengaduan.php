@@ -23,6 +23,7 @@ class Pengaduan extends Model
         'alamat_pelapor',
         'no_hp_pelapor',
         'isi_laporan',
+        'tujuan_polsek',
         'latitude',
         'longitude',
         'tanggal_laporan',

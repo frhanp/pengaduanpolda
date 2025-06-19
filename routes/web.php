@@ -15,6 +15,9 @@ Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengadua
 //     return view('welcome');
 // });
 
+// [PENAMBAHAN] Rute baru untuk halaman Peta Kerawanan
+Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

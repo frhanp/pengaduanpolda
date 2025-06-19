@@ -23,6 +23,7 @@ class StorePengaduanRequest extends FormRequest
             'alamat_pelapor' => 'nullable|string',
             'no_hp_pelapor' => 'required|string|max:20',
             'isi_laporan' => 'required|string',
+            'tujuan_polsek' => 'nullable|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ];
