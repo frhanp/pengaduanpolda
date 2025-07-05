@@ -36,26 +36,32 @@ class PengaduanController extends Controller
         return view('peta-rawan', ['laporan' => $laporanDiPeta]);
     }
 
-    public function store(StorePengaduanRequest $request)
+    public function store(Request $request)
     {
-        // 1. Ambil semua data yang sudah divalidasi oleh StorePengaduanRequest
-        $validatedData = $request->validated();
+        // 1. Validasi semua input langsung di sini
+        $validatedData = $request->validate([
+            'nama_pelapor'      => 'required|string|max:255',
+            'no_hp_pelapor'     => 'required|string|max:20',
+            'umur_pelapor'      => 'nullable|integer|min:1',
+            'pekerjaan_pelapor' => 'nullable|string|max:100',
+            'alamat_pelapor'    => 'nullable|string',
+            'isi_laporan'       => 'required|string',
+            'latitude'          => 'required|numeric',
+            'longitude'         => 'required|numeric',
+            'tujuan_polsek'     => 'required|string|max:255',
+            'nik'               => 'required|numeric|digits:16',
+            'foto_ktp'          => 'required|image|mimes:jpeg,png,jpg|max:10000',
+        ]);
 
-        // 2. Proses upload file foto KTP jika ada
+        // 2. Proses upload file foto KTP (logika ini tidak berubah)
         if ($request->hasFile('foto_ktp')) {
-            // Simpan file ke storage/app/public/ktp
-            // Nama file akan unik berdasarkan waktu upload
             $path = $request->file('foto_ktp')->store('public/ktp');
-
-            // Simpan path file yang bisa diakses publik ke dalam data yang akan disimpan
-            // Kita gunakan Storage::url() untuk mendapatkan URL yang benar
             $validatedData['foto_ktp'] = Storage::url($path);
         }
 
-        // 3. Simpan semua data (termasuk path foto KTP) ke database
+        // 3. Simpan semua data ke database (logika ini tidak berubah)
         Pengaduan::create($validatedData);
         
-
         return redirect('/')->with('success', 'Laporan Anda telah berhasil dikirim. Terima kasih!');
     }
 

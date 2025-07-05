@@ -20,14 +20,24 @@ use App\Http\Controllers\Reskrim\DashboardController as ReskrimDashboardControll
 // RUTE PUBLIK (Dapat Diakses Semua Pengunjung)
 //======================================================================
 
+Route::middleware('web')->group(function () {
+    Route::get('/', [PengaduanController::class, 'index'])->name('landing');
+    Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+    Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
+    Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
+    
+    // Jika Anda punya rute lacak, masukkan juga di sini
+    // Route::get('/lacak', [LacakController::class, 'index'])->name('lacak.index');
+});
+
 // Halaman utama untuk membuat pengaduan
-Route::get('/', [PengaduanController::class, 'index'])->name('landing');
-Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+// Route::get('/', [PengaduanController::class, 'index'])->name('landing');
+// Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
 
-// Halaman khusus untuk melihat peta sebaran kerawanan
-Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
+// // Halaman khusus untuk melihat peta sebaran kerawanan
+// Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
 
-Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
+// Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
 
 
 //======================================================================

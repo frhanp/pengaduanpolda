@@ -14,7 +14,7 @@
         </div>
     </section>
 
-    @include('partials.report-form')
+    @include('partials.report-form', ['errors' => $errors])
 
     <section id="tentang" class="p-10 max-w-7xl mx-auto text-center">
         <h2 class="text-4xl font-bold mb-6 text-blue-700">Tentang PoldaCare</h2>
