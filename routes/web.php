@@ -27,6 +27,8 @@ Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengadua
 // Halaman khusus untuk melihat peta sebaran kerawanan
 Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
 
+Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
+
 
 //======================================================================
 // RUTE SETELAH LOGIN
@@ -45,26 +47,38 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // --- Rute Khusus untuk Role: ADMIN ---
+    // == RUTE KHUSUS ADMIN ==
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        // Dashboard untuk statistik
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/pengaduan/{pengaduan}', [AdminDashboardController::class, 'show'])->name('dashboard.show');
-        
-        // Aksi untuk memproses pengaduan
-        Route::post('/pengaduan/{pengaduan}/verify', [AdminDashboardController::class, 'verify'])->name('dashboard.verify');
-        Route::post('/pengaduan/{pengaduan}/forward', [AdminDashboardController::class, 'forward'])->name('dashboard.forward');
 
-        // Rute untuk membuat STPL
-        Route::post('/pengaduan/{pengaduan}/stpl', [StplController::class, 'store'])->name('stpl.store');
+        // [BARU] Rute untuk Manajemen Pengaduan
+        Route::get('/pengaduan', [AdminDashboardController::class, 'listPengaduan'])->name('pengaduan.list');
+        Route::get('/pengaduan/{pengaduan}', [AdminDashboardController::class, 'show'])->name('pengaduan.show');
+
+        // Aksi untuk memproses pengaduan (tidak berubah)
+        Route::post('/pengaduan/{pengaduan}/verify', [AdminDashboardController::class, 'verify'])->name('pengaduan.verify');
+        Route::post('/pengaduan/{pengaduan}/forward', [AdminDashboardController::class, 'forward'])->name('pengaduan.forward');
+
+        // [PERUBAHAN] Rute untuk Manajemen STPL
+        Route::get('/stpl', [StplController::class, 'index'])->name('stpl.index');
+        // Mengembalikan rute untuk menampilkan form
+        Route::get('/stpl/create/{pengaduan}', [StplController::class, 'create'])->name('stpl.create');
+        Route::post('/stpl', [StplController::class, 'store'])->name('stpl.store');
+        Route::get('/stpl/{stpl}/download', [StplController::class, 'download'])->name('stpl.download');
     });
 
-    // --- Rute Khusus untuk Role: RESKRIM ---
+    // == RUTE KHUSUS RESKRIM ==
     Route::middleware('role:reskrim')->prefix('reskrim')->name('reskrim.')->group(function () {
+        // Dashboard untuk ringkasan
         Route::get('/dashboard', [ReskrimDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/pengaduan/{pengaduan}', [ReskrimDashboardController::class, 'show'])->name('dashboard.show');
+
+        // [BARU] Rute untuk Manajemen Tugas
+        Route::get('/tugas', [ReskrimDashboardController::class, 'listTugas'])->name('tugas.list');
+        Route::get('/tugas/{pengaduan}', [ReskrimDashboardController::class, 'show'])->name('tugas.show');
 
         // Aksi untuk update status
-        Route::post('/pengaduan/{pengaduan}/update-status', [ReskrimDashboardController::class, 'updateStatus'])->name('dashboard.updateStatus');
+        Route::post('/tugas/{pengaduan}/update-status', [ReskrimDashboardController::class, 'updateStatus'])->name('tugas.updateStatus');
     });
 });
 
@@ -72,4 +86,4 @@ Route::middleware('auth')->group(function () {
 //======================================================================
 // RUTE AUTENTIKASI BAWAAN (Login, Register, dll)
 //======================================================================
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -7,7 +7,6 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 @endpush
 
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -39,7 +38,6 @@
                 </div>
             @endif
 
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {{-- Kolom Kiri: Detail Laporan --}}
                 <div class="md:col-span-2 bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -49,8 +47,8 @@
                             <dl class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
                                 <dt class="font-medium text-gray-500">Nama</dt><dd class="text-gray-900">{{ $pengaduan->nama_pelapor }}</dd>
                                 <dt class="font-medium text-gray-500">No. HP</dt><dd class="text-gray-900">{{ $pengaduan->no_hp_pelapor }}</dd>
+                                <dt class="font-medium text-gray-500">NIK</dt><dd class="text-gray-900">{{ $pengaduan->nik ?? '-' }}</dd>
                                 <dt class="font-medium text-gray-500">Umur</dt><dd class="text-gray-900">{{ $pengaduan->umur_pelapor ?? '-' }}</dd>
-                                <dt class="font-medium text-gray-500">Pekerjaan</dt><dd class="text-gray-900">{{ $pengaduan->pekerjaan_pelapor ?? '-' }}</dd>
                                 <dt class="font-medium text-gray-500 col-span-2">Alamat</dt><dd class="text-gray-900 col-span-2">{{ $pengaduan->alamat_pelapor ?? '-' }}</dd>
                             </dl>
                         </div>
@@ -64,7 +62,6 @@
                             <h3 class="text-lg font-bold text-gray-800">Lokasi Kejadian</h3>
                             <div id="map" class="mt-2 rounded-lg"></div>
                         </div>
-
                     </div>
                 </div>
 
@@ -73,7 +70,7 @@
                     {{-- Box Status --}}
                     <div class="bg-white p-6 shadow-sm sm:rounded-lg">
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Status & Tindak Lanjut</h3>
-                         <p class="text-sm text-gray-500 mb-1">Status Saat Ini:</p>
+                        <p class="text-sm text-gray-500 mb-1">Status Saat Ini:</p>
                         @php
                             $statusClass = '';
                             if ($pengaduan->status == 'Baru') $statusClass = 'bg-blue-100 text-blue-800';
@@ -85,6 +82,7 @@
                         <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full {{ $statusClass }}">
                             {{ $pengaduan->status }}
                         </span>
+                        {{-- Anda perlu mendefinisikan relasi 'verifier' dan 'assignee' di model Pengaduan agar ini berfungsi --}}
                         <p class="text-xs text-gray-500 mt-4">Diverifikasi oleh: {{ $pengaduan->verifier->name ?? 'Belum ada' }}</p>
                         <p class="text-xs text-gray-500">Diteruskan ke: {{ $pengaduan->assignee->name ?? 'Belum ada' }}</p>
                     </div>
@@ -92,56 +90,40 @@
                     {{-- Form Aksi Verifikasi --}}
                     @if ($pengaduan->status === 'Baru')
                     <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-                        <form action="{{ route('admin.dashboard.verify', $pengaduan) }}" method="POST">
+                        {{-- [PERBAIKAN] Menggunakan nama rute yang benar --}}
+                        <form action="{{ route('admin.pengaduan.verify', $pengaduan) }}" method="POST">
                             @csrf
                             <button type="submit" class="w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-600 transition">Verifikasi Laporan Ini</button>
                         </form>
                     </div>
                     @endif
 
-                    {{-- Form Aksi STPL --}}
-                    @if ($pengaduan->status !== 'Baru')
-                    <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">STPL</h3>
-                        @if ($pengaduan->stpl)
-                            <p class="text-sm text-gray-600">STPL sudah dibuat.</p>
-                            <p class="text-sm font-semibold text-gray-800">Nomor: {{ $pengaduan->stpl->nomor_stpl }}</p>
-                            <p class="text-sm text-gray-600">Tanggal: {{ \Carbon\Carbon::parse($pengaduan->stpl->tanggal_dibuat)->format('d M Y') }}</p>
-                        @else
-                            <form action="{{ route('admin.stpl.store', $pengaduan) }}" method="POST" class="space-y-3">
-                                @csrf
-                                <div>
-                                    <label for="nomor_stpl" class="text-sm font-medium text-gray-700">Nomor STPL</label>
-                                    <input type="text" name="nomor_stpl" id="nomor_stpl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                                </div>
-                                <div>
-                                    <label for="tanggal_dibuat" class="text-sm font-medium text-gray-700">Tanggal Dibuat</label>
-                                    <input type="date" name="tanggal_dibuat" id="tanggal_dibuat" value="{{ date('Y-m-d') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                                </div>
-                                <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition">Buat STPL</button>
-                            </form>
-                        @endif
-                    </div>
-                    @endif
-                    
                     {{-- Form Aksi Teruskan ke Reskrim --}}
                     @if ($pengaduan->status === 'Diverifikasi' && !$pengaduan->assigned_to_reskrim_id)
                      <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Teruskan Laporan</h3>
-                        <form action="{{ route('admin.dashboard.forward', $pengaduan) }}" method="POST">
-                            @csrf
-                            <label for="assigned_to_reskrim_id" class="text-sm font-medium text-gray-700">Pilih Anggota Reskrim</label>
-                            <select name="assigned_to_reskrim_id" id="assigned_to_reskrim_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                                <option value="">-- Pilih Anggota --</option>
-                                @foreach ($reskrimUsers as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                            <button type="submit" class="mt-4 w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-600 transition">Teruskan ke Reskrim</button>
-                        </form>
-                    </div>
+                         <h3 class="text-lg font-bold text-gray-800 mb-4">Teruskan Laporan</h3>
+                         {{-- [PERBAIKAN] Menggunakan nama rute yang benar --}}
+                         <form action="{{ route('admin.pengaduan.forward', $pengaduan) }}" method="POST">
+                             @csrf
+                             <label for="assigned_to_reskrim_id" class="text-sm font-medium text-gray-700">Pilih Anggota Reskrim</label>
+                             <select name="assigned_to_reskrim_id" id="assigned_to_reskrim_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                                 <option value="">-- Pilih Anggota --</option>
+                                 @foreach ($reskrimUsers as $user)
+                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                 @endforeach
+                             </select>
+                             <button type="submit" class="mt-4 w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-600 transition">Teruskan ke Reskrim</button>
+                         </form>
+                     </div>
                     @endif
 
+                    {{-- Tombol Aksi STPL --}}
+                    <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+                        <a href="{{ route('admin.stpl.create', $pengaduan->id) }}" 
+                           class="block w-full text-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
+                            Buat / Lihat STPL
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,7 +132,6 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Cek jika ada data latitude dan longitude
             const lat = {{ $pengaduan->latitude ?? 'null' }};
             const lng = {{ $pengaduan->longitude ?? 'null' }};
 
@@ -164,7 +145,6 @@
                 L.marker([lat, lng]).addTo(map)
                     .bindPopup('Lokasi kejadian yang dilaporkan.');
             } else {
-                // Jika tidak ada koordinat, tampilkan pesan
                 document.getElementById('map').innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500">Lokasi tidak ditandai oleh pelapor.</div>';
             }
         });

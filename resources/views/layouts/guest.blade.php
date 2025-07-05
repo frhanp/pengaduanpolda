@@ -77,8 +77,11 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 glass">
         <div class="max-w-7xl mx-auto flex items-center justify-between p-6">
-            <a href="#" class="text-3xl font-bold text-blue-700 tracking-tight">PoldaCare</a>
+            <a href="/" class="text-3xl font-bold text-blue-700 tracking-tight">PoldaCare</a>
             <nav class="hidden lg:flex space-x-8 items-center">
+                <a href="{{ route('lacak.aduan') }}"
+               class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Lacak Aduan<span
+                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span></a>
                 <a href="{{ route('peta.rawan') }}"
                     class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Peta Kerawanan<span
                         class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span></a>
@@ -128,6 +131,32 @@
     </footer>
 
     @stack('scripts')
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 3000, // Notifikasi akan hilang setelah 3 detik
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
 </body>
 
 </html>

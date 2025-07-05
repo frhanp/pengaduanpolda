@@ -54,5 +54,27 @@ class Stpl extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'dibuat_oleh_admin_id');
-    }//
+    }
+
+    /**
+     * [FUNGSI BARU]
+     * Membuat nomor STPL unik secara otomatis.
+     * Format: STPL/TAHUN/BULAN/NOMOR_URUT
+     */
+    public static function generateStplNumber(): string
+    {
+        $year = date('Y');
+        $month = date('m');
+
+        // Hitung berapa banyak STPL yang sudah ada di bulan dan tahun ini
+        $count = self::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+
+        // Nomor urut berikutnya (ditambah 1)
+        $nextNumber = $count + 1;
+
+        // Format nomor urut menjadi 4 digit dengan angka 0 di depan (e.g., 0001, 0012)
+        $formattedNumber = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+        return "STPL-{$year}-{$month}-{$formattedNumber}";
+    }
 }

@@ -1,4 +1,4 @@
-{{-- Menambahkan Aset Leaflet di Halaman Ini Saja --}}
+
 @push('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style> #map { height: 300px; z-index: 10;} </style>
@@ -71,7 +71,7 @@
                             $statusClass = '';
                             if ($pengaduan->status == 'Diteruskan ke Reskrim') $statusClass = 'bg-indigo-100 text-indigo-800';
                             elseif ($pengaduan->status == 'Diproses') $statusClass = 'bg-purple-100 text-purple-800';
-                            elseif ($pengaduan->status == 'Selesai') $statusClass = 'bg-green-100 text-green-800';
+                            elseif ($pengaduan->status == 'Diteruskan ke Penyidik') $statusClass = 'bg-teal-100 text-teal-800';
                         @endphp
                         <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full {{ $statusClass }}">
                             {{ $pengaduan->status }}
@@ -82,12 +82,13 @@
                     @if ($pengaduan->status !== 'Selesai')
                     <div class="bg-white p-6 shadow-sm sm:rounded-lg">
                         <h3 class="text-lg font-bold text-gray-800 mb-4">Update Status Proses</h3>
-                        <form action="{{ route('reskrim.dashboard.updateStatus', $pengaduan) }}" method="POST">
+                        <form action="{{ route('reskrim.tugas.updateStatus', $pengaduan) }}" method="POST">
                             @csrf
                             <label for="status" class="text-sm font-medium text-gray-700">Ubah Status Menjadi</label>
                             <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                                <option value="Diproses" @if($pengaduan->status == 'Diproses') selected @endif>Diproses</option>
-                                <option value="Selesai" @if($pengaduan->status == 'Selesai') selected @endif>Selesai</option>
+                                 {{-- [PERUBAHAN] Hanya ada 2 opsi --}}
+                                 <option value="Diproses" @if($pengaduan->status == 'Diproses') selected @endif>Diproses</option>
+                                 <option value="Diteruskan ke Penyidik">Diteruskan ke Penyidik</option>
                             </select>
                             <button type="submit" class="mt-4 w-full bg-purple-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-600 transition">Update Status</button>
                         </form>

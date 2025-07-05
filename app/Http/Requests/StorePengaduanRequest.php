@@ -26,6 +26,8 @@ class StorePengaduanRequest extends FormRequest
             'tujuan_polsek' => 'nullable|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
+            'nik' => 'required|string|max:16',
+            'foto_ktp' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

@@ -22,6 +22,8 @@ class Pengaduan extends Model
         'pekerjaan_pelapor',
         'alamat_pelapor',
         'no_hp_pelapor',
+        'nik',
+        'foto_ktp',
         'isi_laporan',
         'tujuan_polsek',
         'latitude',
@@ -68,4 +70,6 @@ class Pengaduan extends Model
     {
         return $this->belongsTo(User::class, 'assigned_to_reskrim_id');
     }
+
+    
 }
