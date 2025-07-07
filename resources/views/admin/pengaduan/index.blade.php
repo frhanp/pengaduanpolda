@@ -9,7 +9,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
                     <!-- [PENAMBAHAN] Form Filter -->
                     <form id="filter-form" method="GET" action="{{ route('admin.pengaduan.list') }}">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -60,9 +59,24 @@
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $pengaduan->nama_pelapor }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $pengaduan->created_at->format('d M Y, H:i') }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">{{ $pengaduan->status }}</span></td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @php
+                                                $statusClass = '';
+                                                if ($pengaduan->status == 'Baru') $statusClass = 'bg-blue-100 text-blue-800';
+                                                elseif ($pengaduan->status == 'Diverifikasi') $statusClass = 'bg-yellow-100 text-yellow-800';
+                                                elseif ($pengaduan->status == 'Diteruskan ke Reskrim') $statusClass = 'bg-indigo-100 text-indigo-800';
+                                                elseif ($pengaduan->status == 'Diproses') $statusClass = 'bg-purple-100 text-purple-800';
+                                                elseif ($pengaduan->status == 'Diteruskan ke Penyidik') $statusClass = 'bg-teal-100 text-teal-800';
+                                                elseif ($pengaduan->status == 'Selesai') $statusClass = 'bg-green-100 text-green-800';
+                                            @endphp
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
+                                                {{ $pengaduan->status }}
+                                            </span>
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{ route('admin.pengaduan.show', $pengaduan->id) }}" class="text-indigo-600 hover:text-indigo-900">Lihat Detail</a>
+                                            <a href="{{ route('admin.pengaduan.show', $pengaduan->id) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Lihat Detail
+                                            </a>
                                         </td>
                                     </tr>
                                 @empty
@@ -74,7 +88,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{-- [PENTING] Menambahkan withQueryString agar filter tetap ada saat ganti halaman --}}
+                       
                         {{ $pengaduans->withQueryString()->links() }}
                     </div>
                 </div>

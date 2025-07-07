@@ -94,13 +94,20 @@ class StplController extends Controller
             'dibuat_oleh_admin_id' => Auth::id(),
         ]);
 
-        // 4. Buat dan unduh PDF
-        $dataUntukPdf = [
-            'stpl' => $stpl->load('creator', 'pengaduan'),
-            'pengaduan' => $pengaduan,
-        ];
-        $pdf = Pdf::loadView('admin.stpl.pdf_template', $dataUntukPdf);
-        return $pdf->download('STPL-' . $stpl->nomor_stpl . '.pdf');
+        // 4. [PERUBAHAN] Hapus logika pembuatan PDF dari sini.
+        //    Ganti dengan redirect kembali ke halaman show dengan pesan sukses
+        //    dan "titipan" URL download.
+        return redirect()->route('admin.pengaduan.show', $pengaduan->id)
+                         ->with('success', 'STPL berhasil dibuat.');
+                        //  ->with('stpl_download_url', route('admin.stpl.download', $stpl->id));
+
+        // // 4. Buat dan unduh PDF
+        // $dataUntukPdf = [
+        //     'stpl' => $stpl->load('creator', 'pengaduan'),
+        //     'pengaduan' => $pengaduan,
+        // ];
+        // $pdf = Pdf::loadView('admin.stpl.pdf_template', $dataUntukPdf);
+        // return $pdf->download('STPL-' . $stpl->nomor_stpl . '.pdf');
     }
     
 

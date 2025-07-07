@@ -17,9 +17,6 @@ use App\Http\Controllers\UploadTestController;
 |
 */
 
-Route::get('/test-upload', [UploadTestController::class, 'showForm'])->name('test.upload.form');
-Route::post('/test-upload', [UploadTestController::class, 'handleUpload'])->name('test.upload.handle');
-
 //======================================================================
 // RUTE PUBLIK (Dapat Diakses Semua Pengunjung)
 //======================================================================

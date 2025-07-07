@@ -134,44 +134,42 @@
                     @endif
 
                     {{-- Form Aksi Teruskan ke Reskrim --}}
-                    @if ($pengaduan->status === 'Diverifikasi' && !$pengaduan->assigned_to_reskrim_id)
-                        <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4">Teruskan Laporan</h3>
-                            {{-- [PERBAIKAN] Menggunakan nama rute yang benar --}}
-                            <form action="{{ route('admin.pengaduan.forward', $pengaduan) }}" method="POST">
-                                @csrf
-                                <label for="assigned_to_reskrim_id" class="text-sm font-medium text-gray-700">Pilih
-                                    Anggota Reskrim</label>
-                                <select name="assigned_to_reskrim_id" id="assigned_to_reskrim_id"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    required>
-                                    <option value="">-- Pilih Anggota --</option>
-                                    @foreach ($reskrimUsers as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                    @endforeach
-                                </select>
-                                <button type="submit"
-                                    class="mt-4 w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-600 transition">Teruskan
-                                    ke Reskrim</button>
-                            </form>
-                        </div>
-                    @endif
-                    {{-- Tombol Aksi STPL --}}
-                    @if ($pengaduan->status === 'Diverifikasi' && !$pengaduan->stpl)
-                        <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-                            <a href="{{ route('admin.stpl.create', $pengaduan->id) }}"
-                                class="block w-full text-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700">
-                                Buat STPL
-                            </a>
-                        </div>
-                    @elseif($pengaduan->stpl)
-                        <div class="bg-white p-6 shadow-sm sm:rounded-lg text-center">
-                            <p class="text-sm font-medium text-gray-700">STPL sudah dibuat.</p>
-                            <a href="{{ route('admin.stpl.download', $pengaduan->stpl->id) }}"
-                                class="text-indigo-600 hover:text-indigo-900 text-sm">
-                                Cetak Ulang
-                            </a>
-                        </div>
+                    @if ($pengaduan->status === 'Diverifikasi')
+                        {{-- Cek apakah STPL sudah dibuat --}}
+                        @if (!$pengaduan->stpl)
+                            {{-- Jika BELUM, tampilkan tombol Buat STPL --}}
+                            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+                                <a href="{{ route('admin.stpl.create', $pengaduan->id) }}" class="block w-full text-center px-4 py-2 bg-green-600 border rounded-md font-semibold text-xs text-white uppercase hover:bg-green-700">
+                                    Langkah Selanjutnya: Buat STPL
+                                </a>
+                            </div>
+                        @else
+                            {{-- Jika STPL SUDAH ADA, cek apakah sudah diteruskan --}}
+                            @if (!$pengaduan->assigned_to_reskrim_id)
+                                {{-- Jika BELUM diteruskan, tampilkan form Teruskan ke Reskrim --}}
+                                <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+                                    <h3 class="text-lg font-bold text-gray-800 mb-4">Teruskan Laporan</h3>
+                                    <form action="{{ route('admin.pengaduan.forward', $pengaduan) }}" method="POST">
+                                        @csrf
+                                        <label for="assigned_to_reskrim_id" class="text-sm font-medium text-gray-700">Pilih Anggota Reskrim</label>
+                                        <select name="assigned_to_reskrim_id" id="assigned_to_reskrim_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                            <option value="">-- Pilih Anggota --</option>
+                                            @foreach ($reskrimUsers as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <button type="submit" class="mt-4 w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-600 transition">Teruskan ke Reskrim</button>
+                                    </form>
+                                </div>
+                            @endif
+                            {{-- Tampilkan info STPL sudah dibuat --}}
+                            <div class="bg-white p-6 shadow-sm sm:rounded-lg text-center">
+                                <p class="text-sm font-medium text-green-700">✔ STPL sudah dibuat.</p>
+                                <a href="{{ route('admin.stpl.download', $pengaduan->stpl->id) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">
+                                    Cetak Ulang
+                                </a>
+                            </div>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -179,25 +177,34 @@
     </div>
 
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const lat = {{ $pengaduan->latitude ?? 'null' }};
-                const lng = {{ $pengaduan->longitude ?? 'null' }};
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Logika untuk menampilkan peta lokasi (tidak berubah)
+            const lat = {{ $pengaduan->latitude ?? 'null' }};
+            const lng = {{ $pengaduan->longitude ?? 'null' }};
 
-                if (lat && lng) {
-                    const map = L.map('map').setView([lat, lng], 15);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '© OpenStreetMap contributors'
-                    }).addTo(map);
+            if (lat && lng) {
+                const map = L.map('map').setView([lat, lng], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
 
-                    L.marker([lat, lng]).addTo(map)
-                        .bindPopup('Lokasi kejadian yang dilaporkan.');
-                } else {
-                    document.getElementById('map').innerHTML =
-                        '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500">Lokasi tidak ditandai oleh pelapor.</div>';
-                }
-            });
-        </script>
-    @endpush
+                L.marker([lat, lng]).addTo(map)
+                    .bindPopup('Lokasi kejadian yang dilaporkan.');
+            } else {
+                document.getElementById('map').innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500">Lokasi tidak ditandai oleh pelapor.</div>';
+            }
+
+            // [PENAMBAHAN] Logika untuk memicu download PDF secara otomatis
+            @if(session('stpl_download_url'))
+                // Buat jeda singkat agar pengguna sempat melihat notifikasi sukses
+                setTimeout(function() {
+                    // Arahkan browser ke URL download, ini akan memulai unduhan
+                    window.location.href = '{{ session('stpl_download_url') }}';
+                }, 1500); // Jeda 1.5 detik
+            @endif
+        });
+    </script>
+@endpush
 </x-app-layout>
