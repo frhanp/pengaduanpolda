@@ -49,13 +49,18 @@ class PengaduanController extends Controller
             'latitude'          => 'required|numeric',
             'longitude'         => 'required|numeric',
             'tujuan_polsek'     => 'required|string|max:255',
-            'nik'               => 'required|numeric|digits:16',
+            'nik'               => 'required|numeric',
             'foto_ktp'          => 'required|image|mimes:jpeg,png,jpg|max:10000',
         ]);
 
-        // 2. Proses upload file foto KTP dengan jaring pengaman
+        // 2. Proses upload file foto KTP
         if ($request->hasFile('foto_ktp')) {
-            $path = $request->file('foto_ktp')->store('public/ktp');
+
+            // [PERBAIKAN UTAMA DI SINI]
+            // Argumen pertama: folder tujuan di dalam disk.
+            // Argumen kedua: nama disk yang akan digunakan.
+            // Ini akan menyimpan file ke: storage/app/public/ktp
+            $path = $request->file('foto_ktp')->store('ktp', 'public');
 
             // [PERBAIKAN] Cek apakah file berhasil disimpan
             if (!$path) {
@@ -63,7 +68,9 @@ class PengaduanController extends Controller
                 return redirect()->back()->with('error', 'Gagal mengupload file KTP. Pastikan folder storage dapat ditulis.');
             }
 
-            $validatedData['foto_ktp'] = Storage::url($path);
+            // $path sekarang akan berisi 'ktp/namafileacak.jpg'
+            // Ini adalah path yang benar untuk disimpan ke database.
+            $validatedData['foto_ktp'] = $path;
         }
 
         // 3. Simpan semua data ke database
