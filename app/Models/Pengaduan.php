@@ -70,6 +70,4 @@ class Pengaduan extends Model
     {
         return $this->belongsTo(User::class, 'assigned_to_reskrim_id');
     }
-
-    
 }

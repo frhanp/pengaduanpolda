@@ -6,6 +6,7 @@ use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StplController;
 use App\Http\Controllers\Reskrim\DashboardController as ReskrimDashboardController;
+use App\Http\Controllers\UploadTestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,9 @@ use App\Http\Controllers\Reskrim\DashboardController as ReskrimDashboardControll
 | File ini berisi semua rute untuk aplikasi web Anda.
 |
 */
+
+Route::get('/test-upload', [UploadTestController::class, 'showForm'])->name('test.upload.form');
+Route::post('/test-upload', [UploadTestController::class, 'handleUpload'])->name('test.upload.handle');
 
 //======================================================================
 // RUTE PUBLIK (Dapat Diakses Semua Pengunjung)

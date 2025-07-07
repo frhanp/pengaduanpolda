@@ -53,15 +53,22 @@ class PengaduanController extends Controller
             'foto_ktp'          => 'required|image|mimes:jpeg,png,jpg|max:10000',
         ]);
 
-        // 2. Proses upload file foto KTP (logika ini tidak berubah)
+        // 2. Proses upload file foto KTP dengan jaring pengaman
         if ($request->hasFile('foto_ktp')) {
             $path = $request->file('foto_ktp')->store('public/ktp');
+
+            // [PERBAIKAN] Cek apakah file berhasil disimpan
+            if (!$path) {
+                // Jika gagal, kembalikan dengan pesan error
+                return redirect()->back()->with('error', 'Gagal mengupload file KTP. Pastikan folder storage dapat ditulis.');
+            }
+
             $validatedData['foto_ktp'] = Storage::url($path);
         }
 
-        // 3. Simpan semua data ke database (logika ini tidak berubah)
+        // 3. Simpan semua data ke database
         Pengaduan::create($validatedData);
-        
+
         return redirect('/')->with('success', 'Laporan Anda telah berhasil dikirim. Terima kasih!');
     }
 

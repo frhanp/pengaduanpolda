@@ -83,8 +83,8 @@
                         <h3 class="text-lg font-bold text-gray-800 mb-4">Foto KTP Pelapor</h3>
                         @if ($pengaduan->foto_ktp)
                             {{-- Foto bisa diklik untuk melihat ukuran penuh di tab baru --}}
-                            <a href="{{ asset($pengaduan->foto_ktp) }}" target="_blank">
-                                <img src="{{ asset($pengaduan->foto_ktp) }}" alt="Foto KTP"
+                            <a href="{{ asset('storage/' . $pengaduan->foto_ktp) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $pengaduan->foto_ktp) }}" alt="Foto KTP"
                                     class="w-full h-auto rounded-lg border hover:opacity-90 transition">
                             </a>
                         @else
