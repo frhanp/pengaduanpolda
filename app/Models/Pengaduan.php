@@ -32,6 +32,10 @@ class Pengaduan extends Model
         'status',
         'verified_by_admin_id',
         'assigned_to_reskrim_id',
+        'agama',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'jenis_kelamin',
     ];
 
     /**
@@ -43,7 +47,9 @@ class Pengaduan extends Model
         'tanggal_laporan' => 'datetime',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
+        'tanggal_lahir' => 'date',
     ];
+    
 
     // RELASI: Mendefinisikan hubungan Pengaduan dengan tabel lain
 

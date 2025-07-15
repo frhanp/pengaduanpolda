@@ -16,9 +16,6 @@
         .text-center {
             text-align: center;
         }
-        .text-right {
-            text-align: right;
-        }
         .font-bold {
             font-weight: bold;
         }
@@ -60,12 +57,7 @@
             width: 5%;
             text-align: center;
         }
-        .footer-note {
-            margin-top: 50px;
-            font-size: 10pt;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-        }
+        .penutup { margin-top: 20px; }
         .signature-section {
             margin-top: 50px;
         }
@@ -102,25 +94,28 @@
         Berdasarkan Laporan Polisi Nomor: {{ $stpl->nomor_stpl }} tanggal {{ $stpl->tanggal_dibuat->translatedFormat('d F Y') }}, dengan ini diterangkan bahwa pada hari ini {{ $stpl->tanggal_dibuat->translatedFormat('l') }} tanggal {{ $stpl->tanggal_dibuat->translatedFormat('d F Y') }} telah diterima Laporan dari:
     </p>
 
+    {{-- [PERUBAHAN UTAMA] Tabel data pelapor dengan urutan dan format baru --}}
     <table class="content-table">
         <tr><td class="label">Nama</td><td class="separator">:</td><td>{{ $pengaduan->nama_pelapor }}</td></tr>
-        <tr><td class="label">Nomor Identitas (NIK)</td><td class="separator">:</td><td>{{ $pengaduan->nik }}</td></tr>
-        <tr><td class="label">Tempat/Tanggal Lahir</td><td class="separator">:</td><td>-</td></tr>
-        <tr><td class="label">Jenis Kelamin</td><td class="separator">:</td><td>-</td></tr>
-        <tr><td class="label">Pekerjaan</td><td class="separator">:</td><td>{{ $pengaduan->pekerjaan_pelapor ?? '-' }}</td></tr>
+        <tr><td class="label">NIK</td><td class="separator">:</td><td>{{ $pengaduan->nik }}</td></tr>
         <tr><td class="label">Kewarganegaraan</td><td class="separator">:</td><td>INDONESIA</td></tr>
+        <tr><td class="label">Jenis Kelamin</td><td class="separator">:</td><td>{{ $pengaduan->jenis_kelamin ?? '-' }}</td></tr>
+        <tr><td class="label">Tempat/Tanggal Lahir</td><td class="separator">:</td><td>{{ $pengaduan->tempat_lahir ?? '' }}, {{ $pengaduan->tanggal_lahir ? $pengaduan->tanggal_lahir->format('d-m-Y') : '-' }}</td></tr>
+        <tr><td class="label">Umur</td><td class="separator">:</td><td>{{ $pengaduan->umur_pelapor ? $pengaduan->umur_pelapor . ' Tahun' : '-' }}</td></tr>
+        <tr><td class="label">Pekerjaan</td><td class="separator">:</td><td>{{ $pengaduan->pekerjaan_pelapor ?? '-' }}</td></tr>
+        <tr><td class="label">Agama</td><td class="separator">:</td><td>{{ $pengaduan->agama ?? '-' }}</td></tr>
         <tr><td class="label">Alamat</td><td class="separator">:</td><td>{{ $pengaduan->alamat_pelapor ?? '-' }}</td></tr>
         <tr><td class="label">No. Telp/HP</td><td class="separator">:</td><td>{{ $pengaduan->no_hp_pelapor }}</td></tr>
     </table>
 
     <p>
-        Telah melaporkan tentang dugaan Tindak Pidana **{{ $pengaduan->jenis_tindak_pidana ?? '...' }}**, sebagaimana dimaksud dalam Pasal **{{ $pengaduan->pasal_dilanggar ?? '...' }}**, yang terjadi pada hari **...** tanggal **...** di **{{ $pengaduan->alamat_kejadian ?? '...' }}**.
+        Telah melaporkan tentang dugaan Tindak Pidana **...**, sebagaimana dimaksud dalam Pasal **...**, yang terjadi pada hari **...** tanggal **...** di **...**.
     </p>
     
     <p>Uraian singkat kejadian:</p>
     <p>{{ $pengaduan->isi_laporan }}</p>
 
-    <p style="margin-top: 30px;">
+    <p class="penutup">
         Demikian Surat Tanda Penerimaan Laporan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.
     </p>
 
@@ -134,10 +129,6 @@
             <p>NRP. ......................</p>
         </div>
     </div>
-
-    {{-- <div class="footer-note">
-        <strong>Catatan:</strong> Perkembangan penanganan perkara dapat saudara monitor melalui website https://sp2hp.bareskrim.polri.go.id/
-    </div> --}}
 
 </body>
 </html>

@@ -51,6 +51,10 @@ class PengaduanController extends Controller
             'tujuan_polsek'     => 'required|string|max:255',
             'nik'               => 'required|numeric',
             'foto_ktp'          => 'required|image|mimes:jpeg,png,jpg|max:10000',
+            'agama'             => 'nullable|string|max:50',
+            'tempat_lahir'      => 'nullable|string|max:255',
+            'tanggal_lahir'     => 'nullable|date',
+            'jenis_kelamin'     => 'nullable|string|max:20',
         ]);
 
         // 2. Proses upload file foto KTP

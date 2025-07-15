@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PengaduanController;
@@ -26,28 +27,27 @@ Route::middleware('web')->group(function () {
     Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
     Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
     Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
-    
-    // Jika Anda punya rute lacak, masukkan juga di sini
-    // Route::get('/lacak', [LacakController::class, 'index'])->name('lacak.index');
 });
-
-// Halaman utama untuk membuat pengaduan
-// Route::get('/', [PengaduanController::class, 'index'])->name('landing');
-// Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
-
-// // Halaman khusus untuk melihat peta sebaran kerawanan
-// Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
-
-// Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
 
 
 //======================================================================
 // RUTE SETELAH LOGIN
 //======================================================================
 
-// Rute dashboard umum yang memerlukan verifikasi email
 Route::get('/dashboard', function () {
+    $role = Auth::user()->role->value;
+
+    if ($role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if ($role === 'reskrim') {
+        return redirect()->route('reskrim.dashboard');
+    }
+
+    // Fallback jika ada peran lain atau tidak ada peran sama sekali
     return view('dashboard');
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Grup untuk semua rute yang memerlukan pengguna untuk login
