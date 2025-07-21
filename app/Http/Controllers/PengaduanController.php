@@ -25,14 +25,15 @@ class PengaduanController extends Controller
 
     public function petaRawan()
     {
-        // Logika ini sama persis dengan controller 'index' Anda yang sudah berfungsi.
-        $laporanDiPeta = Pengaduan::select('latitude', 'longitude', 'isi_laporan', 'status')
+        // [PERUBAHAN] Menambahkan 'tujuan_polsek' ke dalam select query
+        // agar data ini tersedia di view untuk ditampilkan saat hover.
+        $laporanDiPeta = Pengaduan::select('latitude', 'longitude', 'isi_laporan', 'status', 'tujuan_polsek')
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             ->latest()
             ->get();
 
-        // Kirim data ke view baru 'peta-rawan' dengan nama variabel 'laporan'.
+        // Kirim data ke view 'peta-rawan' dengan nama variabel 'laporan'.
         return view('peta-rawan', ['laporan' => $laporanDiPeta]);
     }
 
@@ -97,5 +98,27 @@ class PengaduanController extends Controller
         }
 
         return view('lacak', compact('pengaduans'));
+    }
+
+
+    public function showProfil()
+    {
+        return view('pages.profil');
+    }
+
+    /**
+     * [FUNGSI BARU] Menampilkan halaman Fitur.
+     */
+    public function showFitur()
+    {
+        return view('pages.fitur');
+    }
+
+    /**
+     * [FUNGSI BARU] Menampilkan halaman Kontak.
+     */
+    public function showKontak()
+    {
+        return view('pages.kontak');
     }
 }

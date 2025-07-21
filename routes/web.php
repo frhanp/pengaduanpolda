@@ -27,6 +27,10 @@ Route::middleware('web')->group(function () {
     Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
     Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
     Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
+
+    Route::get('/profil', [PengaduanController::class, 'showProfil'])->name('page.profil');
+    Route::get('/fitur', [PengaduanController::class, 'showFitur'])->name('page.fitur');
+    Route::get('/kontak', [PengaduanController::class, 'showKontak'])->name('page.kontak');
 });
 
 

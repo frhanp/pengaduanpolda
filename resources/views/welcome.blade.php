@@ -16,7 +16,7 @@
 
     @include('partials.report-form', ['errors' => $errors])
 
-    <section id="tentang" class="p-10 max-w-7xl mx-auto text-center">
+    {{-- <section id="tentang" class="p-10 max-w-7xl mx-auto text-center">
         <h2 class="text-4xl font-bold mb-6 text-blue-700">Tentang PoldaCare</h2>
         <p class="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">PoldaCare adalah platform resmi Polda untuk
             menerima laporan masyarakat secara online, dirancang untuk memberikan pelayanan yang cepat, transparan, dan
@@ -49,7 +49,7 @@
         <p class="text-gray-600 text-lg">Hubungi kami melalui email <a href="mailto:pengaduan@polda.go.id"
                 class="font-semibold text-blue-600 hover:text-blue-800 transition underline">{{ 'pengaduan@polda.go.id' }}</a>
             atau kunjungi kantor Polda terdekat.</p>
-    </section>
+    </section> --}}
 
     @push('scripts')
     <script>

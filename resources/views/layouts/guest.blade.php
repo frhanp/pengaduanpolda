@@ -88,15 +88,11 @@
                 <a href="{{ route('landing') }}#lapor"
                     class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Lapor<span
                         class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span></a>
-                <a href="{{ route('landing') }}#tentang"
-                    class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Tentang<span
-                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span></a>
-                <a href="{{ route('landing') }}#fitur"
-                    class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Fitur<span
-                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span></a>
-                <a href="{{ route('landing') }}#kontak"
-                    class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Kontak<span
-                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span></a>
+                
+                        <a href="{{ route('page.profil') }}" class="text-gray-700 font-medium hover:text-blue-600">Profil</a>
+                        <a href="{{ route('page.fitur') }}" class="text-gray-700 font-medium hover:text-blue-600">Fitur</a>
+                        <a href="{{ route('page.kontak') }}" class="text-gray-700 font-medium hover:text-blue-600">Kontak</a>
+
                 <a href="{{ route('login') }}"
                     class="px-6 py-2.5 font-semibold text-white bg-blue-600 rounded-full shadow-lg hover:bg-blue-700 hover:shadow-blue-600/50 transition transform hover:scale-105">Masuk
                     Petugas</a>
