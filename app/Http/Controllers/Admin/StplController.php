@@ -46,13 +46,16 @@ class StplController extends Controller
      * (Fungsi ini mungkin belum ada, kita tambahkan sekarang)
      */
     public function create(Pengaduan $pengaduan)
-    {
-        // Hanya tampilkan form jika laporan sudah diverifikasi dan belum punya STPL
-        if ($pengaduan->status !== 'Diverifikasi' || $pengaduan->stpl) {
-            return redirect()->route('admin.pengaduan.show', $pengaduan)->with('error', 'STPL tidak dapat dibuat untuk laporan ini. Pastikan sudah diverifikasi dan belum ada STPL sebelumnya.');
-       }
-        return view('admin.stpl.create', compact('pengaduan'));
+{
+    // [PERBAIKAN] Ubah logika untuk mengizinkan pembuatan STPL
+    // selama laporan sudah diproses (bukan 'Baru') dan belum punya STPL.
+    if ($pengaduan->status === 'Baru' || $pengaduan->stpl) {
+        return redirect()->route('admin.pengaduan.show', $pengaduan)
+                         ->with('error', 'STPL tidak dapat dibuat untuk laporan ini. Pastikan laporan sudah diverifikasi dan belum ada STPL sebelumnya.');
     }
+    
+    return view('admin.stpl.create', compact('pengaduan'));
+}
 
     /**
      * Menyimpan data STPL yang baru dibuat dan men-generate PDF.

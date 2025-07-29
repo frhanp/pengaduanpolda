@@ -81,6 +81,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/stpl/create/{pengaduan}', [StplController::class, 'create'])->name('stpl.create');
         Route::post('/stpl', [StplController::class, 'store'])->name('stpl.store');
         Route::get('/stpl/{stpl}/download', [StplController::class, 'download'])->name('stpl.download');
+
+        // [PERUBAHAN] Rute untuk Pengembalian Pengaduan
+        Route::post('/pengaduan/{pengaduan}/kembalikan', [AdminDashboardController::class, 'kembalikan'])->name('pengaduan.kembalikan');
     });
 
     // == RUTE KHUSUS RESKRIM ==

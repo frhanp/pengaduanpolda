@@ -77,6 +77,26 @@ class DashboardController extends Controller
         // [PERBAIKAN] Arahkan ke view yang benar di dalam folder 'pengaduan'
         return view('admin.pengaduan.show', compact('pengaduan', 'reskrimUsers'));
     }
+    
+    public function kembalikan(Request $request, Pengaduan $pengaduan)
+    {
+        // Pastikan hanya laporan 'Baru' yang bisa dikembalikan
+        if ($pengaduan->status !== 'Baru') {
+            return redirect()->route('admin.pengaduan.show', $pengaduan)->with('error', 'Laporan ini tidak dapat dikembalikan karena sudah diproses.');
+        }
+        
+        // Validasi bahwa catatan wajib diisi
+        $request->validate(['catatan' => 'required|string|min:10']);
+
+        // Update status dan simpan catatan
+        $pengaduan->update([
+            'status' => 'Dikembalikan',
+            'catatan_pengembalian' => $request->catatan,
+        ]);
+
+        return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan telah dikembalikan ke pelapor dengan catatan.');
+    }
+
 
     public function verify(Pengaduan $pengaduan)
     {
