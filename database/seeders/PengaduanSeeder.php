@@ -29,6 +29,8 @@ class PengaduanSeeder extends Seeder
                 ['name' => 'Terminal Dungingi', 'lat' => 0.5139, 'lon' => 123.0487],
                 ['name' => 'CitraLand Gorontalo', 'lat' => 0.5734, 'lon' => 123.0458],
             ];
+
+            
     
             // [MODIFIKASI] - Menambah variasi contoh laporan
             $contohLaporan = [
@@ -43,26 +45,47 @@ class PengaduanSeeder extends Seeder
                 'Kemacetan parah akibat parkir liar.',
                 'Sampah menumpuk dan tidak diangkut.',
             ];
+
+            $unitKerjaList = [
+                'Polres Kota Gorontalo',
+                'Polsek Kota Utara',
+                'Polsek Kota Selatan',
+                'Polsek Kota Barat',
+                'Polsek Kota Timur',
+                'Polsek Kota Tengah',
+                'Polsek Dungingi',
+                'Polsek Kawasan Pelabuhan Gorontalo',
+            ];
+            
+            $agamaList = ['Islam', 'Kristen Protestan', 'Kristen Katolik', 'Hindu', 'Buddha', 'Khonghucu'];
     
             // [MODIFIKASI] - Buat 250 data pengaduan palsu untuk kepadatan lebih tinggi
             for ($i = 0; $i < 250; $i++) {
                 $hotspot = Arr::random($hotspots);
-    
-                // Buat koordinat acak di sekitar hotspot
-                $latitude = $hotspot['lat'] + ($faker->randomFloat(5, -0.005, 0.005));
-                $longitude = $hotspot['lon'] + ($faker->randomFloat(5, -0.005, 0.005));
+                $latitude = $hotspot['lat'] + $faker->randomFloat(5, -0.005, 0.005);
+                $longitude = $hotspot['lon'] + $faker->randomFloat(5, -0.005, 0.005);
+                $jenisKelamin = $faker->randomElement(['Laki-laki', 'Perempuan']);
     
                 Pengaduan::create([
-                    'nama_pelapor' => $faker->name,
-                    'umur_pelapor' => $faker->numberBetween(17, 60),
+                    'nama_pelapor'      => $faker->name($jenisKelamin == 'Laki-laki' ? 'male' : 'female'),
+                    'umur_pelapor'      => $faker->numberBetween(18, 65),
                     'pekerjaan_pelapor' => $faker->jobTitle,
-                    'alamat_pelapor' => $faker->address,
-                    'no_hp_pelapor' => $faker->phoneNumber,
-                    'isi_laporan' => Arr::random($contohLaporan) . ' Lokasi di sekitar ' . $hotspot['name'],
-                    'latitude' => $latitude,
-                    'longitude' => $longitude,
-                    'tanggal_laporan' => $faker->dateTimeBetween('-3 months', 'now'),
-                    'status' => 'Baru',
+                    'alamat_pelapor'    => $faker->address,
+                    'no_hp_pelapor'     => $faker->phoneNumber,
+                    'isi_laporan'       => Arr::random($contohLaporan),
+                    'latitude'          => $latitude,
+                    'longitude'         => $longitude,
+                    'tanggal_laporan'   => $faker->dateTimeBetween('-3 months', 'now'),
+                    'status'            => 'Baru',
+    
+                    // [PENAMBAHAN] Mengisi field-field baru dengan data dummy
+                    'nik'               => $faker->numerify('################'),
+                    'foto_ktp'          => null, // Biarkan kosong karena ini data dummy
+                    'tempat_lahir'      => $faker->city,
+                    'tanggal_lahir'     => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
+                    'jenis_kelamin'     => $jenisKelamin,
+                    'agama'             => Arr::random($agamaList),
+                    'tujuan_polsek'     => Arr::random($unitKerjaList),
                 ]);
             }
         }
