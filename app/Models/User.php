@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'unit_kerja',
     ];
 
     /**
@@ -62,6 +63,11 @@ class User extends Authenticatable
         return $this->hasMany(Pengaduan::class, 'verified_by_admin_id');
     }
 
+
+    public function pengaduans()
+    {
+        return $this->hasMany(Pengaduan::class, 'assigned_to_reskrim_id');
+    }
     /**
      * Relasi ke pengaduan yang ditugaskan ke user ini (sebagai reskrim).
      */

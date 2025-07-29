@@ -13,26 +13,42 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Membuat User Admin
-        User::create([
-            'name' => 'Admin Polda',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('password'), // ganti password jika perlu
-            'role' => UserRole::ADMIN,
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@gmail.com'], // Kunci untuk mencari
+            [                                // Data untuk dibuat atau di-update
+                'name' => 'Admin Polda',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
 
         // Membuat User Reskrim
-        User::create([
-            'name' => 'Budi Reskrim',
-            'email' => 'budi.reskrim@gmail.com',
-            'password' => Hash::make('password'),
-            'role' => UserRole::RESKRIM,
-        ]);
+        User::updateOrCreate(
+            ['email' => 'budi.reskrim@gmail.com'],
+            [
+                'name' => 'Budi Reskrim',
+                'password' => Hash::make('password'),
+                'role' => 'reskrim',
+            ]
+        );
 
-        User::create([
-            'name' => 'Siti Reskrim',
-            'email' => 'siti.reskrim@gmail.com',
-            'password' => Hash::make('password'),
-            'role' => UserRole::RESKRIM,
-        ]);
+        User::updateOrCreate(
+            ['email' => 'siti.reskrim@gmail.com'],
+            [
+                'name' => 'Siti Reskrim',
+                'password' => Hash::make('password'),
+                'role' => 'reskrim',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'superadmin@polres.test'],
+            [
+                'name' => 'Super Administrator',
+                'password' => Hash::make('superadmin123'), // Ganti dengan password yang sangat aman
+                'role' => 'admin', // Super Admin tetap memiliki role 'admin'
+                'unit_kerja' => 'Polres Kota Gorontalo', // Atau unit pusat lainnya
+            ]
+        );
     }
 }
