@@ -75,6 +75,8 @@
         </div>
     </div>
     @stack('scripts')
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     {{-- [TAMBAHKAN BLOK INI] --}}
     <!-- Memuat library SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

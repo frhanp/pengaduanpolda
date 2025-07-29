@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pengaduan extends Model
 {
@@ -76,5 +77,10 @@ class Pengaduan extends Model
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to_reskrim_id');
+    }
+
+    public function suratPernyataans(): HasMany
+    {
+        return $this->hasMany(SuratPernyataan::class);
     }
 }

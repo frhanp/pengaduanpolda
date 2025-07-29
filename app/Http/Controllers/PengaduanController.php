@@ -23,6 +23,37 @@ class PengaduanController extends Controller
         return view('welcome', ['laporan' => $laporanDiPeta]);
     }
 
+    public function showVerificationForm(Pengaduan $pengaduan)
+    {
+        // Pastikan hanya laporan yang 'Dikembalikan' yang bisa diakses
+        if ($pengaduan->status !== 'Dikembalikan') {
+            abort(404); // Tampilkan halaman tidak ditemukan jika statusnya tidak sesuai
+        }
+
+        return view('lacak.verifikasi', compact('pengaduan'));
+    }
+
+     /**
+     * [FUNGSI BARU]
+     * Memproses NIK yang diinput dan mengarahkan ke form edit jika cocok.
+     */
+    public function handleVerification(Request $request, Pengaduan $pengaduan)
+    {
+        $request->validate(['nik' => 'required|numeric|digits:16']);
+
+        // Bandingkan NIK yang diinput dengan NIK di database
+        if ($request->nik === $pengaduan->nik) {
+            // Jika cocok, beri "izin" di session untuk mengedit laporan ini
+            $request->session()->put('can_edit_pengaduan_' . $pengaduan->id, true);
+
+            // Arahkan ke halaman form perbaikan (akan kita buat di langkah 3)
+            return redirect()->route('laporan.edit.form', $pengaduan->id);
+        }
+
+        // Jika tidak cocok, kembalikan dengan pesan error
+        return back()->with('error', 'NIK yang Anda masukkan tidak sesuai.');
+    }
+
     public function petaRawan()
     {
         // [PERUBAHAN] Menambahkan 'tujuan_polsek' ke dalam select query
@@ -35,6 +66,79 @@ class PengaduanController extends Controller
 
         // Kirim data ke view 'peta-rawan' dengan nama variabel 'laporan'.
         return view('peta-rawan', ['laporan' => $laporanDiPeta]);
+    }
+
+    /**
+     * [FUNGSI BARU]
+     * Menampilkan form perbaikan yang sudah terisi data lama.
+     */
+    public function showEditForm(Request $request, Pengaduan $pengaduan)
+    {
+        // Keamanan: Cek "izin" yang kita berikan di session setelah NIK cocok
+        if (!$request->session()->get('can_edit_pengaduan_' . $pengaduan->id)) {
+            // Jika tidak ada izin, akses ditolak
+            abort(403, 'Akses tidak diizinkan. Silakan verifikasi NIK Anda terlebih dahulu.');
+        }
+
+        // Tampilkan view form edit dan kirim data pengaduan yang ada
+        return view('lacak.edit', compact('pengaduan'));
+    }
+
+    /**
+     * [FUNGSI BARU]
+     * Memproses data laporan yang sudah diperbaiki.
+     */
+    public function handleUpdate(Request $request, Pengaduan $pengaduan)
+    {
+        // Keamanan: Cek "izin" sekali lagi
+        if (!$request->session()->get('can_edit_pengaduan_' . $pengaduan->id)) {
+            abort(403, 'Akses tidak diizinkan.');
+        }
+
+        // Validasi data yang masuk. Perhatikan 'foto_ktp' sekarang 'nullable'.
+        $validatedData = $request->validate([
+            'nama_pelapor'      => 'required|string|max:255',
+            'no_hp_pelapor'     => 'required|string|max:20',
+            'nik'               => 'required|numeric|digits:16',
+            'foto_ktp'          => 'nullable|image|mimes:jpeg,png,jpg|max:10000', // Foto KTP sekarang opsional
+            'tempat_lahir'      => 'required|string|max:100',
+            'tanggal_lahir'     => 'required|date',
+            'jenis_kelamin'     => 'required|string|in:Laki-laki,Perempuan',
+            'agama'             => 'required|string|max:50',
+            'pekerjaan_pelapor' => 'nullable|string|max:100',
+            'alamat_pelapor'    => 'nullable|string',
+            'tujuan_polsek'     => 'required|string|max:255',
+            'isi_laporan'       => 'required|string',
+            'latitude'          => 'required|numeric',
+            'longitude'         => 'required|numeric',
+        ]);
+
+        // Cek jika ada file KTP baru yang di-upload
+        if ($request->hasFile('foto_ktp')) {
+            // Hapus file KTP lama jika ada
+            if ($pengaduan->foto_ktp) {
+                Storage::delete('public/' . $pengaduan->foto_ktp);
+            }
+            // Simpan file KTP yang baru
+            $path = $request->file('foto_ktp')->store('ktp', 'public');
+            $validatedData['foto_ktp'] = $path;
+        }
+
+        // Update data pengaduan di database
+        $pengaduan->update($validatedData);
+        
+        // Kembalikan status menjadi 'Baru' dan hapus catatan
+        $pengaduan->update([
+            'status' => 'Baru',
+            'catatan_pengembalian' => null,
+        ]);
+
+        // Hapus "izin" dari session setelah selesai
+        $request->session()->forget('can_edit_pengaduan_' . $pengaduan->id);
+
+        // Arahkan kembali ke halaman lacak dengan pesan sukses
+        return redirect()->route('lacak.aduan', ['nama_pelapor' => $pengaduan->nama_pelapor])
+                         ->with('success', 'Laporan berhasil diperbaiki dan telah dikirim ulang untuk ditinjau.');
     }
 
     public function store(Request $request)
@@ -105,6 +209,8 @@ class PengaduanController extends Controller
     {
         return view('pages.profil');
     }
+
+
 
     /**
      * [FUNGSI BARU] Menampilkan halaman Fitur.

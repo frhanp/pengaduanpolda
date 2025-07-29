@@ -7,6 +7,7 @@ use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StplController;
 use App\Http\Controllers\Reskrim\DashboardController as ReskrimDashboardController;
+use App\Http\Controllers\Reskrim\SuratPernyataanController;
 use App\Http\Controllers\UploadTestController;
 
 /*
@@ -27,6 +28,13 @@ Route::middleware('web')->group(function () {
     Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
     Route::get('/peta-rawan', [PengaduanController::class, 'petaRawan'])->name('peta.rawan');
     Route::get('/lacak-aduan', [PengaduanController::class, 'lacak'])->name('lacak.aduan');
+    Route::get('/perbaiki-laporan/verifikasi/{pengaduan}', [PengaduanController::class, 'showVerificationForm'])->name('laporan.verifikasi.form');
+    Route::post('/perbaiki-laporan/verifikasi/{pengaduan}', [PengaduanController::class, 'handleVerification'])->name('laporan.verifikasi.handle');
+
+    // [PENAMBAHAN] Rute untuk menampilkan form edit
+    Route::get('/perbaiki-laporan/edit/{pengaduan}', [PengaduanController::class, 'showEditForm'])->name('laporan.edit.form');
+    // [PENAMBAHAN] Rute untuk memproses update laporan
+    Route::post('/perbaiki-laporan/update/{pengaduan}', [PengaduanController::class, 'handleUpdate'])->name('laporan.update.handle');
 
     Route::get('/profil', [PengaduanController::class, 'showProfil'])->name('page.profil');
     Route::get('/fitur', [PengaduanController::class, 'showFitur'])->name('page.fitur');
@@ -51,7 +59,6 @@ Route::get('/dashboard', function () {
 
     // Fallback jika ada peran lain atau tidak ada peran sama sekali
     return view('dashboard');
-
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Grup untuk semua rute yang memerlukan pengguna untuk login
@@ -97,6 +104,10 @@ Route::middleware('auth')->group(function () {
 
         // Aksi untuk update status
         Route::post('/tugas/{pengaduan}/update-status', [ReskrimDashboardController::class, 'updateStatus'])->name('tugas.updateStatus');
+
+        // [PENAMBAHAN] Rute untuk upload dan download surat pernyataan
+        Route::post('/tugas/{pengaduan}/upload-surat', [SuratPernyataanController::class, 'store'])->name('tugas.surat.store');
+        Route::get('/surat/{suratPernyataan}/download', [SuratPernyataanController::class, 'download'])->name('surat.download');
     });
 });
 

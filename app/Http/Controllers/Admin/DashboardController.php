@@ -7,28 +7,65 @@ use Illuminate\Http\Request;
 use App\Models\Pengaduan;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     /**
      * Menampilkan halaman dashboard statistik untuk Admin.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil data untuk statistik
+        // --- Data untuk Kartu Statistik ---
         $totalLaporan = Pengaduan::count();
         $laporanBaru = Pengaduan::where('status', 'Baru')->count();
         $laporanDiverifikasi = Pengaduan::where('status', 'Diverifikasi')->count();
-        $laporanDiteruskan = Pengaduan::where('status', 'Diteruskan')->count();
         $laporanSelesai = Pengaduan::where('status', 'Selesai')->count();
 
-        // Kirim data ke view dashboard admin
+        // --- [PENAMBAHAN] Data untuk Analitik ---
+
+        // 1. Grafik Garis: Tren Laporan Masuk
+        $periode = $request->input('periode', '7hari');
+        $days = match ($periode) {
+            '30hari' => 30,
+            '90hari' => 90,
+            default => 7,
+        };
+        $laporanMasukHarian = Pengaduan::select(DB::raw('DATE(created_at) as tanggal'), DB::raw('count(*) as jumlah'))
+            ->whereBetween('created_at', [Carbon::now()->subDays($days - 1), Carbon::now()])
+            ->groupBy('tanggal')->pluck('jumlah', 'tanggal');
+        
+        $lineChartData = [];
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $tanggal = Carbon::now()->subDays($i)->format('Y-m-d');
+            $lineChartData[] = ['x' => $tanggal, 'y' => $laporanMasukHarian[$tanggal] ?? 0];
+        }
+
+        // 2. Grafik Lingkaran: Komposisi Status
+        $statusCounts = Pengaduan::select('status', DB::raw('count(*) as jumlah'))
+            ->groupBy('status')->pluck('jumlah', 'status');
+        $donutChartData = [
+            'labels' => $statusCounts->keys()->all(),
+            'data' => $statusCounts->values()->all(),
+        ];
+
+        // 3. Grafik Batang: Laporan per Polsek
+        $laporanPerPolsek = Pengaduan::select('tujuan_polsek', DB::raw('count(*) as jumlah'))
+            ->groupBy('tujuan_polsek')->orderBy('jumlah', 'desc')->pluck('jumlah', 'tujuan_polsek');
+        $barChartData = [
+            'labels' => $laporanPerPolsek->keys()->all(),
+            'data' => $laporanPerPolsek->values()->all(),
+        ];
+        
+        // 4. Daftar Laporan Mendesak (5 laporan 'Baru' terlama)
+        $laporanMendesak = Pengaduan::where('status', 'Baru')->orderBy('created_at', 'asc')->limit(5)->get();
+
+        // Kirim semua data ke view
         return view('admin.dashboard', compact(
-            'totalLaporan',
-            'laporanBaru',
-            'laporanDiverifikasi',
-            'laporanDiteruskan',
-            'laporanSelesai'
+            'totalLaporan', 'laporanBaru', 'laporanDiverifikasi', 'laporanSelesai',
+            'lineChartData', 'donutChartData', 'barChartData', 'laporanMendesak',
+            'periode'
         ));
     }
 

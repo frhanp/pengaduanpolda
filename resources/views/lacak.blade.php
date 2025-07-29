@@ -83,6 +83,11 @@
                                     <p class="text-sm font-bold text-red-700">Catatan dari Petugas:</p>
                                     <p class="text-sm text-gray-600 italic">"{{ $pengaduan->catatan_pengembalian }}"</p>
                                 </div>
+                                <div class="mt-4 text-right">
+                                    <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}" class="inline-block px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                                        Perbaiki Laporan Ini
+                                    </a>
+                                </div>
                             @endif
                         </div>
                     @empty
