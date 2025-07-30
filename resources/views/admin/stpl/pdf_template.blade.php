@@ -4,29 +4,27 @@
     <meta charset="UTF-8">
     <title>STPL - {{ $stpl->nomor_stpl }}</title>
     <style>
-        /* CSS ini dirancang agar terlihat bagus saat di-generate menjadi PDF oleh DomPDF */
+        /* CSS Dioptimalkan Maksimal untuk Satu Halaman dengan Margin 1cm */
         @page {
-            margin: 2.5cm;
+            margin: 1cm;
         }
         body {
             font-family: 'Times New Roman', Times, serif;
             font-size: 12pt;
-            line-height: 1.5;
+            line-height: 1.3; 
         }
-        .text-center {
-            text-align: center;
+        p {
+            margin: 5px 0;
         }
-        .font-bold {
-            font-weight: bold;
-        }
-        .underline {
-            text-decoration: underline;
-        }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: bold; }
+        .underline { text-decoration: underline; }
+
         .kop-surat {
             text-align: center;
             border-bottom: 3px solid black;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
         }
         .kop-surat .line1 {
             font-size: 14pt;
@@ -35,49 +33,68 @@
         .kop-surat .line2 {
             font-size: 14pt;
         }
-        .pro-justitia {
-            position: absolute;
-            top: 2.5cm;
-            right: 2.5cm;
-            font-style: italic;
+        
+        .judul-container p {
+            margin-top: 1px;
+            margin-bottom: 1px;
         }
+
         .content-table {
             width: 100%;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         .content-table td {
             vertical-align: top;
-            padding: 1px 0;
+            padding: 0;
         }
-        .content-table .label {
-            width: 30%;
+        .content-table .label { width: 30%; }
+        .content-table .separator { width: 5%; text-align: center; }
+
+        .penutup { 
+            margin-top: 15px;
         }
-        .content-table .separator {
-            width: 5%;
+
+        /* PERUBAHAN CSS UNTUK TANDA TANGAN */
+        .signature-section {
+            margin-top: 30px; /* Memberi sedikit ruang tambahan */
+            overflow: auto; /* Penting untuk 'contain' float elements */
+            width: 100%;
+        }
+        /* Blok untuk tanda tangan Pelapor di KIRI */
+        .signature-block-left {
+            width: 45%;
+            float: left;
             text-align: center;
         }
-        .penutup { margin-top: 20px; }
-        .signature-section {
-            margin-top: 50px;
-        }
-        .signature-block {
-            width: 320px;
+        /* Blok untuk tanda tangan Penerima di KANAN */
+        .signature-block-right {
+            width: 45%;
             float: right;
             text-align: center;
         }
-        .signature-block .name {
-            margin-top: 80px; /* Jarak untuk tanda tangan dan stempel */
+        .signature-section p {
+            margin: 2px 0;
+        }
+        .signature-section {
+            /* Memberi ruang kosong untuk tanda tangan */
+            height: 50px; 
+        }
+
+        .name-space {
+            height: 100px;
+        }
+        .signature-section .name {
             font-weight: bold;
             text-decoration: underline;
+        }
+        /* Khusus untuk nama pelapor, sesuai gambar */
+        .signature-block-left .name {
+            font-weight: normal; /* Tidak bold */
         }
     </style>
 </head>
 <body>
-
-    <div class="pro-justitia">
-        "PRO JUSTITIA"
-    </div>
 
     <div class="kop-surat">
         <div class="line1">KEPOLISIAN NEGARA REPUBLIK INDONESIA</div>
@@ -85,16 +102,15 @@
         <div class="line2">SEKTOR {{ strtoupper($pengaduan->tujuan_polsek ?? 'KOTA UTARA') }}</div>
     </div>
 
-    <div class="text-center">
-        <p class="judul underline font-bold">SURAT TANDA PENERIMAAN LAPORAN</p>
+    <div class="text-center judul-container">
+        <p class="judul underline font-bold" style="margin-bottom: 5px;">SURAT TANDA PENERIMAAN LAPORAN</p>
         <p>Nomor: {{ $stpl->nomor_stpl }}</p>
     </div>
 
-    <p style="margin-top: 30px;">
+    <p style="margin-top: 20px;">
         Berdasarkan Laporan Polisi Nomor: {{ $stpl->nomor_stpl }} tanggal {{ $stpl->tanggal_dibuat->translatedFormat('d F Y') }}, dengan ini diterangkan bahwa pada hari ini {{ $stpl->tanggal_dibuat->translatedFormat('l') }} tanggal {{ $stpl->tanggal_dibuat->translatedFormat('d F Y') }} telah diterima Laporan dari:
     </p>
 
-    {{-- [PERUBAHAN UTAMA] Tabel data pelapor dengan urutan dan format baru --}}
     <table class="content-table">
         <tr><td class="label">Nama</td><td class="separator">:</td><td>{{ $pengaduan->nama_pelapor }}</td></tr>
         <tr><td class="label">NIK</td><td class="separator">:</td><td>{{ $pengaduan->nik }}</td></tr>
@@ -112,19 +128,32 @@
         Telah melaporkan tentang dugaan Tindak Pidana **...**, sebagaimana dimaksud dalam Pasal **...**, yang terjadi pada hari **...** tanggal **...** di **...**.
     </p>
     
-    <p>Uraian singkat kejadian:</p>
+    <p style="margin-top: 10px;">Uraian singkat kejadian:</p>
     <p>{{ $pengaduan->isi_laporan }}</p>
 
     <p class="penutup">
         Demikian Surat Tanda Penerimaan Laporan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.
     </p>
 
+    <!-- PERUBAHAN HTML: Bagian Tanda Tangan -->
     <div class="signature-section">
-        <div class="signature-block">
+        <!-- Tanda Tangan Pelapor (KIRI) -->
+        <div class="signature-block-left">
+            <!-- Menambahkan paragraf kosong untuk menyejajarkan posisi dengan blok kanan -->
+            <p>&nbsp;</p>
+            <p>Pelapor,</p>
+            <p>&nbsp;</p>
+            <div class="name-space"></div> <!-- Ruang untuk ttd basah -->
+            <br>
+            <p class="name">({{ strtoupper($pengaduan->nama_pelapor) }})</p>
+        </div>
+
+        <!-- Tanda Tangan Penerima Laporan (KANAN) -->
+        <div class="signature-block-right">
             <p>Gorontalo, {{ $stpl->tanggal_dibuat->translatedFormat('d F Y') }}</p>
             <p>Yang Menerima Laporan,</p>
-            <p>KA SPKT POLSEK {{ strtoupper($pengaduan->tujuan_polsek ?? 'KOTA UTARA') }}</p>
-            
+            <p style="margin-bottom: 5px;">KA SPKT POLSEK {{ strtoupper($pengaduan->tujuan_polsek ?? 'KOTA UTARA') }}</p>
+            <div class="name-space"></div> <!-- Ruang untuk ttd basah & stempel -->
             <p class="name">{{ $stpl->creator->name }}</p>
             <p>NRP. ......................</p>
         </div>

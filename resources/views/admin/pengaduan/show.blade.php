@@ -127,6 +127,8 @@
                                 $statusClass = 'bg-purple-100 text-purple-800';
                             } elseif ($pengaduan->status == 'Diteruskan ke Penyidik') {
                                 $statusClass = 'bg-teal-100 text-teal-800';
+                            } elseif ($pengaduan->status == 'Dikembalikan') {
+                                $statusClass = 'bg-red-100 text-red-800';
                             }
                         @endphp
                         <span

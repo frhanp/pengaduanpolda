@@ -19,13 +19,13 @@ class StplController extends Controller
         // Terapkan filter jika ada input 'search'
         if ($request->filled('search')) {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 // Cari di kolom nomor_stpl
                 $q->where('nomor_stpl', 'like', '%' . $searchTerm . '%')
-                  // Atau cari di nama pelapor melalui relasi
-                  ->orWhereHas('pengaduan', function($subQ) use ($searchTerm) {
-                      $subQ->where('nama_pelapor', 'like', '%' . $searchTerm . '%');
-                  });
+                    // Atau cari di nama pelapor melalui relasi
+                    ->orWhereHas('pengaduan', function ($subQ) use ($searchTerm) {
+                        $subQ->where('nama_pelapor', 'like', '%' . $searchTerm . '%');
+                    });
             });
         }
 
@@ -46,22 +46,34 @@ class StplController extends Controller
      * (Fungsi ini mungkin belum ada, kita tambahkan sekarang)
      */
     public function create(Pengaduan $pengaduan)
-{
-    // [PERBAIKAN] Ubah logika untuk mengizinkan pembuatan STPL
-    // selama laporan sudah diproses (bukan 'Baru') dan belum punya STPL.
-    if ($pengaduan->status === 'Baru' || $pengaduan->stpl) {
-        return redirect()->route('admin.pengaduan.show', $pengaduan)
-                         ->with('error', 'STPL tidak dapat dibuat untuk laporan ini. Pastikan laporan sudah diverifikasi dan belum ada STPL sebelumnya.');
+    {
+        // [PERBAIKAN] Ubah logika untuk mengizinkan pembuatan STPL
+        // selama laporan sudah diproses (bukan 'Baru') dan belum punya STPL.
+        if ($pengaduan->status === 'Baru' || $pengaduan->stpl) {
+            return redirect()->route('admin.pengaduan.show', $pengaduan)
+                ->with('error', 'STPL tidak dapat dibuat untuk laporan ini. Pastikan laporan sudah diverifikasi dan belum ada STPL sebelumnya.');
+        }
+
+        return view('admin.stpl.create', compact('pengaduan'));
     }
-    
-    return view('admin.stpl.create', compact('pengaduan'));
-}
+    public function preview(Stpl $stpl)
+    {
+        $dataUntukPdf = [
+            'stpl' => $stpl->load(['creator', 'pengaduan']),
+            'pengaduan' => $stpl->pengaduan,
+        ];
+
+        $pdf = Pdf::loadView('admin.stpl.pdf_template', $dataUntukPdf);
+
+        // stream() akan menampilkan PDF di browser, bukan men-download.
+        return $pdf->stream('preview-stpl.pdf');
+    }
 
     /**
      * Menyimpan data STPL yang baru dibuat dan men-generate PDF.
      * (Ini adalah method store Anda yang sudah disempurnakan)
      */
-     /**
+    /**
      * [PERUBAHAN UTAMA]
      * Menyimpan STPL dengan opsi nomor manual atau otomatis.
      */
@@ -101,8 +113,8 @@ class StplController extends Controller
         //    Ganti dengan redirect kembali ke halaman show dengan pesan sukses
         //    dan "titipan" URL download.
         return redirect()->route('admin.pengaduan.show', $pengaduan->id)
-                         ->with('success', 'STPL berhasil dibuat.');
-                        //  ->with('stpl_download_url', route('admin.stpl.download', $stpl->id));
+            ->with('success', 'STPL berhasil dibuat.');
+        //  ->with('stpl_download_url', route('admin.stpl.download', $stpl->id));
 
         // // 4. Buat dan unduh PDF
         // $dataUntukPdf = [
@@ -112,7 +124,7 @@ class StplController extends Controller
         // $pdf = Pdf::loadView('admin.stpl.pdf_template', $dataUntukPdf);
         // return $pdf->download('STPL-' . $stpl->nomor_stpl . '.pdf');
     }
-    
+
 
     public function download(Stpl $stpl)
     {

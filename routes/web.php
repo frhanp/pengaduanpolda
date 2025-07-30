@@ -91,6 +91,8 @@ Route::middleware('auth')->group(function () {
 
         // [PERUBAHAN] Rute untuk Pengembalian Pengaduan
         Route::post('/pengaduan/{pengaduan}/kembalikan', [AdminDashboardController::class, 'kembalikan'])->name('pengaduan.kembalikan');
+
+        Route::get('/stpl/{stpl}/preview', [StplController::class, 'preview'])->name('stpl.preview');
     });
 
     // == RUTE KHUSUS RESKRIM ==
