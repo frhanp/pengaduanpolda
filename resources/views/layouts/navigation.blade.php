@@ -4,11 +4,11 @@
         @if (Auth::check())
             @if (Auth::user()->role->value === 'admin')
                 <a href="{{ route('admin.dashboard') }}" class="text-2xl font-bold text-gray-800">
-                    PoldaCare
+                    Polres Gorontalo Kota
                 </a>
             @else
                 <a href="{{ route('reskrim.dashboard') }}" class="text-2xl font-bold text-gray-800">
-                    PoldaCare
+                    Polres Gorontalo Kota
                 </a>
             @endif
         @endif

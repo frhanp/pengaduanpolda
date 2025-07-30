@@ -125,7 +125,7 @@
     </table>
 
     <p>
-        Telah melaporkan tentang dugaan Tindak Pidana **...**, sebagaimana dimaksud dalam Pasal **...**, yang terjadi pada hari **...** tanggal **...** di **...**.
+        Telah melaporkan tentang dugaan Tindak Pidana <strong>{{ $stpl->tindak_pidana }}</strong>, sebagaimana dimaksud dalam Pasal <strong>{{ $stpl->pasal_dilanggar }}</strong>, yang terjadi pada hari <strong>{{ $stpl->hari_kejadian }}</strong> tanggal <strong>{{ $stpl->tanggal_kejadian->translatedFormat('d F Y') }}</strong> di <strong>{{ $stpl->tempat_kejadian }}</strong>.
     </p>
     
     <p style="margin-top: 10px;">Uraian singkat kejadian:</p>

@@ -27,6 +27,11 @@ class Stpl extends Model
         'nomor_stpl',
         'tanggal_dibuat',
         'dibuat_oleh_admin_id',
+        'tindak_pidana',
+        'pasal_dilanggar',
+        'hari_kejadian',
+        'tanggal_kejadian',
+        'tempat_kejadian',
     ];
 
     /**
@@ -36,6 +41,7 @@ class Stpl extends Model
      */
     protected $casts = [
         'tanggal_dibuat' => 'date',
+        'tanggal_kejadian' => 'date',
     ];
 
     // RELASI: Mendefinisikan hubungan STPL dengan tabel lain

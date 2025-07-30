@@ -79,13 +79,19 @@ class StplController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi input dari form
+        // 1. Validasi input dari form, termasuk detail kejadian yang baru
         $validated = $request->validate([
             'pengaduan_id' => 'required|exists:pengaduans,id',
             'tanggal_dibuat' => 'required|date',
             'nomor_stpl_option' => 'required|in:otomatis,manual',
-            // Nomor STPL hanya wajib diisi jika opsi 'manual' yang dipilih
             'nomor_stpl' => 'required_if:nomor_stpl_option,manual|nullable|string|max:255|unique:stpl,nomor_stpl',
+
+            // [PENAMBAHAN] Validasi untuk detail kejadian
+            'tindak_pidana' => 'required|string|max:255',
+            'pasal_dilanggar' => 'required|string|max:255',
+            'hari_kejadian' => 'required|string|max:50',
+            'tanggal_kejadian' => 'required|date',
+            'tempat_kejadian' => 'required|string',
         ]);
 
         $pengaduan = Pengaduan::findOrFail($validated['pengaduan_id']);
@@ -93,7 +99,7 @@ class StplController extends Controller
             return back()->with('error', 'Laporan ini sudah memiliki STPL.');
         }
 
-        // 2. Tentukan nomor STPL berdasarkan pilihan
+        // 2. Tentukan nomor STPL berdasarkan pilihan (tidak berubah)
         $nomorStplFinal = '';
         if ($validated['nomor_stpl_option'] === 'otomatis') {
             $nomorStplFinal = Stpl::generateStplNumber();
@@ -101,28 +107,25 @@ class StplController extends Controller
             $nomorStplFinal = $validated['nomor_stpl'];
         }
 
-        // 3. Simpan data STPL ke database
+        // 3. Simpan data STPL ke database, termasuk detail kejadian yang baru
         $stpl = Stpl::create([
             'pengaduan_id' => $pengaduan->id,
             'nomor_stpl' => $nomorStplFinal,
             'tanggal_dibuat' => $validated['tanggal_dibuat'],
             'dibuat_oleh_admin_id' => Auth::id(),
+
+            // [PENAMBAHAN] Menyimpan data detail kejadian
+            'tindak_pidana' => $validated['tindak_pidana'],
+            'pasal_dilanggar' => $validated['pasal_dilanggar'],
+            'hari_kejadian' => $validated['hari_kejadian'],
+            'tanggal_kejadian' => $validated['tanggal_kejadian'],
+            'tempat_kejadian' => $validated['tempat_kejadian'],
         ]);
 
-        // 4. [PERUBAHAN] Hapus logika pembuatan PDF dari sini.
-        //    Ganti dengan redirect kembali ke halaman show dengan pesan sukses
-        //    dan "titipan" URL download.
+        // 4. Redirect kembali ke halaman show dengan pesan sukses
+        // (Ini adalah logika redirect Anda yang sebelumnya, tanpa download otomatis)
         return redirect()->route('admin.pengaduan.show', $pengaduan->id)
             ->with('success', 'STPL berhasil dibuat.');
-        //  ->with('stpl_download_url', route('admin.stpl.download', $stpl->id));
-
-        // // 4. Buat dan unduh PDF
-        // $dataUntukPdf = [
-        //     'stpl' => $stpl->load('creator', 'pengaduan'),
-        //     'pengaduan' => $pengaduan,
-        // ];
-        // $pdf = Pdf::loadView('admin.stpl.pdf_template', $dataUntukPdf);
-        // return $pdf->download('STPL-' . $stpl->nomor_stpl . '.pdf');
     }
 
 
