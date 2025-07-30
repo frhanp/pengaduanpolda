@@ -92,6 +92,8 @@ class StplController extends Controller
             'hari_kejadian' => 'required|string|max:50',
             'tanggal_kejadian' => 'required|date',
             'tempat_kejadian' => 'required|string',
+            'uraian_kejadian' => 'required|string',
+            'terlapor' => 'required|string',
         ]);
 
         $pengaduan = Pengaduan::findOrFail($validated['pengaduan_id']);
@@ -120,6 +122,8 @@ class StplController extends Controller
             'hari_kejadian' => $validated['hari_kejadian'],
             'tanggal_kejadian' => $validated['tanggal_kejadian'],
             'tempat_kejadian' => $validated['tempat_kejadian'],
+            'uraian_kejadian' => $validated['uraian_kejadian'],
+            'terlapor' => $validated['terlapor'],
         ]);
 
         // 4. Redirect kembali ke halaman show dengan pesan sukses

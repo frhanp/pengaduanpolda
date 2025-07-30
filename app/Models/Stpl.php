@@ -32,6 +32,8 @@ class Stpl extends Model
         'hari_kejadian',
         'tanggal_kejadian',
         'tempat_kejadian',
+        'uraian_kejadian',
+        'terlapor',
     ];
 
     /**

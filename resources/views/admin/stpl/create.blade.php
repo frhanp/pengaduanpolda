@@ -67,6 +67,16 @@
                                         <textarea id="tempat_kejadian" name="tempat_kejadian" rows="3" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" required>{{ old('tempat_kejadian') }}</textarea>
                                         @error('tempat_kejadian')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
                                     </div>
+                                    <div class="md:col-span-2">
+                                        <label for="uraian_kejadian" class="block font-medium text-sm text-gray-700">Uraian Kejadian</label>
+                                        <textarea id="uraian_kejadian" name="uraian_kejadian" rows="3" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" required>{{ old('uraian_kejadian') }}</textarea>
+                                        @error('uraian_kejadian')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label for="terlapor" class="block font-medium text-sm text-gray-700">Terlapor</label>
+                                        <input type="text" id="terlapor" name="terlapor" value="{{ old('terlapor') }}" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" required>
+                                        @error('terlapor')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
+                                    </div>
                                 </div>
                             </div>
 
