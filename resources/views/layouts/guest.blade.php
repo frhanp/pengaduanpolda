@@ -77,7 +77,8 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 glass">
         <div class="max-w-7xl mx-auto flex items-center justify-between p-6">
-            <a href="/" class="text-3xl font-bold text-blue-700 tracking-tight">PoldaCare</a>
+            <a href="/" class="text-3xl font-bold text-blue-700 tracking-tight">Polres 
+                Gorontalo Kota</a>
             <nav class="hidden lg:flex space-x-8 items-center">
                 <a href="{{ route('lacak.aduan') }}"
                class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Lacak Aduan<span
