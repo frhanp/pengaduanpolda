@@ -33,9 +33,20 @@
     @endpush
 
     <section class="w-full">
-        <div class="bg-blue-600 text-white p-6 text-center shadow-lg">
-            <h1 class="text-3xl font-bold">Peta Sebaran Laporan Kerawanan</h1>
-            <p class="mt-2 text-blue-100">Peta ini menampilkan semua titik laporan yang telah masuk ke sistem.</p>
+        <div class="bg-blue-600 text-white p-6 shadow-lg flex justify-center items-center gap-6">
+    
+            {{-- [PENAMBAHAN] Logo di sebelah kiri --}}
+            <div class="flex-shrink-0 hidden md:block">
+                <img src="{{ asset('images/polreslogocowo1.png') }}" alt="Logo Polres" 
+                     class="h-20 w-20 object-contain rounded-full bg-white/20 p-2">
+            </div>
+            
+            {{-- Teks Judul --}}
+            <div class="text-center">
+                <h1 class="text-3xl font-bold">Peta Sebaran Laporan Kerawanan</h1>
+                <p class="mt-2 text-blue-100">Peta ini menampilkan semua titik laporan yang telah masuk ke sistem.</p>
+            </div>
+        
         </div>
         <div id="map-container">
             {{-- Elemen peta, dengan data laporan yang dikirim dari controller --}}

@@ -3,39 +3,61 @@
 <x-guest-layout>
     <section class="py-20 px-10 bg-white">
         <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-blue-700">Lacak Aduan Anda</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto mt-4 text-lg">
-                    Masukkan nama lengkap yang Anda gunakan saat melapor untuk melihat status aduan Anda.
-                </p>
+            <div class="text-center mb-12 flex items-center justify-center gap-4 md:gap-8">
+
+                {{-- Logo Kiri --}}
+                <div class="flex-shrink-0">
+                    {{-- [PERUBAHAN] Menambahkan class untuk membuat gambar menjadi lingkaran --}}
+                    <img src="{{ asset('images/polreslogocowo.png') }}" alt="Logo Kiri"
+                        class="h-16 w-16 md:h-24 md:w-24 object-cover rounded-full shadow-lg border-4 border-white/50">
+                </div>
+
+                {{-- Teks Judul --}}
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-blue-700">Lacak Aduan Anda</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto mt-4 text-lg">
+                        Masukkan nama lengkap yang Anda gunakan saat melapor untuk melihat status aduan Anda.
+                    </p>
+                </div>
+
+                {{-- Logo Kanan --}}
+                <div class="flex-shrink-0">
+                    {{-- [PERUBAHAN] Menambahkan class untuk membuat gambar menjadi lingkaran --}}
+                    <img src="{{ asset('images/polreslogocewe.png') }}" alt="Logo Kanan"
+                        class="h-16 w-16 md:h-24 md:w-24 object-cover rounded-full shadow-lg border-4 border-white/50">
+                </div>
+
             </div>
 
             <div class="glass p-8 rounded-2xl mb-8">
                 <form action="{{ route('lacak.aduan') }}" method="GET" class="flex items-center gap-4">
                     <div class="flex-grow">
                         <label for="nama_pelapor" class="sr-only">Nama Pelapor</label>
-                        <input type="text" id="nama_pelapor" name="nama_pelapor" value="{{ request('nama_pelapor') }}"
-                               class="w-full p-3 bg-white/50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition"
-                               placeholder="Ketik nama lengkap Anda di sini..." required>
+                        <input type="text" id="nama_pelapor" name="nama_pelapor"
+                            value="{{ request('nama_pelapor') }}"
+                            class="w-full p-3 bg-white/50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition"
+                            placeholder="Ketik nama lengkap Anda di sini..." required>
                     </div>
                     <button type="submit"
-                            class="px-6 py-3 font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 transition">
+                        class="px-6 py-3 font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 transition">
                         Cari Aduan
                     </button>
                 </form>
             </div>
 
-            @if(request()->filled('nama_pelapor'))
-                <h3 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pencarian untuk "{{ request('nama_pelapor') }}"</h3>
+            @if (request()->filled('nama_pelapor'))
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pencarian untuk "{{ request('nama_pelapor') }}"
+                </h3>
                 <div class="space-y-6">
                     @forelse ($pengaduans as $pengaduan)
-                        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 
-                            @if($pengaduan->status == 'Diteruskan ke Penyidik' || $pengaduan->status == 'Selesai') border-green-500
+                        <div
+                            class="bg-white p-6 rounded-lg shadow-md border-l-4 
+                            @if ($pengaduan->status == 'Diteruskan ke Penyidik' || $pengaduan->status == 'Selesai') border-green-500
                             @elseif($pengaduan->status == 'Diproses' || $pengaduan->status == 'Diteruskan ke Reskrim') border-purple-500
                             @elseif($pengaduan->status == 'Diverifikasi') border-yellow-500
                             @elseif($pengaduan->status == 'Dikembalikan') border-red-500
                             @else border-blue-500 @endif">
-                            
+
                             {{-- ====================================================== --}}
                             {{-- [PERUBAHAN UTAMA] Tampilan Kartu Hasil Pencarian     --}}
                             {{-- ====================================================== --}}
@@ -52,15 +74,18 @@
                                     </div>
                                     <div class="flex items-baseline">
                                         <p class="w-40 text-sm text-gray-500">Jenis Kasus</p>
-                                        <p class="font-semibold text-gray-800">: {{ Str::limit($pengaduan->isi_laporan, 50) }}</p>
+                                        <p class="font-semibold text-gray-800">:
+                                            {{ Str::limit($pengaduan->isi_laporan, 50) }}</p>
                                     </div>
                                     <div class="flex items-baseline">
                                         <p class="w-40 text-sm text-gray-500">Dilaporkan pada Tanggal</p>
-                                        <p class="font-semibold text-gray-800">: {{ $pengaduan->created_at->translatedFormat('d F Y') }}</p>
+                                        <p class="font-semibold text-gray-800">:
+                                            {{ $pengaduan->created_at->translatedFormat('d F Y') }}</p>
                                     </div>
                                     <div class="flex items-baseline">
                                         <p class="w-40 text-sm text-gray-500">Waktu</p>
-                                        <p class="font-semibold text-gray-800">: {{ $pengaduan->created_at->format('H:i') }} WITA</p>
+                                        <p class="font-semibold text-gray-800">:
+                                            {{ $pengaduan->created_at->format('H:i') }} WITA</p>
                                     </div>
                                 </div>
 
@@ -69,15 +94,24 @@
                                     <p class="text-sm text-gray-500 mb-1">Status:</p>
                                     @php
                                         $statusClass = '';
-                                        if ($pengaduan->status == 'Baru') $statusClass = 'bg-blue-100 text-blue-800';
-                                        elseif ($pengaduan->status == 'Diverifikasi') $statusClass = 'bg-yellow-100 text-yellow-800';
-                                        elseif ($pengaduan->status == 'Diteruskan ke Reskrim') $statusClass = 'bg-indigo-100 text-indigo-800';
-                                        elseif ($pengaduan->status == 'Diproses') $statusClass = 'bg-purple-100 text-purple-800';
-                                        elseif ($pengaduan->status == 'Diteruskan ke Penyidik') $statusClass = 'bg-teal-100 text-teal-800';
-                                        elseif ($pengaduan->status == 'Dikembalikan') $statusClass = 'bg-red-100 text-red-800';
-                                        elseif ($pengaduan->status == 'Selesai') $statusClass = 'bg-green-100 text-green-800';
+                                        if ($pengaduan->status == 'Baru') {
+                                            $statusClass = 'bg-blue-100 text-blue-800';
+                                        } elseif ($pengaduan->status == 'Diverifikasi') {
+                                            $statusClass = 'bg-yellow-100 text-yellow-800';
+                                        } elseif ($pengaduan->status == 'Diteruskan ke Reskrim') {
+                                            $statusClass = 'bg-indigo-100 text-indigo-800';
+                                        } elseif ($pengaduan->status == 'Diproses') {
+                                            $statusClass = 'bg-purple-100 text-purple-800';
+                                        } elseif ($pengaduan->status == 'Diteruskan ke Penyidik') {
+                                            $statusClass = 'bg-teal-100 text-teal-800';
+                                        } elseif ($pengaduan->status == 'Dikembalikan') {
+                                            $statusClass = 'bg-red-100 text-red-800';
+                                        } elseif ($pengaduan->status == 'Selesai') {
+                                            $statusClass = 'bg-green-100 text-green-800';
+                                        }
                                     @endphp
-                                    <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full {{ $statusClass }}">
+                                    <span
+                                        class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full {{ $statusClass }}">
                                         {{ $pengaduan->status }}
                                     </span>
                                 </div>
@@ -86,9 +120,11 @@
                             @if ($pengaduan->status == 'Dikembalikan' && $pengaduan->catatan_pengembalian)
                                 <div class="mt-4 pt-4 border-t border-gray-200">
                                     <p class="text-sm font-bold text-red-700">Catatan dari Petugas:</p>
-                                    <p class="text-sm text-gray-600 italic">"{{ $pengaduan->catatan_pengembalian }}"</p>
+                                    <p class="text-sm text-gray-600 italic">"{{ $pengaduan->catatan_pengembalian }}"
+                                    </p>
                                     <div class="mt-4 text-right">
-                                        <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}" class="inline-block px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                                        <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}"
+                                            class="inline-block px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
                                             Perbaiki Laporan Ini
                                         </a>
                                     </div>

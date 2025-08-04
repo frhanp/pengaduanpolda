@@ -142,8 +142,7 @@
 
                     {{-- [PENAMBAHAN] Umur (Opsional) --}}
                     <div>
-                        <label for="umur_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Umur
-                            (Opsional)</label>
+                        <label for="umur_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Umur</label>
                         <input type="number" id="umur_pelapor" name="umur_pelapor" value="{{ old('umur_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('umur_pelapor') border-red-500 @else border-gray-300 @enderror">
                         @error('umur_pelapor')
@@ -153,8 +152,8 @@
 
                     {{-- Pekerjaan (Opsional) --}}
                     <div class="md:col-span-2">
-                        <label for="pekerjaan_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Pekerjaan
-                            (Opsional)</label>
+                        <label for="pekerjaan_pelapor"
+                            class="block mb-2 text-sm font-medium text-gray-700">Pekerjaan</label>
                         <input type="text" id="pekerjaan_pelapor" name="pekerjaan_pelapor"
                             value="{{ old('pekerjaan_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('pekerjaan_pelapor') border-red-500 @else border-gray-300 @enderror">

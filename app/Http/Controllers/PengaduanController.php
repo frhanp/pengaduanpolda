@@ -147,19 +147,19 @@ class PengaduanController extends Controller
         $validatedData = $request->validate([
             'nama_pelapor'      => 'required|string|max:255',
             'no_hp_pelapor'     => 'required|string|max:20',
-            'umur_pelapor'      => 'nullable|integer|min:1',
-            'pekerjaan_pelapor' => 'nullable|string|max:100',
-            'alamat_pelapor'    => 'nullable|string',
+            'umur_pelapor'      => 'required|integer|min:1',
+            'pekerjaan_pelapor' => 'required|string|max:100',
+            'alamat_pelapor'    => 'required|string',
             'isi_laporan'       => 'required|string',
             'latitude'          => 'required|numeric',
             'longitude'         => 'required|numeric',
             'tujuan_polsek'     => 'required|string|max:255',
             'nik'               => 'required|numeric',
             'foto_ktp'          => 'required|image|mimes:jpeg,png,jpg|max:10000',
-            'agama'             => 'nullable|string|max:50',
-            'tempat_lahir'      => 'nullable|string|max:255',
-            'tanggal_lahir'     => 'nullable|date',
-            'jenis_kelamin'     => 'nullable|string|max:20',
+            'agama'             => 'required|string|max:50',
+            'tempat_lahir'      => 'required|string|max:255',
+            'tanggal_lahir'     => 'required|date',
+            'jenis_kelamin'     => 'required|string|max:20',
         ]);
 
         // 2. Proses upload file foto KTP

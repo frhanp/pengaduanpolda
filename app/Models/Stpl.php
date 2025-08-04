@@ -34,6 +34,8 @@ class Stpl extends Model
         'tempat_kejadian',
         'uraian_kejadian',
         'terlapor',
+        'nama_penerima',
+        'nrp_penerima',
     ];
 
     /**

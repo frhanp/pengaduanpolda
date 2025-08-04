@@ -1,16 +1,32 @@
 <x-guest-layout>
 
-    <section
-        class="flex-1 flex flex-col items-center justify-center text-center p-10 relative min-h-[80vh] bg-gradient-to-br from-blue-50 to-blue-100">
-        <div class="glass p-10 rounded-2xl max-w-3xl animate-fadeInUp relative z-10">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 text-blue-900 leading-tight drop-shadow-lg">Pengaduan
-                Masyarakat</h1>
-            <p class="max-w-xl mx-auto mb-8 text-blue-800 text-lg">Sampaikan laporan Anda dengan mudah, aman, dan
-                transparan. <br>PoldaCare siap melayani dan menjaga keamanan masyarakat.</p>
-            <a href="#lapor"
-                class="px-8 py-3.5 font-semibold text-gray-100 bg-blue-600 rounded-full shadow-lg transition transform hover:bg-blue-500 hover:shadow-blue-500/50 hover:scale-105">
-                Laporkan Sekarang
-            </a>
+    <section class="flex-1 flex flex-col items-center justify-center text-center p-10 relative min-h-[80vh] bg-gradient-to-br from-blue-50 to-blue-100">
+        {{-- Lebar maksimal diperbesar agar logo dan teks muat berdampingan --}}
+        <div class="glass p-8 md:p-12 rounded-2xl max-w-5xl animate-fadeInUp relative z-10">
+            {{-- Menggunakan flexbox untuk layout, stacking di mobile, row di desktop --}}
+            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                
+                <!-- [PENAMBAHAN] Kolom Kiri: Logo Placeholder -->
+                <div class="flex-shrink-0">
+                    <img src="{{ asset('images/polreslogocowo.png') }}" alt="Logo Polres Gorontalo Kota" 
+                         class="w-32 h-32 md:w-48 md:h-48 rounded-full object-cover shadow-lg border-4 border-white/50">
+                </div>
+    
+                <!-- Kolom Kanan: Teks dan Tombol Aksi -->
+                <div class="text-center md:text-left">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900 leading-tight drop-shadow-lg">
+                        Pengaduan Masyarakat
+                    </h1>
+                    <p class="mt-6 mb-8 text-blue-800 text-lg">
+                        Sampaikan laporan Anda dengan mudah, aman, dan transparan. <br>Polres Gorontalo Kota siap melayani dan menjaga keamanan masyarakat.
+                    </p>
+                    <a href="#lapor"
+                       class="inline-block px-8 py-3.5 font-semibold text-white bg-blue-600 rounded-full shadow-lg transition transform hover:bg-blue-500 hover:shadow-blue-500/50 hover:scale-105">
+                        Laporkan Sekarang
+                    </a>
+                </div>
+    
+            </div>
         </div>
     </section>
 

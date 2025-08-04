@@ -234,9 +234,12 @@
             <p>Yang Menerima Laporan,</p>
             <p style="margin-bottom: 5px;">KA SPKT POLSEK {{ strtoupper($pengaduan->tujuan_polsek ?? 'KOTA UTARA') }}
             </p>
+
             <div class="name-space"></div> <!-- Ruang untuk ttd basah & stempel -->
-            <p class="name">{{ $stpl->creator->name }}</p>
-            <p>NRP. ......................</p>
+
+            {{-- [PERUBAHAN] Menampilkan data dari input form --}}
+            <p class="name">{{ $stpl->nama_penerima }}</p>
+            <p>NRP. {{ $stpl->nrp_penerima }}</p>
         </div>
     </div>
 
