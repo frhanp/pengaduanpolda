@@ -208,7 +208,7 @@
         <strong>{{ $stpl->tempat_kejadian }}</strong> dengan terlapor <strong>{{ $stpl->terlapor }}</strong>.
     </p>
 
-    <p style="margin-top: 2px;">Uraian singkat kejadian: {{ $pengaduan->uraian_singkat_kejadian }}</p>
+    <p style="margin-top: 2px;">Uraian singkat kejadian: {{ $stpl->uraian_kejadian }}</p>
 
     <p class="penutup">
         Demikian Surat Tanda Penerimaan Laporan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana
