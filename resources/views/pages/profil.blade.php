@@ -5,14 +5,34 @@
             <div class="max-w-4xl mx-auto">
                 
                 {{-- Judul Halaman --}}
-                <div class="text-center mb-20">
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight">
-                        Profil Polres Gorontalo Kota
-                    </h2>
-                    <p class="mt-4 text-lg text-gray-600">
-                        Visi dan Misi kami dalam melayani masyarakat.
-                    </p>
-                </div>
+                {{-- Ganti div text-center Anda dengan blok ini --}}
+<div class="text-center mb-20 flex items-center justify-center gap-4 md:gap-8">
+    
+    {{-- Logo Kiri --}}
+    <div class="flex-shrink-0">
+        {{-- Ganti dengan URL logo Anda jika berbeda --}}
+        <img src="{{ asset('images/polreslogocowo.png') }}" alt="Logo Kiri" 
+             class="h-16 w-16 md:h-24 md:w-24 object-cover rounded-full shadow-lg border-4 border-white/50">
+    </div>
+
+    {{-- Teks Judul --}}
+    <div>
+        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight">
+            Profil Polres Gorontalo Kota
+        </h2>
+        <p class="mt-4 text-lg text-gray-600">
+            Visi dan Misi kami dalam melayani masyarakat.
+        </p>
+    </div>
+
+    {{-- Logo Kanan --}}
+    <div class="flex-shrink-0">
+        {{-- Ganti dengan URL logo Anda jika berbeda --}}
+        <img src="{{ asset('images/polreslogocewe.png') }}" alt="Logo Kanan" 
+             class="h-16 w-16 md:h-24 md:w-24 object-cover rounded-full shadow-lg border-4 border-white/50">
+    </div>
+
+</div>
 
                 <div class="space-y-16">
                     

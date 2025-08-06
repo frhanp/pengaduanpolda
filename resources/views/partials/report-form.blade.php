@@ -166,7 +166,7 @@
                 {{-- Alamat --}}
                 <div>
                     <div class="flex justify-between items-center mb-2"><label for="alamat_pelapor"
-                            class="text-sm font-medium text-gray-700">Alamat</label><button type="button"
+                            class="text-sm font-medium text-gray-700">Alamat Kejadian</label><button type="button"
                             id="get-location-btn"
                             class="flex items-center text-xs text-blue-600 font-semibold hover:text-blue-800 transition"><svg
                                 class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
