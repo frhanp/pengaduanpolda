@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Events\StatusDiubah;
 
 class DashboardController extends Controller
 {
@@ -16,54 +17,63 @@ class DashboardController extends Controller
      * Menampilkan halaman dashboard statistik untuk Admin.
      */
     public function index(Request $request)
-{
-    $unitKerja = Auth::user()->unit_kerja;
+    {
+        $unitKerja = Auth::user()->unit_kerja;
 
-    // --- Data untuk Kartu Statistik (tidak berubah) ---
-    $totalLaporan = Pengaduan::where('tujuan_polsek', $unitKerja)->count();
-    $laporanBaru = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Baru')->count();
-    $laporanDiverifikasi = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Diverifikasi')->count();
-    $laporanSelesai = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Selesai')->count();
+        // --- Data untuk Kartu Statistik (tidak berubah) ---
+        $totalLaporan = Pengaduan::where('tujuan_polsek', $unitKerja)->count();
+        $laporanBaru = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Baru')->count();
+        $laporanDiverifikasi = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Diverifikasi')->count();
+        $laporanSelesai = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Selesai')->count();
 
-    // --- Data untuk Analitik ---
+        // --- Data untuk Analitik ---
 
-    // 1. Grafik Garis: Tren Laporan Masuk (tidak berubah)
-    $periode = $request->input('periode', '7hari');
-    $days = match ($periode) { '30hari' => 30, '90hari' => 90, default => 7, };
-    $laporanMasukHarian = Pengaduan::select(DB::raw('DATE(created_at) as tanggal'), DB::raw('count(*) as jumlah'))
-        ->where('tujuan_polsek', $unitKerja)
-        ->whereBetween('created_at', [Carbon::now()->subDays($days - 1), Carbon::now()])
-        ->groupBy('tanggal')->pluck('jumlah', 'tanggal');
-    $lineChartData = [];
-    for ($i = $days - 1; $i >= 0; $i--) {
-        $tanggal = Carbon::now()->subDays($i)->format('Y-m-d');
-        $lineChartData[] = ['x' => $tanggal, 'y' => $laporanMasukHarian[$tanggal] ?? 0];
+        // 1. Grafik Garis: Tren Laporan Masuk (tidak berubah)
+        $periode = $request->input('periode', '7hari');
+        $days = match ($periode) {
+            '30hari' => 30,
+            '90hari' => 90,
+            default => 7,
+        };
+        $laporanMasukHarian = Pengaduan::select(DB::raw('DATE(created_at) as tanggal'), DB::raw('count(*) as jumlah'))
+            ->where('tujuan_polsek', $unitKerja)
+            ->whereBetween('created_at', [Carbon::now()->subDays($days - 1), Carbon::now()])
+            ->groupBy('tanggal')->pluck('jumlah', 'tanggal');
+        $lineChartData = [];
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $tanggal = Carbon::now()->subDays($i)->format('Y-m-d');
+            $lineChartData[] = ['x' => $tanggal, 'y' => $laporanMasukHarian[$tanggal] ?? 0];
+        }
+
+        // [PERUBAHAN] 2. Grafik Batang: Beban Kerja Tim Reskrim
+        $bebanKerjaReskrim = User::where('role', 'reskrim')
+            ->where('unit_kerja', $unitKerja)
+            ->withCount(['pengaduans as tugas_aktif_count' => function ($query) {
+                $query->whereIn('status', ['Diteruskan ke Reskrim', 'Diproses']);
+            }])
+            ->get();
+
+        $barChartData = [
+            'labels' => $bebanKerjaReskrim->pluck('name')->all(),
+            'data' => $bebanKerjaReskrim->pluck('tugas_aktif_count')->all(),
+        ];
+
+        // 3. Daftar Laporan Mendesak (tidak berubah)
+        $laporanMendesak = Pengaduan::where('tujuan_polsek', $unitKerja)
+            ->where('status', 'Baru')->orderBy('created_at', 'asc')->limit(5)->get();
+
+        // Kirim semua data ke view
+        return view('admin.dashboard', compact(
+            'totalLaporan',
+            'laporanBaru',
+            'laporanDiverifikasi',
+            'laporanSelesai',
+            'lineChartData',
+            'barChartData',
+            'laporanMendesak',
+            'periode'
+        ));
     }
-
-    // [PERUBAHAN] 2. Grafik Batang: Beban Kerja Tim Reskrim
-    $bebanKerjaReskrim = User::where('role', 'reskrim')
-        ->where('unit_kerja', $unitKerja)
-        ->withCount(['pengaduans as tugas_aktif_count' => function ($query) {
-            $query->whereIn('status', ['Diteruskan ke Reskrim', 'Diproses']);
-        }])
-        ->get();
-
-    $barChartData = [
-        'labels' => $bebanKerjaReskrim->pluck('name')->all(),
-        'data' => $bebanKerjaReskrim->pluck('tugas_aktif_count')->all(),
-    ];
-    
-    // 3. Daftar Laporan Mendesak (tidak berubah)
-    $laporanMendesak = Pengaduan::where('tujuan_polsek', $unitKerja)
-        ->where('status', 'Baru')->orderBy('created_at', 'asc')->limit(5)->get();
-
-    // Kirim semua data ke view
-    return view('admin.dashboard', compact(
-        'totalLaporan', 'laporanBaru', 'laporanDiverifikasi', 'laporanSelesai',
-        'lineChartData', 'barChartData', 'laporanMendesak',
-        'periode'
-    ));
-}
 
 
     /**
@@ -115,12 +125,12 @@ class DashboardController extends Controller
 
         // [PERUBAHAN] Ambil daftar user reskrim DARI UNIT KERJA YANG SAMA
         $reskrimUsers = User::where('role', 'reskrim')
-                            ->where('unit_kerja', Auth::user()->unit_kerja)
-                            ->get();
+            ->where('unit_kerja', Auth::user()->unit_kerja)
+            ->get();
 
         return view('admin.pengaduan.show', compact('pengaduan', 'reskrimUsers'));
     }
-    
+
     /**
      * Mengembalikan laporan ke pelapor dengan catatan.
      */
@@ -131,9 +141,16 @@ class DashboardController extends Controller
             abort(403);
         }
 
-        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */ }
+        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */
+        }
         $request->validate(['catatan' => 'required|string|min:10']);
         $pengaduan->update(['status' => 'Dikembalikan', 'catatan_pengembalian' => $request->catatan]);
+        $riwayat = $pengaduan->riwayatStatus()->create([
+            'status'     => 'Dikembalikan',
+            'catatan'    => $request->catatan,
+            'updated_by' => Auth:: id(),
+        ]);
+        event(new StatusDiubah($pengaduan, $riwayat));
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan telah dikembalikan.');
     }
 
@@ -147,8 +164,16 @@ class DashboardController extends Controller
             abort(403);
         }
 
-        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */ }
+        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */
+        }
         $pengaduan->update(['status' => 'Diverifikasi', 'verified_by_admin_id' => Auth::id()]);
+        $riwayat = $pengaduan->riwayatStatus()->create([
+            'status'     => 'Diverifikasi',
+            'catatan'    => 'Laporan telah diverifikasi oleh admin.',
+            'updated_by' => Auth::id(),
+        ]);
+
+        event(new StatusDiubah($pengaduan, $riwayat));
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan berhasil diverifikasi.');
     }
 
@@ -180,6 +205,14 @@ class DashboardController extends Controller
             'status' => 'Diteruskan ke Reskrim',
             'assigned_to_reskrim_id' => $request->assigned_to_reskrim_id,
         ]);
+
+        $userReskrim = User::find($request->assigned_to_reskrim_id);
+        $riwayat = $pengaduan->riwayatStatus()->create([
+            'status'     => 'Diteruskan ke Reskrim',
+            'catatan'    => 'Laporan diteruskan ke tim Reskrim: ' . $userReskrim->name,
+            'updated_by' => Auth::id(),
+        ]);
+        event(new StatusDiubah($pengaduan, $riwayat));
 
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan berhasil diteruskan.');
     }

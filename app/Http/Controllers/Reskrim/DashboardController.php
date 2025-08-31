@@ -8,6 +8,7 @@ use App\Models\Pengaduan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Events\StatusDiubah;
 
 class DashboardController extends Controller
 {
@@ -135,6 +136,14 @@ class DashboardController extends Controller
         $pengaduan->update([
             'status' => $request->status,
         ]);
+
+        $riwayat = $pengaduan->riwayatStatus()->create([
+            'status'     => $request->status,
+            'catatan'    => 'Status laporan diperbarui oleh tim Reskrim.',
+            'updated_by' => Auth::id(),
+        ]);
+
+        event(new StatusDiubah($pengaduan, $riwayat));
 
         // [PERBAIKAN] Arahkan kembali ke rute yang benar
         return redirect()->route('reskrim.tugas.show', $pengaduan)->with('success', 'Status laporan berhasil diperbarui.');

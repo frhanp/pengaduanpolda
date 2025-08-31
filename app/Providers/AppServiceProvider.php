@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event; // Tambahkan ini
+use App\Events\StatusDiubah;         // Tambahkan ini
+use App\Listeners\KirimNotifikasiStatus; // Tambahkan ini
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            StatusDiubah::class,
+            KirimNotifikasiStatus::class
+        );
     }
 }

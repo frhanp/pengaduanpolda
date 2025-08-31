@@ -1,5 +1,5 @@
 ﻿# Project Digest (Full Content)
-_Generated: 2025-08-31 14:53:04_
+_Generated: 2025-08-31 22:05:59_
 **Root:** D:\Laragon\www\pengaduanpolda
 
 
@@ -35,12 +35,15 @@ README.md
 tailwind.config.js
 vite.config.js
 app\Enums
+app\Events
 app\Http
+app\Listeners
 app\Mail
 app\Models
 app\Providers
 app\View
 app\Enums\UserRole.php
+app\Events\StatusDiubah.php
 app\Http\Controllers
 app\Http\Middleware
 app\Http\Requests
@@ -70,9 +73,12 @@ app\Http\Requests\Auth
 app\Http\Requests\ProfileUpdateRequest.php
 app\Http\Requests\StorePengaduanRequest.php
 app\Http\Requests\Auth\LoginRequest.php
+app\Listeners\KirimNotifikasiStatus.php
 app\Mail\PengaduanReceived.php
+app\Mail\StatusDiperbarui.php
 app\Models\BuktiPengaduan.php
 app\Models\Pengaduan.php
+app\Models\RiwayatStatus.php
 app\Models\Stpl.php
 app\Models\SuratPernyataan.php
 app\Models\User.php
@@ -121,6 +127,7 @@ database\migrations\2025_07_30_041436_add_terlapor_to_stpl_table.php
 database\migrations\2025_08_04_103448_add_penerima_details_to_stpl_table.php
 database\migrations\2025_08_31_141150_create_bukti_pengaduans_table.php
 database\migrations\2025_08_31_145212_add_email_pelapor_to_pengaduans_table.php
+database\migrations\2025_08_31_214555_create_riwayat_status_table.php
 database\seeders\DatabaseSeeder.php
 database\seeders\PengaduanSeeder.php
 database\seeders\UnitUserSeeder.php
@@ -144,6 +151,7 @@ resources\js\bootstrap.js
 resources\views\admin
 resources\views\auth
 resources\views\components
+resources\views\emails
 resources\views\lacak
 resources\views\layouts
 resources\views\pages
@@ -195,6 +203,8 @@ resources\views\components\primary-button.blade.php
 resources\views\components\responsive-nav-link.blade.php
 resources\views\components\secondary-button.blade.php
 resources\views\components\text-input.blade.php
+resources\views\emails\pengaduan-diterima.blade.php
+resources\views\emails\status-diperbarui.blade.php
 resources\views\lacak\edit.blade.php
 resources\views\lacak\verifikasi.blade.php
 resources\views\layouts\app.blade.php
@@ -235,15 +245,28 @@ storage\app\public\bukti
 storage\app\public\ktp
 storage\app\public\surat_pernyataan
 storage\app\public\.gitignore
+storage\app\public\bukti\3pzuqsT3t9IjifUlv2mZM13RyiYqCgImVjWOvXD5.jpg
+storage\app\public\bukti\aimkgpv3j76oDLY09OGhrdIkLdMp4kmsffuua8PD.jpg
+storage\app\public\bukti\ctfLLwphZsHXXKiuSgv2tpTe7xPoC2IL9zCpkn8T.jpg
+storage\app\public\bukti\gfVMiNONZmZyfQS1jX364YPZCPtS8ELoLHG6Pd6X.jpg
 storage\app\public\bukti\mXiGl5vsT3Qj35lNiyi5hJNkJFXnTi5rRuuB3d8f.jpg
+storage\app\public\bukti\nvgx7ISXBJZ74bnuZNRL6PDcvCJ63NcYbMrC6QNR.jpg
 storage\app\public\bukti\qbA8qcnSiGkw6Rx5oqbDmK86dHjRVZCNRHCiM05P.jpg
+storage\app\public\bukti\QeCHQnxQBnBPHyl5NC8haAOqNW4mYOnFyezVay59.jpg
+storage\app\public\bukti\SyEb6A5wuQteqRGFDc4pTvtqNSdwI1ggSj3wC23A.jpg
+storage\app\public\bukti\tNpiHl33OVAL5pjSp0h0dFFGrfX9HC5oyecvoYPL.jpg
 storage\app\public\bukti\uALkv0tggZqFjArumD3jifd9I8ZyhZj3sNxmGYBa.jpg
 storage\app\public\bukti\uPbab20pVAeRk0WuwIiKb42fJHQA5AE9tHrTSaEg.jpg
+storage\app\public\bukti\ziFfoH74xDrqxkDCCjaAOnJsxNUu705P0UBNoLPq.jpg
 storage\app\public\ktp\1GG1kgFdSPzT1YXUtlDUIlxkAo1tVOFIPP77sQH3.jpg
+storage\app\public\ktp\2WMeL9lZCliPBs5xBgt0YZuj5De2bEluLMwY4Txn.jpg
 storage\app\public\ktp\3IB3m4JsAXdiPq9VqN83aubSWxiD8c0VdRRYpJaO.jpg
 storage\app\public\ktp\46LKzuLrsuWXzNB5V9pd27rmAav5zEXud9HwPGLe.jpg
 storage\app\public\ktp\644zw5dCU2HawIcILfvfqKAbLC0Fg1RxFSmye0dD.jpg
+storage\app\public\ktp\bLyp9u62shw1wczzhOqiwQCQzARDgPKTO9m5zPbc.jpg
+storage\app\public\ktp\d5oIS3cjdceJO4RKlhF3ZZQYQNn1TolOnsWbvj37.jpg
 storage\app\public\ktp\ePTl0ZRPpxNZTiI4uWsOruuIoTmZsusvrW3uamGu.jpg
+storage\app\public\ktp\Hwhv9Erf41VVq8jZfGKtlxjyNCfLFLmXH6Yf6ZJh.jpg
 storage\app\public\ktp\ibiZERib1qZlay0puHCpzJJGMnVLrzk0MUNec3Xs.jpg
 storage\app\public\ktp\ij5xVlkuHs0mVTB96X1Rfj77poFgnJoQdbPYspCR.jpg
 storage\app\public\ktp\Iv51z909C5WncOrtbQ5NBP36MZDOKqFnxDpU25Lf.jpg
@@ -254,6 +277,10 @@ storage\app\public\ktp\ngCov1YEK3Euos2CpzBYIbuyjI2iq7EDxV7JTYVB.jpg
 storage\app\public\ktp\pk7D6ctPkR3fFDwPFoZiCy3kvsDAr6lzL8jzcFng.jpg
 storage\app\public\ktp\QoHv94N0rmOLXfvQlvJQvT8iNpmxGdIRB9KWDd0O.jpg
 storage\app\public\ktp\rEKicvs9v4L3eDe5BINoohihKidtJdXIqFj48C3b.jpg
+storage\app\public\ktp\S9596OvQx1SOFG7WPpufY7g4S203SIn2wXMj1a2c.jpg
+storage\app\public\ktp\T9nfazrEFUXJV7GWbnldCd2j2XM4WlYJoRGvBJwC.jpg
+storage\app\public\ktp\tzRjFgf3t3PderN12HdfFFPQsSJqCAlL0btjgNFo.jpg
+storage\app\public\ktp\uACEpEIsdG7QLSLlin6LSdrbm75VczGwLrzZbZxa.jpg
 storage\app\public\ktp\UekYuE9JRHpwkluYipj6OC9xJlmWTdmCbGXJntu0.jpg
 storage\app\public\ktp\uW5J08LvmgiOr1IL2HqpLufWgWn7EgIAcr24MIdH.jpg
 storage\app\public\ktp\VKFVfLpW6RAY3RR1lgYrwGsHl1Rcxl3sEUXj9dvv.jpg
@@ -262,6 +289,7 @@ storage\app\public\ktp\VZYS1ihlVEjofFr4m2nnQBnRxZJ5o6RxAVHEmdPm.jpg
 storage\app\public\ktp\wGS2cEOBEwssmhraYGqVnWz56cmqSEtoW6vrqRYb.jpg
 storage\app\public\ktp\xWdOyJBhP1HhI4nYNEVbp4rl0H2cu5nuK3ZZBZIm.jpg
 storage\app\public\ktp\Yv1dO9DtK8cPEOs3uqBKGPe7nvVknZBJCK0bAHjk.jpg
+storage\app\public\ktp\zBe9qQkYDMIdE2I28o0cIbQGvBhqGnt82ZgtWhPG.jpg
 storage\app\public\surat_pernyataan\AE6afQirE3CRBsushUwd3LxxctsTSPjlYyzHrKe9.pdf
 storage\framework\cache
 storage\framework\sessions
@@ -281,6 +309,7 @@ storage\framework\views\11613c9a6c1f9dfde169f10bfbe5f231.php
 storage\framework\views\14ff2534a2c50b646f77ccf2d80e123e.php
 storage\framework\views\1dc8c5887b1a72de0f0ca72217ce0bf3.php
 storage\framework\views\2128f6320ed4fdb255c62b67d36c23ae.php
+storage\framework\views\2276ece9fd269c0dd77a031c164e5504.php
 storage\framework\views\3532b615c8fccaf907c311f9e6fee8b1.php
 storage\framework\views\3b8213ad9799e3ef7447ba773025db08.php
 storage\framework\views\3d1676ac3418168a6044ce4b08bc999a.php
@@ -359,11 +388,11 @@ Branch:
 main
 
 Last 5 commits:
+603af78 memunculkan notif di email
+d371c53 add bukti dan email
 87e36db last update
 28a3072 ubah alamat kejadian dan logo
 4ceb944 hilangkan data pengaduan
-2109585 deploy terakhir
-d27572f inputan dan logo
 ```
 
 
@@ -664,54 +693,63 @@ class DashboardController extends Controller
      * Menampilkan halaman dashboard statistik untuk Admin.
      */
     public function index(Request $request)
-{
-    $unitKerja = Auth::user()->unit_kerja;
+    {
+        $unitKerja = Auth::user()->unit_kerja;
 
-    // --- Data untuk Kartu Statistik (tidak berubah) ---
-    $totalLaporan = Pengaduan::where('tujuan_polsek', $unitKerja)->count();
-    $laporanBaru = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Baru')->count();
-    $laporanDiverifikasi = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Diverifikasi')->count();
-    $laporanSelesai = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Selesai')->count();
+        // --- Data untuk Kartu Statistik (tidak berubah) ---
+        $totalLaporan = Pengaduan::where('tujuan_polsek', $unitKerja)->count();
+        $laporanBaru = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Baru')->count();
+        $laporanDiverifikasi = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Diverifikasi')->count();
+        $laporanSelesai = Pengaduan::where('tujuan_polsek', $unitKerja)->where('status', 'Selesai')->count();
 
-    // --- Data untuk Analitik ---
+        // --- Data untuk Analitik ---
 
-    // 1. Grafik Garis: Tren Laporan Masuk (tidak berubah)
-    $periode = $request->input('periode', '7hari');
-    $days = match ($periode) { '30hari' => 30, '90hari' => 90, default => 7, };
-    $laporanMasukHarian = Pengaduan::select(DB::raw('DATE(created_at) as tanggal'), DB::raw('count(*) as jumlah'))
-        ->where('tujuan_polsek', $unitKerja)
-        ->whereBetween('created_at', [Carbon::now()->subDays($days - 1), Carbon::now()])
-        ->groupBy('tanggal')->pluck('jumlah', 'tanggal');
-    $lineChartData = [];
-    for ($i = $days - 1; $i >= 0; $i--) {
-        $tanggal = Carbon::now()->subDays($i)->format('Y-m-d');
-        $lineChartData[] = ['x' => $tanggal, 'y' => $laporanMasukHarian[$tanggal] ?? 0];
+        // 1. Grafik Garis: Tren Laporan Masuk (tidak berubah)
+        $periode = $request->input('periode', '7hari');
+        $days = match ($periode) {
+            '30hari' => 30,
+            '90hari' => 90,
+            default => 7,
+        };
+        $laporanMasukHarian = Pengaduan::select(DB::raw('DATE(created_at) as tanggal'), DB::raw('count(*) as jumlah'))
+            ->where('tujuan_polsek', $unitKerja)
+            ->whereBetween('created_at', [Carbon::now()->subDays($days - 1), Carbon::now()])
+            ->groupBy('tanggal')->pluck('jumlah', 'tanggal');
+        $lineChartData = [];
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $tanggal = Carbon::now()->subDays($i)->format('Y-m-d');
+            $lineChartData[] = ['x' => $tanggal, 'y' => $laporanMasukHarian[$tanggal] ?? 0];
+        }
+
+        // [PERUBAHAN] 2. Grafik Batang: Beban Kerja Tim Reskrim
+        $bebanKerjaReskrim = User::where('role', 'reskrim')
+            ->where('unit_kerja', $unitKerja)
+            ->withCount(['pengaduans as tugas_aktif_count' => function ($query) {
+                $query->whereIn('status', ['Diteruskan ke Reskrim', 'Diproses']);
+            }])
+            ->get();
+
+        $barChartData = [
+            'labels' => $bebanKerjaReskrim->pluck('name')->all(),
+            'data' => $bebanKerjaReskrim->pluck('tugas_aktif_count')->all(),
+        ];
+
+        // 3. Daftar Laporan Mendesak (tidak berubah)
+        $laporanMendesak = Pengaduan::where('tujuan_polsek', $unitKerja)
+            ->where('status', 'Baru')->orderBy('created_at', 'asc')->limit(5)->get();
+
+        // Kirim semua data ke view
+        return view('admin.dashboard', compact(
+            'totalLaporan',
+            'laporanBaru',
+            'laporanDiverifikasi',
+            'laporanSelesai',
+            'lineChartData',
+            'barChartData',
+            'laporanMendesak',
+            'periode'
+        ));
     }
-
-    // [PERUBAHAN] 2. Grafik Batang: Beban Kerja Tim Reskrim
-    $bebanKerjaReskrim = User::where('role', 'reskrim')
-        ->where('unit_kerja', $unitKerja)
-        ->withCount(['pengaduans as tugas_aktif_count' => function ($query) {
-            $query->whereIn('status', ['Diteruskan ke Reskrim', 'Diproses']);
-        }])
-        ->get();
-
-    $barChartData = [
-        'labels' => $bebanKerjaReskrim->pluck('name')->all(),
-        'data' => $bebanKerjaReskrim->pluck('tugas_aktif_count')->all(),
-    ];
-    
-    // 3. Daftar Laporan Mendesak (tidak berubah)
-    $laporanMendesak = Pengaduan::where('tujuan_polsek', $unitKerja)
-        ->where('status', 'Baru')->orderBy('created_at', 'asc')->limit(5)->get();
-
-    // Kirim semua data ke view
-    return view('admin.dashboard', compact(
-        'totalLaporan', 'laporanBaru', 'laporanDiverifikasi', 'laporanSelesai',
-        'lineChartData', 'barChartData', 'laporanMendesak',
-        'periode'
-    ));
-}
 
 
     /**
@@ -763,12 +801,12 @@ class DashboardController extends Controller
 
         // [PERUBAHAN] Ambil daftar user reskrim DARI UNIT KERJA YANG SAMA
         $reskrimUsers = User::where('role', 'reskrim')
-                            ->where('unit_kerja', Auth::user()->unit_kerja)
-                            ->get();
+            ->where('unit_kerja', Auth::user()->unit_kerja)
+            ->get();
 
         return view('admin.pengaduan.show', compact('pengaduan', 'reskrimUsers'));
     }
-    
+
     /**
      * Mengembalikan laporan ke pelapor dengan catatan.
      */
@@ -779,9 +817,15 @@ class DashboardController extends Controller
             abort(403);
         }
 
-        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */ }
+        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */
+        }
         $request->validate(['catatan' => 'required|string|min:10']);
         $pengaduan->update(['status' => 'Dikembalikan', 'catatan_pengembalian' => $request->catatan]);
+        $pengaduan->riwayatStatus()->create([
+            'status'     => 'Dikembalikan',
+            'catatan'    => $request->catatan,
+            'updated_by' => Auth::id(),
+        ]);
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan telah dikembalikan.');
     }
 
@@ -795,8 +839,14 @@ class DashboardController extends Controller
             abort(403);
         }
 
-        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */ }
+        if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */
+        }
         $pengaduan->update(['status' => 'Diverifikasi', 'verified_by_admin_id' => Auth::id()]);
+        $pengaduan->riwayatStatus()->create([
+            'status'     => 'Diverifikasi',
+            'catatan'    => 'Laporan telah diverifikasi oleh admin.',
+            'updated_by' => Auth::id(),
+        ]);
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan berhasil diverifikasi.');
     }
 
@@ -827,6 +877,13 @@ class DashboardController extends Controller
         $pengaduan->update([
             'status' => 'Diteruskan ke Reskrim',
             'assigned_to_reskrim_id' => $request->assigned_to_reskrim_id,
+        ]);
+
+        $userReskrim = User::find($request->assigned_to_reskrim_id);
+        $pengaduan->riwayatStatus()->create([
+            'status'     => 'Diteruskan ke Reskrim',
+            'catatan'    => 'Laporan diteruskan ke tim Reskrim: ' . $userReskrim->name,
+            'updated_by' => Auth::id(),
         ]);
 
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan berhasil diteruskan.');
@@ -1489,6 +1546,12 @@ class DashboardController extends Controller
             'status' => $request->status,
         ]);
 
+        $pengaduan->riwayatStatus()->create([
+            'status'     => $request->status,
+            'catatan'    => 'Status laporan diperbarui oleh tim Reskrim.',
+            'updated_by' => Auth::id(),
+        ]);
+
         // [PERBAIKAN] Arahkan kembali ke rute yang benar
         return redirect()->route('reskrim.tugas.show', $pengaduan)->with('success', 'Status laporan berhasil diperbarui.');
     }
@@ -1562,6 +1625,8 @@ use Illuminate\Http\Request;
 use App\Models\Pengaduan;
 use App\Http\Requests\StorePengaduanRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengaduanReceived;
 
 class PengaduanController extends Controller
 {
@@ -1751,9 +1816,7 @@ class PengaduanController extends Controller
                 ]);
             }
         }
-
-        dd($pengaduan);
-
+        Mail::to($pengaduan->email_pelapor)->send(new PengaduanReceived($pengaduan));
         return redirect('/')->with('success', 'Laporan Anda telah berhasil dikirim. Terima kasih!');
     }
 
@@ -1945,6 +2008,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\RiwayatStatus;
 
 class Pengaduan extends Model
 {
@@ -1976,6 +2040,7 @@ class Pengaduan extends Model
         'tanggal_lahir',
         'jenis_kelamin',
         'catatan_pengembalian',
+        'email_pelapor',
     ];
 
     /**
@@ -1989,6 +2054,13 @@ class Pengaduan extends Model
         'longitude' => 'decimal:8',
         'tanggal_lahir' => 'date',
     ];
+
+    protected function nomorTiket(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => 'PDC-' . str_pad($this->id, 6, '0', STR_PAD_LEFT),
+        );
+    }
 
 
     // RELASI: Mendefinisikan hubungan Pengaduan dengan tabel lain
@@ -2025,6 +2097,33 @@ class Pengaduan extends Model
     public function bukti()
     {
         return $this->hasMany(BuktiPengaduan::class);
+    }
+
+    public function riwayatStatus()
+    {
+        return $this->hasMany(RiwayatStatus::class);
+    }
+}
+
+===== app\Models\RiwayatStatus.php =====
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class RiwayatStatus extends Model
+{
+    use HasFactory;
+    protected $table = 'riwayat_status';
+    protected $fillable = ['pengaduan_id', 'status', 'catatan', 'updated_by'];
+
+    public function pengaduan() {
+        return $this->belongsTo(Pengaduan::class);
+    }
+    public function user() {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }
 
@@ -4355,6 +4454,56 @@ $classes = ($active ?? false)
 @props(['disabled' => false])
 
 <input @disabled($disabled) {{ $attributes->merge(['class' => 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm']) }}>
+
+===== resources\views\emails\pengaduan-diterima.blade.php =====
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Diterima</title>
+</head>
+<body style="font-family: Arial, sans-serif;">
+    <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+        <h2>Laporan Anda Telah Diterima</h2>
+        <p>Halo, {{ $pengaduan->nama_pelapor }},</p>
+        <p>Terima kasih telah membuat laporan. Laporan Anda telah kami terima dan akan segera ditindaklanjuti.</p>
+        <p><strong>Nomor Tiket Laporan Anda: {{ $pengaduan->nomor_tiket }}</strong></p>
+        <p>Silakan gunakan nomor tiket ini untuk melacak status laporan Anda.</p>
+        <hr>
+        <p>Hormat kami,<br>Tim PoldaCare</p>
+    </div>
+</body>
+</html>
+
+===== resources\views\emails\status-diperbarui.blade.php =====
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Status Laporan</title>
+</head>
+
+<body style="font-family: Arial, sans-serif;">
+    <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+        <h2>Status Laporan Anda Telah Diperbarui</h2>
+        <p>Halo, {{ $pengaduan->nama_pelapor }},</p>
+        <p>Ada pembaruan untuk laporan Anda dengan nomor tiket <strong>{{ $pengaduan->nomor_tiket }}</strong>.</p>
+
+        <div style="padding: 15px; background-color: #f2f2f2; border-radius: 5px; margin-top: 15px;">
+            <p><strong>Status Baru:</strong> {{ $riwayat->status }}</p>
+            @if ($riwayat->catatan)
+                <p><strong>Catatan:</strong> {{ $riwayat->catatan }}</p>
+            @endif
+        </div>
+
+        <p style="margin-top: 20px;">Anda dapat melacak detail laporan Anda kapan saja melalui website kami.</p>
+        <hr>
+        <p>Hormat kami,<br>Tim PoldaCare</p>
+    </div>
+</body>
+
+</html>
 
 ===== resources\views\lacak\edit.blade.php =====
 <x-guest-layout>
