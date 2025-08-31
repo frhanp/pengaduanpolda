@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Pengaduan;
 use App\Http\Requests\StorePengaduanRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengaduanReceived;
 
 class PengaduanController extends Controller
 {
@@ -195,9 +197,7 @@ class PengaduanController extends Controller
                 ]);
             }
         }
-
-        
-
+        Mail::to($pengaduan->email_pelapor)->send(new PengaduanReceived($pengaduan));
         return redirect('/')->with('success', 'Laporan Anda telah berhasil dikirim. Terima kasih!');
     }
 

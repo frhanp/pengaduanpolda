@@ -8,17 +8,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Pengaduan;
 
 class PengaduanReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $pengaduan;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Pengaduan $pengaduan)
     {
-        //
+        $this->pengaduan = $pengaduan;
     }
 
     /**
@@ -27,7 +30,7 @@ class PengaduanReceived extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pengaduan Received',
+            subject: 'Laporan Diterima - Tiket #' . $this->pengaduan->nomor_tiket,
         );
     }
 
@@ -37,9 +40,10 @@ class PengaduanReceived extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.pengaduan-diterima',
         );
     }
+
 
     /**
      * Get the attachments for the message.
@@ -51,3 +55,5 @@ class PengaduanReceived extends Mailable
         return [];
     }
 }
+
+

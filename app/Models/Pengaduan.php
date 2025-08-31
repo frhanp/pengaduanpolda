@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\RiwayatStatus;
 
 class Pengaduan extends Model
 {
@@ -53,6 +54,13 @@ class Pengaduan extends Model
         'tanggal_lahir' => 'date',
     ];
 
+    protected function nomorTiket(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => 'PDC-' . str_pad($this->id, 6, '0', STR_PAD_LEFT),
+        );
+    }
+
 
     // RELASI: Mendefinisikan hubungan Pengaduan dengan tabel lain
 
@@ -88,5 +96,10 @@ class Pengaduan extends Model
     public function bukti()
     {
         return $this->hasMany(BuktiPengaduan::class);
+    }
+
+    public function riwayatStatus()
+    {
+        return $this->hasMany(RiwayatStatus::class);
     }
 }
