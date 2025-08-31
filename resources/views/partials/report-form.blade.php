@@ -72,6 +72,20 @@
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
                     </div>
+                    <div>
+                        <label for="bukti" class="block mb-2 text-sm font-medium text-gray-700">Upload Bukti (Bisa lebih dari satu)</label>
+                        <input type="file" id="bukti" name="bukti[]" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" multiple>
+                    </div>
+
+                    <div>
+                        <label for="email_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email_pelapor" name="email_pelapor" value="{{ old('email_pelapor') }}"
+                            class="w-full p-3 rounded-lg border @error('email_pelapor') border-red-500 @else border-gray-300 @enderror"
+                            required>
+                        @error('email_pelapor')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
 
                     {{-- Tempat Lahir --}}
                     <div>

@@ -38,6 +38,7 @@ class Pengaduan extends Model
         'tanggal_lahir',
         'jenis_kelamin',
         'catatan_pengembalian',
+        'email_pelapor',
     ];
 
     /**
@@ -51,7 +52,7 @@ class Pengaduan extends Model
         'longitude' => 'decimal:8',
         'tanggal_lahir' => 'date',
     ];
-    
+
 
     // RELASI: Mendefinisikan hubungan Pengaduan dengan tabel lain
 
@@ -82,5 +83,10 @@ class Pengaduan extends Model
     public function suratPernyataans(): HasMany
     {
         return $this->hasMany(SuratPernyataan::class);
+    }
+
+    public function bukti()
+    {
+        return $this->hasMany(BuktiPengaduan::class);
     }
 }

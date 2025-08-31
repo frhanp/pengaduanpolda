@@ -33,7 +33,7 @@ class PengaduanController extends Controller
         return view('lacak.verifikasi', compact('pengaduan'));
     }
 
-     /**
+    /**
      * [FUNGSI BARU]
      * Memproses NIK yang diinput dan mengarahkan ke form edit jika cocok.
      */
@@ -126,7 +126,7 @@ class PengaduanController extends Controller
 
         // Update data pengaduan di database
         $pengaduan->update($validatedData);
-        
+
         // Kembalikan status menjadi 'Baru' dan hapus catatan
         $pengaduan->update([
             'status' => 'Baru',
@@ -138,7 +138,7 @@ class PengaduanController extends Controller
 
         // Arahkan kembali ke halaman lacak dengan pesan sukses
         return redirect()->route('lacak.aduan', ['nama_pelapor' => $pengaduan->nama_pelapor])
-                         ->with('success', 'Laporan berhasil diperbaiki dan telah dikirim ulang untuk ditinjau.');
+            ->with('success', 'Laporan berhasil diperbaiki dan telah dikirim ulang untuk ditinjau.');
     }
 
     public function store(Request $request)
@@ -146,6 +146,8 @@ class PengaduanController extends Controller
         // 1. Validasi semua input langsung di sini
         $validatedData = $request->validate([
             'nama_pelapor'      => 'required|string|max:255',
+            'email_pelapor'     => 'required|email|max:255',
+            'bukti.*'           => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
             'no_hp_pelapor'     => 'required|string|max:20',
             'umur_pelapor'      => 'required|integer|min:1',
             'pekerjaan_pelapor' => 'required|string|max:100',
@@ -162,13 +164,11 @@ class PengaduanController extends Controller
             'jenis_kelamin'     => 'required|string|max:20',
         ]);
 
+
         // 2. Proses upload file foto KTP
         if ($request->hasFile('foto_ktp')) {
 
-            // [PERBAIKAN UTAMA DI SINI]
-            // Argumen pertama: folder tujuan di dalam disk.
-            // Argumen kedua: nama disk yang akan digunakan.
-            // Ini akan menyimpan file ke: storage/app/public/ktp
+
             $path = $request->file('foto_ktp')->store('ktp', 'public');
 
             // [PERBAIKAN] Cek apakah file berhasil disimpan
@@ -183,7 +183,20 @@ class PengaduanController extends Controller
         }
 
         // 3. Simpan semua data ke database
-        Pengaduan::create($validatedData);
+        $pengaduan = Pengaduan::create($validatedData);
+
+        // 4. Proses upload file bukti (jika ada)
+        if ($request->hasFile('bukti')) {
+            foreach ($request->file('bukti') as $file) {
+                $path = $file->store('bukti', 'public');
+                // Gunakan relasi untuk menyimpan bukti
+                $pengaduan->bukti()->create([
+                    'file_path' => $path
+                ]);
+            }
+        }
+
+        
 
         return redirect('/')->with('success', 'Laporan Anda telah berhasil dikirim. Terima kasih!');
     }
