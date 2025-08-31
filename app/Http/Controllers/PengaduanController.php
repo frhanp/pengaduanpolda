@@ -8,6 +8,7 @@ use App\Http\Requests\StorePengaduanRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PengaduanReceived;
+use App\Mail\PengaduanDiperbaiki;
 
 class PengaduanController extends Controller
 {
@@ -125,15 +126,32 @@ class PengaduanController extends Controller
             $path = $request->file('foto_ktp')->store('ktp', 'public');
             $validatedData['foto_ktp'] = $path;
         }
+        // ---- PERUBAIKAN LOGIKA ----
+        // 1. Tambahkan status baru dan hapus catatan ke data yang akan diupdate
+        $validatedData['status'] = 'Baru';
+        $validatedData['catatan_pengembalian'] = null;
 
-        // Update data pengaduan di database
+        // 2. Lakukan update HANYA SEKALI untuk semua perubahan
         $pengaduan->update($validatedData);
 
-        // Kembalikan status menjadi 'Baru' dan hapus catatan
-        $pengaduan->update([
-            'status' => 'Baru',
-            'catatan_pengembalian' => null,
+        // 3. Catat ke riwayat
+        $pengaduan->riwayatStatus()->create([
+            'status'  => 'Baru',
+            'catatan' => 'Laporan diperbaiki dan dikirim ulang oleh pelapor.',
         ]);
+
+        // 4. Kirim email notifikasi ke pelapor
+        Mail::to($pengaduan->email_pelapor)->send(new PengaduanDiperbaiki($pengaduan));
+        // ---- BATAS PERUBAIKAN ----
+
+        // // Update data pengaduan di database
+        // $pengaduan->update($validatedData);
+
+        // // Kembalikan status menjadi 'Baru' dan hapus catatan
+        // $pengaduan->update([
+        //     'status' => 'Baru',
+        //     'catatan_pengembalian' => null,
+        // ]);
 
         // Hapus "izin" dari session setelah selesai
         $request->session()->forget('can_edit_pengaduan_' . $pengaduan->id);
