@@ -16,7 +16,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-gray-50 to-blue-50">
             <div>
                 <a href="/" class="text-4xl font-bold text-blue-700 tracking-tight">
-                    Polres Gorontalo Kota
+                    Polresta Gorontalo Kota 
                 </a>
             </div>
 
