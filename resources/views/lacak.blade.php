@@ -45,98 +45,81 @@
                 </form>
             </div>
 
+            {{-- Ganti seluruh blok ini dari @if sampai @endif --}}
             @if (request()->filled('nama_pelapor'))
                 <h3 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pencarian untuk "{{ request('nama_pelapor') }}"
                 </h3>
-                <div class="space-y-6">
-                    @forelse ($pengaduans as $pengaduan)
-                        <div
-                            class="bg-white p-6 rounded-lg shadow-md border-l-4 
-                            @if ($pengaduan->status == 'Diteruskan ke Penyidik' || $pengaduan->status == 'Selesai') border-green-500
-                            @elseif($pengaduan->status == 'Diproses' || $pengaduan->status == 'Diteruskan ke Reskrim') border-purple-500
-                            @elseif($pengaduan->status == 'Diverifikasi') border-yellow-500
-                            @elseif($pengaduan->status == 'Dikembalikan') border-red-500
-                            @else border-blue-500 @endif">
 
-                            {{-- ====================================================== --}}
-                            {{-- [PERUBAHAN UTAMA] Tampilan Kartu Hasil Pencarian     --}}
-                            {{-- ====================================================== --}}
-                            <div class="flex flex-col sm:flex-row justify-between">
-                                {{-- Kolom Kiri: Detail Laporan --}}
-                                <div class="space-y-3">
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">ID Laporan</p>
-                                        <p class="font-semibold text-gray-800">: #{{ $pengaduan->id }}</p>
+                @if ($pengaduans->isNotEmpty())
+                    <div class="space-y-8">
+                        @foreach ($pengaduans as $pengaduan)
+                            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Nomor Tiket:
+                                            {{ $pengaduan->nomor_tiket }}</h3>
+                                        <p class="text-sm text-gray-500">Dilaporkan pada:
+                                            {{ $pengaduan->created_at->format('d M Y, H:i') }}</p>
                                     </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Nama Pelapor</p>
-                                        <p class="font-semibold text-gray-800">: {{ $pengaduan->nama_pelapor }}</p>
-                                    </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Jenis Kasus</p>
-                                        <p class="font-semibold text-gray-800">:
-                                            {{ Str::limit($pengaduan->isi_laporan, 50) }}</p>
-                                    </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Dilaporkan pada Tanggal</p>
-                                        <p class="font-semibold text-gray-800">:
-                                            {{ $pengaduan->created_at->translatedFormat('d F Y') }}</p>
-                                    </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Waktu</p>
-                                        <p class="font-semibold text-gray-800">:
-                                            {{ $pengaduan->created_at->format('H:i') }} WITA</p>
-                                    </div>
+                                    @if ($pengaduan->status == 'Dikembalikan')
+                                        <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}"
+                                            class="text-sm bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition">
+                                            Perbaiki Laporan
+                                        </a>
+                                    @endif
                                 </div>
+                                <hr class="my-4">
 
-                                {{-- Kolom Kanan: Status --}}
-                                <div class="mt-4 sm:mt-0 sm:text-right">
-                                    <p class="text-sm text-gray-500 mb-1">Status:</p>
-                                    @php
-                                        $statusClass = '';
-                                        if ($pengaduan->status == 'Baru') {
-                                            $statusClass = 'bg-blue-100 text-blue-800';
-                                        } elseif ($pengaduan->status == 'Diverifikasi') {
-                                            $statusClass = 'bg-yellow-100 text-yellow-800';
-                                        } elseif ($pengaduan->status == 'Diteruskan ke Reskrim') {
-                                            $statusClass = 'bg-indigo-100 text-indigo-800';
-                                        } elseif ($pengaduan->status == 'Diproses') {
-                                            $statusClass = 'bg-purple-100 text-purple-800';
-                                        } elseif ($pengaduan->status == 'Diteruskan ke Penyidik') {
-                                            $statusClass = 'bg-teal-100 text-teal-800';
-                                        } elseif ($pengaduan->status == 'Dikembalikan') {
-                                            $statusClass = 'bg-red-100 text-red-800';
-                                        } elseif ($pengaduan->status == 'Selesai') {
-                                            $statusClass = 'bg-green-100 text-green-800';
-                                        }
-                                    @endphp
-                                    <span
-                                        class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full {{ $statusClass }}">
-                                        {{ $pengaduan->status }}
-                                    </span>
+                                {{-- Timeline Riwayat Status --}}
+                                <div class="relative border-l-2 border-blue-200 ml-3 mt-6">
+
+                                    {{-- Loop untuk setiap riwayat status (sekarang yang terbaru di atas) --}}
+                                    @foreach ($pengaduan->riwayatStatus as $riwayat)
+                                        <div class="mb-8 ml-6">
+                                            <span
+                                                class="absolute flex items-center justify-center w-6 h-6 bg-blue-500 rounded-full -left-3 ring-8 ring-white">
+                                                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </span>
+                                            <h4 class="font-semibold text-gray-900">{{ $riwayat->status }}</h4>
+                                            <time
+                                                class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $riwayat->created_at->format('d M Y, H:i') }}</time>
+                                            @if ($riwayat->catatan)
+                                                <p class="text-base font-normal text-gray-600">{{ $riwayat->catatan }}
+                                                </p>
+                                            @endif
+                                        </div>
+                                    @endforeach
+
+                                    {{-- Riwayat Awal (Saat Laporan Dibuat) SEKARANG DI BAWAH --}}
+                                    <div class="mb-8 ml-6">
+                                        <span
+                                            class="absolute flex items-center justify-center w-6 h-6 bg-blue-500 rounded-full -left-3 ring-8 ring-white">
+                                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                        </span>
+                                        <h4 class="font-semibold text-gray-900">Laporan Dibuat</h4>
+                                        <time
+                                            class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $pengaduan->created_at->format('d M Y, H:i') }}</time>
+                                        <p class="text-base font-normal text-gray-600">Laporan Anda berhasil dikirim dan
+                                            menunggu verifikasi admin.</p>
+                                    </div>
+
                                 </div>
                             </div>
-
-                            @if ($pengaduan->status == 'Dikembalikan' && $pengaduan->catatan_pengembalian)
-                                <div class="mt-4 pt-4 border-t border-gray-200">
-                                    <p class="text-sm font-bold text-red-700">Catatan dari Petugas:</p>
-                                    <p class="text-sm text-gray-600 italic">"{{ $pengaduan->catatan_pengembalian }}"
-                                    </p>
-                                    <div class="mt-4 text-right">
-                                        <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}"
-                                            class="inline-block px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
-                                            Perbaiki Laporan Ini
-                                        </a>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    @empty
-                        <div class="text-center py-10 bg-gray-50 rounded-lg">
-                            <p class="text-gray-600">Tidak ada aduan yang ditemukan dengan nama tersebut.</p>
-                        </div>
-                    @endforelse
-                </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-10 bg-gray-50 rounded-lg">
+                        <p class="text-gray-600">Tidak ada aduan yang ditemukan dengan nama tersebut.</p>
+                    </div>
+                @endif
             @endif
         </div>
     </section>

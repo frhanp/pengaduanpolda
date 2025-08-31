@@ -226,10 +226,12 @@ class PengaduanController extends Controller
         if ($request->filled('nama_pelapor')) {
             $namaPelapor = $request->input('nama_pelapor');
 
+
             // [PERBAIKAN] Ganti 'ILIKE' menjadi 'LIKE'
-            $pengaduans = Pengaduan::where('nama_pelapor', 'LIKE', '%' . $namaPelapor . '%')
-                ->latest()
-                ->get();
+            $pengaduans = Pengaduan::with('riwayatStatus')
+            ->where('nama_pelapor', 'LIKE', '%' . $namaPelapor . '%')
+            ->latest()
+            ->get();
         }
 
         return view('lacak', compact('pengaduans'));

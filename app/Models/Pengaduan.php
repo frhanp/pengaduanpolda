@@ -57,7 +57,7 @@ class Pengaduan extends Model
     protected function nomorTiket(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn() => 'PDC-' . str_pad($this->id, 6, '0', STR_PAD_LEFT),
+            get: fn() => 'PGK-' . str_pad($this->id, 6, '0', STR_PAD_LEFT),
         );
     }
 
@@ -100,6 +100,6 @@ class Pengaduan extends Model
 
     public function riwayatStatus()
     {
-        return $this->hasMany(RiwayatStatus::class);
+        return $this->hasMany(RiwayatStatus::class)->orderBy('created_at', 'desc');
     }
 }
