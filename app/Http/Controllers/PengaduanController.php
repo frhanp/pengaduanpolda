@@ -42,19 +42,20 @@ class PengaduanController extends Controller
      */
     public function handleVerification(Request $request, Pengaduan $pengaduan)
     {
-        $request->validate(['nik' => 'required|numeric|digits:16']);
+        // Validasi input nomor tiket
+        $request->validate(['nomor_tiket' => 'required|string']);
 
-        // Bandingkan NIK yang diinput dengan NIK di database
-        if ($request->nik === $pengaduan->nik) {
-            // Jika cocok, beri "izin" di session untuk mengedit laporan ini
+        // Bandingkan nomor tiket yang diinput dengan nomor tiket virtual dari pengaduan
+        if ($request->nomor_tiket === $pengaduan->nomor_tiket) {
+            // Jika cocok, beri "izin" di session
             $request->session()->put('can_edit_pengaduan_' . $pengaduan->id, true);
 
-            // Arahkan ke halaman form perbaikan (akan kita buat di langkah 3)
+            // Arahkan ke halaman form perbaikan
             return redirect()->route('laporan.edit.form', $pengaduan->id);
         }
 
         // Jika tidak cocok, kembalikan dengan pesan error
-        return back()->with('error', 'NIK yang Anda masukkan tidak sesuai.');
+        return back()->with('error', 'Nomor tiket yang Anda masukkan tidak sesuai.');
     }
 
     public function petaRawan()
@@ -231,8 +232,6 @@ class PengaduanController extends Controller
                 $pengaduans = Pengaduan::with('riwayatStatus')
                     ->where('id', $id)
                     ->get();
-
-                
             }
         }
 
