@@ -11,7 +11,7 @@
         <p>Terima kasih telah mengirimkan perbaikan untuk laporan Anda dengan nomor tiket <strong>{{ $pengaduan->nomor_tiket }}</strong>.</p>
         <p>Laporan Anda kini telah berstatus "Baru" dan akan kembali ditinjau oleh admin kami.</p>
         <hr>
-        <p>Hormat kami,<br>Tim PoldaCare</p>
+        <p>Hormat kami,<br>Tim Polresta Gorontalo Kota</p>
     </div>
 </body>
 </html>

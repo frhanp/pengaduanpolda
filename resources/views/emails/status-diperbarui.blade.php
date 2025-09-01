@@ -21,7 +21,7 @@
 
         <p style="margin-top: 20px;">Anda dapat melacak detail laporan Anda kapan saja melalui website kami.</p>
         <hr>
-        <p>Hormat kami,<br>Tim PoldaCare</p>
+        <p>Hormat kami,<br>Tim Polresta Gorontalo Kota</p>
     </div>
 </body>
 

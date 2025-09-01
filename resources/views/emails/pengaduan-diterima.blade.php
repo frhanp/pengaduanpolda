@@ -10,9 +10,9 @@
         <p>Halo, {{ $pengaduan->nama_pelapor }},</p>
         <p>Terima kasih telah membuat laporan. Laporan Anda telah kami terima dan akan segera ditindaklanjuti.</p>
         <p><strong>Nomor Tiket Laporan Anda: {{ $pengaduan->nomor_tiket }}</strong></p>
-        <p>Silakan gunakan nomor tiket ini untuk melacak status laporan Anda.</p>
+        <p>Silakan gunakan nama lengkap  untuk melacak status laporan Anda.</p>
         <hr>
-        <p>Hormat kami,<br>Tim PoldaCare</p>
+        <p>Hormat kami,<br>Tim Polresta Gorontalo Kota</p>
     </div>
 </body>
 </html>
