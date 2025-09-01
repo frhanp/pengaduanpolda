@@ -222,16 +222,18 @@ class PengaduanController extends Controller
     public function lacak(Request $request)
     {
         $pengaduans = collect();
+        $keyword = $request->input('keyword');
 
-        if ($request->filled('nama_pelapor')) {
-            $namaPelapor = $request->input('nama_pelapor');
+        if ($request->filled('keyword')) {
+            if (preg_match('/^([A-Z]+)-(\d+)$/i', $keyword, $matches)) {
+                $id = (int)$matches[2];
 
+                $pengaduans = Pengaduan::with('riwayatStatus')
+                    ->where('id', $id)
+                    ->get();
 
-            // [PERBAIKAN] Ganti 'ILIKE' menjadi 'LIKE'
-            $pengaduans = Pengaduan::with('riwayatStatus')
-            ->where('nama_pelapor', 'LIKE', '%' . $namaPelapor . '%')
-            ->latest()
-            ->get();
+                
+            }
         }
 
         return view('lacak', compact('pengaduans'));

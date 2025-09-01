@@ -16,7 +16,7 @@
                 <div>
                     <h2 class="text-3xl md:text-4xl font-bold text-blue-700">Lacak Aduan Anda</h2>
                     <p class="text-gray-600 max-w-2xl mx-auto mt-4 text-lg">
-                        Masukkan nama lengkap yang Anda gunakan saat melapor untuk melihat status aduan Anda.
+                        Masukkan nomor tiket yang Anda terima di email untuk melihat status aduan Anda.
                     </p>
                 </div>
 
@@ -32,11 +32,10 @@
             <div class="glass p-8 rounded-2xl mb-8">
                 <form action="{{ route('lacak.aduan') }}" method="GET" class="flex items-center gap-4">
                     <div class="flex-grow">
-                        <label for="nama_pelapor" class="sr-only">Nama Pelapor</label>
-                        <input type="text" id="nama_pelapor" name="nama_pelapor"
-                            value="{{ request('nama_pelapor') }}"
+                        <label for="keyword" class="sr-only">Nomor Tiket</label>
+                        <input type="text" id="keyword" name="keyword" value="{{ request('keyword') }}"
                             class="w-full p-3 bg-white/50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition"
-                            placeholder="Ketik nama lengkap Anda di sini..." required>
+                            placeholder="Ketik nomor tiket Anda di sini (contoh: PGK-000001)..." required>
                     </div>
                     <button type="submit"
                         class="px-6 py-3 font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 transition">
@@ -46,8 +45,8 @@
             </div>
 
             {{-- Ganti seluruh blok ini dari @if sampai @endif --}}
-            @if (request()->filled('nama_pelapor'))
-                <h3 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pencarian untuk "{{ request('nama_pelapor') }}"
+            @if (request()->filled('keyword'))
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pencarian untuk "{{ request('keyword') }}"
                 </h3>
 
                 @if ($pengaduans->isNotEmpty())
@@ -55,11 +54,22 @@
                         @foreach ($pengaduans as $pengaduan)
                             <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
                                 <div class="flex justify-between items-start">
+                                    {{-- Ganti div ini --}}
                                     <div>
                                         <h3 class="text-xl font-bold text-gray-800">Nomor Tiket:
                                             {{ $pengaduan->nomor_tiket }}</h3>
-                                        <p class="text-sm text-gray-500">Dilaporkan pada:
-                                            {{ $pengaduan->created_at->format('d M Y, H:i') }}</p>
+
+                                        {{-- Detail Laporan Tambahan --}}
+                                        <div class="mt-3 space-y-2 text-sm text-gray-600">
+                                            <p><span class="font-semibold w-32 inline-block">Nama Pelapor</span>:
+                                                {{ $pengaduan->nama_pelapor }}</p>
+                                            <p><span class="font-semibold w-32 inline-block">Jenis Kasus</span>:
+                                                {{ Str::limit($pengaduan->isi_laporan, 50) }}</p>
+                                            <p><span class="font-semibold w-32 inline-block">Dilaporkan pada</span>:
+                                                {{ $pengaduan->created_at->translatedFormat('d F Y') }}</p>
+                                            <p><span class="font-semibold w-32 inline-block">Waktu</span>:
+                                                {{ $pengaduan->created_at->format('H:i') }} WITA</p>
+                                        </div>
                                     </div>
                                     @if ($pengaduan->status == 'Dikembalikan')
                                         <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}"
