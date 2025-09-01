@@ -75,6 +75,9 @@
                                 <dt class="font-medium text-gray-500">No. HP</dt>
                                 <dd class="text-gray-900">{{ $pengaduan->no_hp_pelapor }}</dd>
 
+                                <dt class="text-sm font-medium text-gray-500">Email Pelapor</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ $pengaduan->email_pelapor }}</dd>
+
                                 <dt class="font-medium text-gray-500">Umur</dt>
                                 <dd class="text-gray-900">{{ $pengaduan->umur_pelapor ?? '-' }}</dd>
 
@@ -110,6 +113,37 @@
                             <p class="text-gray-500 text-sm">Tidak ada foto KTP yang diunggah.</p>
                         @endif
                     </div>
+
+                    @if ($pengaduan->bukti->isNotEmpty())
+                        <div class="md:col-span-2">
+                            <dt class="text-sm font-medium text-gray-500">Bukti Tambahan</dt>
+                            <dd class="mt-2 text-sm text-gray-900">
+                                <ul role="list" class="border border-gray-200 rounded-md divide-y divide-gray-200">
+                                    @foreach ($pengaduan->bukti as $item)
+                                        <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                                            <div class="w-0 flex-1 flex items-center">
+                                                {{-- Icon Lampiran --}}
+                                                <svg class="flex-shrink-0 h-5 w-5 text-gray-400"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.497a1.5 1.5 0 012.121-2.121l-1.414-1.414a1 1 0 111.414-1.414l1.414 1.414a3.5 3.5 0 11-4.95-4.95l.497-.497h.001l7-7a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                                <span
+                                                    class="ml-2 flex-1 w-0 truncate">{{ basename($item->file_path) }}</span>
+                                            </div>
+                                            <div class="ml-4 flex-shrink-0">
+                                                <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank"
+                                                    class="font-medium text-blue-600 hover:text-blue-500">Lihat</a>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </dd>
+                        </div>
+                    @endif
+
 
                     {{-- Box Status (tidak berubah) --}}
                     <div class="bg-white p-6 shadow-sm sm:rounded-lg">
