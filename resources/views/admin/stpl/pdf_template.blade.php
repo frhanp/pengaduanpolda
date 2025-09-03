@@ -158,7 +158,7 @@
 
         <!-- JUDUL -->
         <div class="text-center judul-container">
-            <img src="{{ public_path('images/polreslogocowo.png') }}" alt="Logo POLRI"
+            <img src="{{ public_path('images/logostpl.jpg') }}" alt="Logo POLRI"
                 style="width:80px; height:auto; margin-bottom:8px;">
             <p class="judul underline font-bold" style="margin-bottom: 5px;">SURAT TANDA PENERIMAAN LAPORAN</p>
             <p>Nomor: {{ $stpl->nomor_stpl }}</p>
