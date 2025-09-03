@@ -108,7 +108,7 @@ class Pengaduan extends Model
         return $this->belongsTo(User::class, 'assigned_to_reskrim_id');
     }
 
-    public function suratPernyataans(): HasMany
+    public function suratPernyataan()
     {
         return $this->hasMany(SuratPernyataan::class);
     }

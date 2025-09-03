@@ -1,5 +1,5 @@
 ﻿# Project Digest (Full Content)
-_Generated: 2025-09-03 08:54:03_
+_Generated: 2025-09-03 10:32:12_
 **Root:** D:\Laragon\www\pengaduanpolda
 
 
@@ -141,6 +141,7 @@ public\favicon.ico
 public\hot
 public\index.php
 public\robots.txt
+public\images\logostpl.jpg
 public\images\polreslogocewe.png
 public\images\polreslogocowo.png
 public\images\polreslogocowo1.png
@@ -222,8 +223,11 @@ resources\views\profile\edit.blade.php
 resources\views\profile\partials\delete-user-form.blade.php
 resources\views\profile\partials\update-password-form.blade.php
 resources\views\profile\partials\update-profile-information-form.blade.php
+resources\views\reskrim\surat-pernyataan
 resources\views\reskrim\tugas
 resources\views\reskrim\dashboard.blade.php
+resources\views\reskrim\surat-pernyataan\create.blade.php
+resources\views\reskrim\surat-pernyataan\pdf_template.blade.php
 resources\views\reskrim\tugas\index.blade.php
 resources\views\reskrim\tugas\show.blade.php
 routes\auth.php
@@ -252,6 +256,7 @@ storage\app\public\bukti\0Smw0Qjs0fcJmrQ4Vbt6rVA1tvUW21hiCVbXC6A7.jpg
 storage\app\public\bukti\3pzuqsT3t9IjifUlv2mZM13RyiYqCgImVjWOvXD5.jpg
 storage\app\public\bukti\8PHi4EmH2byjqrbKapT8nfwUt5c0b1ipiYrZqfc4.jpg
 storage\app\public\bukti\aimkgpv3j76oDLY09OGhrdIkLdMp4kmsffuua8PD.jpg
+storage\app\public\bukti\AjKYJgK2ikrRoSYcC1Dq2GXzo2cYMWgczgXAKokh.jpg
 storage\app\public\bukti\ctfLLwphZsHXXKiuSgv2tpTe7xPoC2IL9zCpkn8T.jpg
 storage\app\public\bukti\DTx8ktqjkuptHk77mWDbt2mBNqwlIBPwu6E4m0B1.jpg
 storage\app\public\bukti\EFeff1RImCKS9HaJlK4avjDuq5DsSVQOSMs7Tavd.jpg
@@ -280,6 +285,7 @@ storage\app\public\ktp\46LKzuLrsuWXzNB5V9pd27rmAav5zEXud9HwPGLe.jpg
 storage\app\public\ktp\644zw5dCU2HawIcILfvfqKAbLC0Fg1RxFSmye0dD.jpg
 storage\app\public\ktp\bLyp9u62shw1wczzhOqiwQCQzARDgPKTO9m5zPbc.jpg
 storage\app\public\ktp\d5oIS3cjdceJO4RKlhF3ZZQYQNn1TolOnsWbvj37.jpg
+storage\app\public\ktp\e1x4x0ZF8RAvfmmOlCEIa8zWai1jdXYsoa3jTP6Y.jpg
 storage\app\public\ktp\ePTl0ZRPpxNZTiI4uWsOruuIoTmZsusvrW3uamGu.jpg
 storage\app\public\ktp\Hwhv9Erf41VVq8jZfGKtlxjyNCfLFLmXH6Yf6ZJh.jpg
 storage\app\public\ktp\ibiZERib1qZlay0puHCpzJJGMnVLrzk0MUNec3Xs.jpg
@@ -329,6 +335,7 @@ storage\framework\views\0368c8d042725db37103eb7ec94bd69c.php
 storage\framework\views\07f23a5c9250599b8309ca9d41ad37fc.php
 storage\framework\views\11613c9a6c1f9dfde169f10bfbe5f231.php
 storage\framework\views\14ff2534a2c50b646f77ccf2d80e123e.php
+storage\framework\views\1c961438313bd82e12f99aaccc064801.php
 storage\framework\views\1dc8c5887b1a72de0f0ca72217ce0bf3.php
 storage\framework\views\2128f6320ed4fdb255c62b67d36c23ae.php
 storage\framework\views\2276ece9fd269c0dd77a031c164e5504.php
@@ -362,6 +369,7 @@ storage\framework\views\9707d3720c51aef55ac3e7d54e856d75.php
 storage\framework\views\9dadd769c40a92cab53b3ab2ed650ab8.php
 storage\framework\views\9f94024b8d530d336f499fb145ede980.php
 storage\framework\views\acd9524593636b7c04201c47dc282caf.php
+storage\framework\views\ae9900c6d2f8c6e4af40ec306c1c16c1.php
 storage\framework\views\b29dd44bb7b9365cdfa0ea176e6a27b8.php
 storage\framework\views\b2fa4da7e80592078891f695a65dcd5f.php
 storage\framework\views\b9a05bf63488d6dcb9987b4557aa168a.php
@@ -411,11 +419,11 @@ Branch:
 main
 
 Last 5 commits:
+da5eed3 tambah logo stpl
+bfd9f36 hash tiket
 19b7204 perubahan pdf dan bintang merah
 36769c1 add bukti dan email di reskrim
 caf1a08 add bukti dan email di view
-746904a ubah verifikasi nik jadi tiket
-415eb47 modifikasi tampilan lacak
 ```
 
 
@@ -579,7 +587,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // == RUTE KHUSUS ADMIN ==
-    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () { 
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         // Dashboard untuk statistik
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -616,9 +624,9 @@ Route::middleware('auth')->group(function () {
         // Aksi untuk update status
         Route::post('/tugas/{pengaduan}/update-status', [ReskrimDashboardController::class, 'updateStatus'])->name('tugas.updateStatus');
 
-        // [PENAMBAHAN] Rute untuk upload dan download surat pernyataan
-        Route::post('/tugas/{pengaduan}/upload-surat', [SuratPernyataanController::class, 'store'])->name('tugas.surat.store');
-        Route::get('/surat/{suratPernyataan}/download', [SuratPernyataanController::class, 'download'])->name('surat.download');
+        Route::get('/surat-pernyataan/create', [SuratPernyataanController::class, 'create'])->name('surat-pernyataan.create');
+        Route::post('/surat-pernyataan/{pengaduan}', [SuratPernyataanController::class, 'store'])->name('surat-pernyataan.store');
+        Route::get('/surat-pernyataan/{suratPernyataan}/download', [SuratPernyataanController::class, 'download'])->name('surat-pernyataan.download');
     });
 });
 
@@ -634,63 +642,64 @@ require __DIR__ . '/auth.php';
 ## Routes (from command)
 ```
 
-  GET|HEAD  / ............................................................. landing ΓÇ║ PengaduanController@index
-  GET|HEAD  _debugbar/assets/javascript ........... debugbar.assets.js ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@js
-  GET|HEAD  _debugbar/assets/stylesheets ........ debugbar.assets.css ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@css
-  DELETE    _debugbar/cache/{key}/{tags?} .. debugbar.cache.delete ΓÇ║ Barryvdh\Debugbar ΓÇ║ CacheController@delete
-  GET|HEAD  _debugbar/clockwork/{id} . debugbar.clockwork ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@clockwork
-  GET|HEAD  _debugbar/open ............ debugbar.openhandler ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@handle
-  POST      _debugbar/queries/explain debugbar.queries.explain ΓÇ║ Barryvdh\Debugbar ΓÇ║ QueriesController@explain
-  GET|HEAD  admin/dashboard ................................. admin.dashboard ΓÇ║ Admin\DashboardController@index
-  GET|HEAD  admin/pengaduan .................... admin.pengaduan.list ΓÇ║ Admin\DashboardController@listPengaduan
-  GET|HEAD  admin/pengaduan/{pengaduan} ................. admin.pengaduan.show ΓÇ║ Admin\DashboardController@show
-  POST      admin/pengaduan/{pengaduan}/forward ... admin.pengaduan.forward ΓÇ║ Admin\DashboardController@forward
-  POST      admin/pengaduan/{pengaduan}/kembalikan admin.pengaduan.kembalikan ΓÇ║ Admin\DashboardController@kembΓÇª
-  POST      admin/pengaduan/{pengaduan}/verify ...... admin.pengaduan.verify ΓÇ║ Admin\DashboardController@verify
-  GET|HEAD  admin/stpl .......................................... admin.stpl.index ΓÇ║ Admin\StplController@index
-  POST      admin/stpl .......................................... admin.stpl.store ΓÇ║ Admin\StplController@store
-  GET|HEAD  admin/stpl/create/{pengaduan} ..................... admin.stpl.create ΓÇ║ Admin\StplController@create
-  GET|HEAD  admin/stpl/{stpl}/download .................... admin.stpl.download ΓÇ║ Admin\StplController@download
-  GET|HEAD  admin/stpl/{stpl}/preview ....................... admin.stpl.preview ΓÇ║ Admin\StplController@preview
-  GET|HEAD  confirm-password ....................... password.confirm ΓÇ║ Auth\ConfirmablePasswordController@show
-  POST      confirm-password ......................................... Auth\ConfirmablePasswordController@store
-  GET|HEAD  dashboard ............................................................................... dashboard
-  POST      email/verification-notification verification.send ΓÇ║ Auth\EmailVerificationNotificationController@sΓÇª
-  GET|HEAD  fitur .................................................. page.fitur ΓÇ║ PengaduanController@showFitur
-  GET|HEAD  forgot-password ........................ password.request ΓÇ║ Auth\PasswordResetLinkController@create
-  POST      forgot-password ........................... password.email ΓÇ║ Auth\PasswordResetLinkController@store
-  GET|HEAD  kontak ............................................... page.kontak ΓÇ║ PengaduanController@showKontak
-  GET|HEAD  lacak-aduan ............................................... lacak.aduan ΓÇ║ PengaduanController@lacak
-  GET|HEAD  login .......................................... login ΓÇ║ Auth\AuthenticatedSessionController@create
-  POST      login ................................................... Auth\AuthenticatedSessionController@store
-  POST      logout ....................................... logout ΓÇ║ Auth\AuthenticatedSessionController@destroy
-  PUT       password ......................................... password.update ΓÇ║ Auth\PasswordController@update
-  POST      pengaduan ............................................. pengaduan.store ΓÇ║ PengaduanController@store
-  GET|HEAD  perbaiki-laporan/edit/{pengaduan} ............ laporan.edit.form ΓÇ║ PengaduanController@showEditForm
-  POST      perbaiki-laporan/update/{pengaduan} ...... laporan.update.handle ΓÇ║ PengaduanController@handleUpdate
-  GET|HEAD  perbaiki-laporan/verifikasi/{pengaduan} laporan.verifikasi.form ΓÇ║ PengaduanController@showVerificaΓÇª
-  POST      perbaiki-laporan/verifikasi/{pengaduan} laporan.verifikasi.handle ΓÇ║ PengaduanController@handleVeriΓÇª
-  GET|HEAD  peta-rawan ............................................. peta.rawan ΓÇ║ PengaduanController@petaRawan
-  GET|HEAD  profil ............................................... page.profil ΓÇ║ PengaduanController@showProfil
-  GET|HEAD  profile ..................................................... profile.edit ΓÇ║ ProfileController@edit
-  PATCH     profile ................................................. profile.update ΓÇ║ ProfileController@update
-  DELETE    profile ............................................... profile.destroy ΓÇ║ ProfileController@destroy
-  GET|HEAD  register .......................................... register ΓÇ║ Auth\RegisteredUserController@create
-  POST      register ...................................................... Auth\RegisteredUserController@store
-  POST      reset-password .................................. password.store ΓÇ║ Auth\NewPasswordController@store
-  GET|HEAD  reset-password/{token} ......................... password.reset ΓÇ║ Auth\NewPasswordController@create
-  GET|HEAD  reskrim/dashboard ........................... reskrim.dashboard ΓÇ║ Reskrim\DashboardController@index
-  GET|HEAD  reskrim/surat/{suratPernyataan}/download reskrim.surat.download ΓÇ║ Reskrim\SuratPernyataanControlleΓÇª
-  GET|HEAD  reskrim/tugas .......................... reskrim.tugas.list ΓÇ║ Reskrim\DashboardController@listTugas
-  GET|HEAD  reskrim/tugas/{pengaduan} ................... reskrim.tugas.show ΓÇ║ Reskrim\DashboardController@show
-  POST      reskrim/tugas/{pengaduan}/update-status reskrim.tugas.updateStatus ΓÇ║ Reskrim\DashboardController@uΓÇª
-  POST      reskrim/tugas/{pengaduan}/upload-surat reskrim.tugas.surat.store ΓÇ║ Reskrim\SuratPernyataanControllΓÇª
-  GET|HEAD  storage/{path} ...................................................................... storage.local
-  GET|HEAD  up ................................................................................................ 
-  GET|HEAD  verify-email ......................... verification.notice ΓÇ║ Auth\EmailVerificationPromptController
-  GET|HEAD  verify-email/{id}/{hash} ......................... verification.verify ΓÇ║ Auth\VerifyEmailController
+  GET|HEAD  / ........................................................................ landing ΓÇ║ PengaduanController@index
+  GET|HEAD  _debugbar/assets/javascript ...................... debugbar.assets.js ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@js
+  GET|HEAD  _debugbar/assets/stylesheets ................... debugbar.assets.css ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@css
+  DELETE    _debugbar/cache/{key}/{tags?} ............. debugbar.cache.delete ΓÇ║ Barryvdh\Debugbar ΓÇ║ CacheController@delete
+  GET|HEAD  _debugbar/clockwork/{id} ............ debugbar.clockwork ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@clockwork
+  GET|HEAD  _debugbar/open ....................... debugbar.openhandler ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@handle
+  POST      _debugbar/queries/explain ........... debugbar.queries.explain ΓÇ║ Barryvdh\Debugbar ΓÇ║ QueriesController@explain
+  GET|HEAD  admin/dashboard ............................................ admin.dashboard ΓÇ║ Admin\DashboardController@index
+  GET|HEAD  admin/pengaduan ............................... admin.pengaduan.list ΓÇ║ Admin\DashboardController@listPengaduan
+  GET|HEAD  admin/pengaduan/{pengaduan} ............................ admin.pengaduan.show ΓÇ║ Admin\DashboardController@show
+  POST      admin/pengaduan/{pengaduan}/forward .............. admin.pengaduan.forward ΓÇ║ Admin\DashboardController@forward
+  POST      admin/pengaduan/{pengaduan}/kembalikan ..... admin.pengaduan.kembalikan ΓÇ║ Admin\DashboardController@kembalikan
+  POST      admin/pengaduan/{pengaduan}/verify ................. admin.pengaduan.verify ΓÇ║ Admin\DashboardController@verify
+  GET|HEAD  admin/stpl ..................................................... admin.stpl.index ΓÇ║ Admin\StplController@index
+  POST      admin/stpl ..................................................... admin.stpl.store ΓÇ║ Admin\StplController@store
+  GET|HEAD  admin/stpl/create/{pengaduan} ................................ admin.stpl.create ΓÇ║ Admin\StplController@create
+  GET|HEAD  admin/stpl/{stpl}/download ............................... admin.stpl.download ΓÇ║ Admin\StplController@download
+  GET|HEAD  admin/stpl/{stpl}/preview .................................. admin.stpl.preview ΓÇ║ Admin\StplController@preview
+  GET|HEAD  confirm-password .................................. password.confirm ΓÇ║ Auth\ConfirmablePasswordController@show
+  POST      confirm-password .................................................... Auth\ConfirmablePasswordController@store
+  GET|HEAD  dashboard .......................................................................................... dashboard
+  POST      email/verification-notification ....... verification.send ΓÇ║ Auth\EmailVerificationNotificationController@store
+  GET|HEAD  fitur ............................................................. page.fitur ΓÇ║ PengaduanController@showFitur
+  GET|HEAD  forgot-password ................................... password.request ΓÇ║ Auth\PasswordResetLinkController@create
+  POST      forgot-password ...................................... password.email ΓÇ║ Auth\PasswordResetLinkController@store
+  GET|HEAD  kontak .......................................................... page.kontak ΓÇ║ PengaduanController@showKontak
+  GET|HEAD  lacak-aduan .......................................................... lacak.aduan ΓÇ║ PengaduanController@lacak
+  GET|HEAD  login ..................................................... login ΓÇ║ Auth\AuthenticatedSessionController@create
+  POST      login .............................................................. Auth\AuthenticatedSessionController@store
+  POST      logout .................................................. logout ΓÇ║ Auth\AuthenticatedSessionController@destroy
+  PUT       password .................................................... password.update ΓÇ║ Auth\PasswordController@update
+  POST      pengaduan ........................................................ pengaduan.store ΓÇ║ PengaduanController@store
+  GET|HEAD  perbaiki-laporan/edit/{pengaduan} ....................... laporan.edit.form ΓÇ║ PengaduanController@showEditForm
+  POST      perbaiki-laporan/update/{pengaduan} ................. laporan.update.handle ΓÇ║ PengaduanController@handleUpdate
+  GET|HEAD  perbaiki-laporan/verifikasi/{pengaduan} ... laporan.verifikasi.form ΓÇ║ PengaduanController@showVerificationForm
+  POST      perbaiki-laporan/verifikasi/{pengaduan} ... laporan.verifikasi.handle ΓÇ║ PengaduanController@handleVerification
+  GET|HEAD  peta-rawan ........................................................ peta.rawan ΓÇ║ PengaduanController@petaRawan
+  GET|HEAD  profil .......................................................... page.profil ΓÇ║ PengaduanController@showProfil
+  GET|HEAD  profile ................................................................ profile.edit ΓÇ║ ProfileController@edit
+  PATCH     profile ............................................................ profile.update ΓÇ║ ProfileController@update
+  DELETE    profile .......................................................... profile.destroy ΓÇ║ ProfileController@destroy
+  GET|HEAD  register ..................................................... register ΓÇ║ Auth\RegisteredUserController@create
+  POST      register ................................................................. Auth\RegisteredUserController@store
+  POST      reset-password ............................................. password.store ΓÇ║ Auth\NewPasswordController@store
+  GET|HEAD  reset-password/{token} .................................... password.reset ΓÇ║ Auth\NewPasswordController@create
+  GET|HEAD  reskrim/dashboard ...................................... reskrim.dashboard ΓÇ║ Reskrim\DashboardController@index
+  GET|HEAD  reskrim/surat-pernyataan/create ... reskrim.surat-pernyataan.create ΓÇ║ Reskrim\SuratPernyataanController@create
+  POST      reskrim/surat-pernyataan/{pengaduan} reskrim.surat-pernyataan.store ΓÇ║ Reskrim\SuratPernyataanController@store
+  GET|HEAD  reskrim/surat-pernyataan/{suratPernyataan}/download reskrim.surat-pernyataan.download ΓÇ║ Reskrim\SuratPernyataΓÇª
+  GET|HEAD  reskrim/tugas ..................................... reskrim.tugas.list ΓÇ║ Reskrim\DashboardController@listTugas
+  GET|HEAD  reskrim/tugas/{pengaduan} .............................. reskrim.tugas.show ΓÇ║ Reskrim\DashboardController@show
+  POST      reskrim/tugas/{pengaduan}/update-status reskrim.tugas.updateStatus ΓÇ║ Reskrim\DashboardController@updateStatus
+  GET|HEAD  storage/{path} ................................................................................. storage.local
+  GET|HEAD  up ........................................................................................................... 
+  GET|HEAD  verify-email .................................... verification.notice ΓÇ║ Auth\EmailVerificationPromptController
+  GET|HEAD  verify-email/{id}/{hash} .................................... verification.verify ΓÇ║ Auth\VerifyEmailController
 
-                                                                                            Showing [55] routes
+                                                                                                       Showing [56] routes
 
 ```
 
@@ -1599,41 +1608,71 @@ use App\Models\Pengaduan;
 use App\Models\SuratPernyataan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SuratPernyataanController extends Controller
 {
-    public function store(Request $request, Pengaduan $pengaduan)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
     {
-        // Keamanan: Pastikan hanya reskrim yang ditugaskan yang bisa upload
-        if ($pengaduan->assigned_to_reskrim_id !== Auth::id()) {
-            abort(403);
+        $request->validate(['pengaduan_id' => 'required|exists:pengaduans,id']);
+        $pengaduan = Pengaduan::findOrFail($request->pengaduan_id);
+
+        // Keamanan: Pastikan reskrim hanya bisa membuat surat untuk unit kerjanya
+        if ($pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
+            abort(403, 'Akses Ditolak');
         }
 
-        $request->validate([
-            'judul' => 'required|string|max:255',
-            'file_pernyataan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // Maks 5MB
+        return view('reskrim.surat-pernyataan.create', compact('pengaduan'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, Pengaduan $pengaduan)
+    {
+        $validatedData = $request->validate([
+            'tempat_dibuat'   => 'required|string|max:255',
+            'isi_pernyataan'  => 'required|string',
+            'pihak'           => 'required|array|min:2|max:4',
+            'pihak.*.nama'    => 'required|string|max:255',
+            'pihak.*.ttl'     => 'required|string|max:255',
+            'pihak.*.pekerjaan' => 'required|string|max:255',
+            'pihak.*.alamat'  => 'required|string',
         ]);
 
-        $path = $request->file('file_pernyataan')->store('surat_pernyataan', 'public');
+        // Keamanan: Pastikan reskrim hanya bisa membuat surat untuk unit kerjanya
+        if ($pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
+            abort(403, 'Akses Ditolak');
+        }
 
-        SuratPernyataan::create([
-            'pengaduan_id' => $pengaduan->id,
-            'user_id' => Auth::id(),
-            'judul' => $request->judul,
-            'path_file' => $path,
+        // Simpan data ke database
+        $surat = SuratPernyataan::create([
+            'pengaduan_id'           => $pengaduan->id,
+            'dibuat_oleh_reskrim_id' => Auth::id(),
+            'pihak_terlibat'         => $validatedData['pihak'],
+            'isi_pernyataan'         => $validatedData['isi_pernyataan'],
+            'tempat_dibuat'          => $validatedData['tempat_dibuat'],
         ]);
 
-        return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
+        return redirect()->route('reskrim.tugas.show', $pengaduan->id)
+                         ->with('success', 'Surat Pernyataan berhasil dibuat.');
     }
 
     public function download(SuratPernyataan $suratPernyataan)
     {
-        // Keamanan: Pastikan hanya reskrim yang ditugaskan yang bisa download
-        if ($suratPernyataan->pengaduan->assigned_to_reskrim_id !== Auth::id()) {
-            abort(403);
+        // Keamanan: Pastikan reskrim hanya bisa mengakses surat dari unit kerjanya
+        if ($suratPernyataan->pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
+            abort(403, 'AKSES DITOLAK');
         }
 
-        return Storage::disk('public')->download($suratPernyataan->path_file);
+        // Render view PDF dengan data yang ada
+        $pdf = Pdf::loadView('reskrim.surat-pernyataan.pdf_template', compact('suratPernyataan'));
+        
+        // Unduh PDF dengan nama file yang dinamis
+        return $pdf->download('Surat-Pernyataan-' . $suratPernyataan->pengaduan->id . '.pdf');
     }
 }
 
@@ -2164,7 +2203,7 @@ class Pengaduan extends Model
         return $this->belongsTo(User::class, 'assigned_to_reskrim_id');
     }
 
-    public function suratPernyataans(): HasMany
+    public function suratPernyataan()
     {
         return $this->hasMany(SuratPernyataan::class);
     }
@@ -2309,11 +2348,23 @@ class SuratPernyataan extends Model
 {
     use HasFactory;
 
+    protected $table = 'surat_pernyataans';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'pengaduan_id',
-        'user_id',
-        'judul',
-        'path_file',
+        'dibuat_oleh_reskrim_id',
+        'pihak_terlibat', // Kolom baru untuk data JSON
+        'isi_pernyataan', // Kolom baru untuk isi pernyataan
+        'tempat_dibuat',  // Kolom baru untuk tempat dibuat
+    ];
+
+    protected $casts = [
+        'pihak_terlibat' => 'array', // Ini akan otomatis mengubah JSON dari DB menjadi array PHP
     ];
 
     public function pengaduan(): BelongsTo
@@ -2323,7 +2374,7 @@ class SuratPernyataan extends Model
 
     public function uploader(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'dibuat_oleh_reskrim_id');
     }
 }
 
@@ -3907,7 +3958,7 @@ class SuratPernyataan extends Model
 
         <!-- JUDUL -->
         <div class="text-center judul-container">
-            <img src="{{ public_path('images/polreslogocowo.png') }}" alt="Logo POLRI"
+            <img src="{{ public_path('images/logostpl.jpg') }}" alt="Logo POLRI"
                 style="width:80px; height:auto; margin-bottom:8px;">
             <p class="judul underline font-bold" style="margin-bottom: 5px;">SURAT TANDA PENERIMAAN LAPORAN</p>
             <p>Nomor: {{ $stpl->nomor_stpl }}</p>
@@ -6044,6 +6095,166 @@ $classes = ($active ?? false)
     </div>
 </x-app-layout>
 
+===== resources\views\reskrim\surat-pernyataan\create.blade.php =====
+{{-- resources/views/reskrim/surat-pernyataan/create.blade.php --}}
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Buat Surat Pernyataan untuk Laporan #{{ $pengaduan->id }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+
+                    <form action="{{ route('reskrim.surat-pernyataan.store', $pengaduan->id) }}" method="POST" 
+                          x-data="{ 
+                            pihak: [
+                                { nama: '', ttl: '', pekerjaan: '', alamat: '' }, 
+                                { nama: '', ttl: '', pekerjaan: '', alamat: '' }
+                            ],
+                            maxPihak: 4,
+                            addPihak() {
+                                if (this.pihak.length < this.maxPihak) {
+                                    this.pihak.push({ nama: '', ttl: '', pekerjaan: '', alamat: '' });
+                                }
+                            },
+                            removePihak(index) {
+                                this.pihak.splice(index, 1);
+                            }
+                          }">
+                        @csrf
+                        <input type="hidden" name="pengaduan_id" value="{{ $pengaduan->id }}">
+
+                        <div class="space-y-8">
+                            {{-- Blok Pihak Terlibat --}}
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Pihak yang Terlibat</h3>
+                                <div class="space-y-6">
+                                    <template x-for="(p, index) in pihak" :key="index">
+                                        <div class="border border-gray-200 p-4 rounded-lg relative">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-semibold text-gray-700" x-text="'Pihak ke-' + (index + 1)"></h4>
+                                                <button type="button" @click="removePihak(index)" x-show="index > 1" class="text-red-500 hover:text-red-700 text-sm">Hapus</button>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label :for="'nama-' + index" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                                                    <input type="text" :name="'pihak['+index+'][nama]'" :id="'nama-' + index" x-model="p.nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                                </div>
+                                                <div>
+                                                    <label :for="'ttl-' + index" class="block text-sm font-medium text-gray-700">Tempat, Tanggal Lahir</label>
+                                                    <input type="text" :name="'pihak['+index+'][ttl]'" :id="'ttl-' + index" x-model="p.ttl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                                </div>
+                                                <div>
+                                                    <label :for="'pekerjaan-' + index" class="block text-sm font-medium text-gray-700">Pekerjaan</label>
+                                                    <input type="text" :name="'pihak['+index+'][pekerjaan]'" :id="'pekerjaan-' + index" x-model="p.pekerjaan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label :for="'alamat-' + index" class="block text-sm font-medium text-gray-700">Alamat</label>
+                                                    <textarea :name="'pihak['+index+'][alamat]'" :id="'alamat-' + index" x-model="p.alamat" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button type="button" @click="addPihak" :disabled="pihak.length >= maxPihak" class="mt-4 text-sm text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    + Tambah Pihak Lain
+                                </button>
+                            </div>
+
+                            {{-- Isi Pernyataan --}}
+                            <div>
+                                <label for="isi_pernyataan" class="block text-sm font-medium text-gray-700">Isi Pernyataan Bersama</label>
+                                <textarea id="isi_pernyataan" name="isi_pernyataan" rows="8" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>{{ old('isi_pernyataan') }}</textarea>
+                            </div>
+
+                            {{-- Tempat Dibuat --}}
+                            <div>
+                                <label for="tempat_dibuat" class="block text-sm font-medium text-gray-700">Tempat Surat Dibuat</label>
+                                <input type="text" id="tempat_dibuat" name="tempat_dibuat" value="{{ old('tempat_dibuat', 'Gorontalo') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
+                                Simpan Surat Pernyataan
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
+
+===== resources\views\reskrim\surat-pernyataan\pdf_template.blade.php =====
+{{-- resources/views/reskrim/surat-pernyataan/pdf_template.blade.php --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Surat Pernyataan</title>
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 2cm; }
+        .judul { text-align: center; font-weight: bold; text-decoration: underline; font-size: 14pt; margin-bottom: 30px; }
+        .pembuka { margin-bottom: 20px; }
+        .pihak-title { font-weight: bold; }
+        .pihak-table { width: 100%; margin-bottom: 15px; }
+        .pihak-table td { vertical-align: top; padding: 1px 0; }
+        .pihak-table .label { width: 150px; }
+        .isi-pernyataan { text-align: justify; margin-top: 20px; }
+        .penutup { margin-top: 30px; }
+        .ttd-container { margin-top: 40px; width: 100%; }
+        .ttd-box { float: left; width: 50%; text-align: center; }
+        .nama-ttd { margin-top: 60px; font-weight: bold; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="judul">SURAT PERNYATAAN</div>
+
+    <div class="pembuka">
+        <p>Pada hari ini, {{ $suratPernyataan->created_at->translatedFormat('l') }} tanggal {{ $suratPernyataan->created_at->translatedFormat('d F Y') }}, kami yang bertanda tangan di bawah ini:</p>
+    </div>
+
+    @foreach($suratPernyataan->pihak_terlibat as $index => $pihak)
+    <div class="pihak-title">
+        {{ $index == 0 ? 'PIHAK PERTAMA' : ($index == 1 ? 'PIHAK KEDUA' : ($index == 2 ? 'PIHAK KETIGA' : 'PIHAK KEEMPAT')) }}
+    </div>
+    <table class="pihak-table">
+        <tr><td class="label">Nama</td><td>: {{ $pihak['nama'] }}</td></tr>
+        <tr><td class="label">Tempat/Tgl Lahir</td><td>: {{ $pihak['ttl'] }}</td></tr>
+        <tr><td class="label">Pekerjaan</td><td>: {{ $pihak['pekerjaan'] }}</td></tr>
+        <tr><td class="label">Alamat</td><td>: {{ $pihak['alamat'] }}</td></tr>
+    </table>
+    @endforeach
+
+    <div class="isi-pernyataan">
+        <p>Dengan ini menyatakan dengan sebenarnya bahwa:</p>
+        <p style="text-indent: 40px;">{{ $suratPernyataan->isi_pernyataan }}</p>
+    </div>
+    
+    <div class="penutup">
+        <p>Demikian Surat Pernyataan Bersama ini kami buat dalam keadaan sadar dan tanpa ada paksaan dari pihak manapun.</p>
+    </div>
+
+    <div class="ttd-container">
+        @foreach($suratPernyataan->pihak_terlibat as $index => $pihak)
+        <div class="ttd-box">
+            <p>{{ $index == 0 ? 'PIHAK PERTAMA' : ($index == 1 ? 'PIHAK KEDUA' : ($index == 2 ? 'PIHAK KETIGA' : 'PIHAK KEEMPAT')) }},</p>
+            <p class="nama-ttd">{{ $pihak['nama'] }}</p>
+        </div>
+        @endforeach
+    </div>
+
+</body>
+</html>
+
 ===== resources\views\reskrim\tugas\index.blade.php =====
 <x-app-layout>
     <x-slot name="header">
@@ -6251,62 +6462,37 @@ $classes = ($active ?? false)
                         </div>
                     </div>
 
-                    {{-- [PENAMBAHAN] Kartu Dokumen Pendukung --}}
+                    {{-- [PENAMBAHAN] Surat Pernyataan --}}
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4">Dokumen Pendukung</h3>
-
-                            {{-- Daftar Dokumen yang Sudah Di-upload --}}
-                            <div class="space-y-3 mb-6">
-                                @forelse ($pengaduan->suratPernyataans as $surat)
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-bold text-gray-800">Surat Pernyataan</h3>
+                                <a href="{{ route('reskrim.surat-pernyataan.create', ['pengaduan_id' => $pengaduan->id]) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                    Buat Surat Baru
+                                </a>
+                            </div>
+                    
+                            {{-- Daftar Surat yang Sudah Dibuat --}}
+                            <div class="space-y-3">
+                                @forelse ($pengaduan->suratPernyataan as $surat)
                                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-md border">
                                         <div>
-                                            <p class="font-semibold text-gray-700">{{ $surat->judul }}</p>
-                                            <p class="text-xs text-gray-500">Diunggah oleh {{ $surat->uploader->name }}
+                                            <p class="font-semibold text-gray-700">Surat Pernyataan #{{ $surat->id }}</p>
+                                            <p class="text-xs text-gray-500">Dibuat oleh {{ $surat->uploader->name }}
                                                 pada {{ $surat->created_at->format('d M Y') }}</p>
                                         </div>
-                                        <a href="{{ route('reskrim.surat.download', $surat->id) }}"
-                                            class="text-sm text-indigo-600 hover:text-indigo-900 font-semibold">Download</a>
+                                        <a href="{{ route('reskrim.surat-pernyataan.download', $surat->id) }}"
+                                            class="text-sm text-indigo-600 hover:text-indigo-900 font-semibold" target="_blank">Download</a>
                                     </div>
                                 @empty
-                                    <div class="text-center text-sm text-gray-500 py-4">Belum ada dokumen yang diunggah.
+                                    <div class="text-center text-sm text-gray-500 py-4">
+                                        Belum ada surat pernyataan yang dibuat.
                                     </div>
                                 @endforelse
                             </div>
-
-                            <hr class="my-6">
-
-                            {{-- Form Upload Dokumen Baru --}}
-                            <h4 class="text-md font-semibold text-gray-700 mb-2">Upload Dokumen Baru</h4>
-                            <form action="{{ route('reskrim.tugas.surat.store', $pengaduan->id) }}" method="POST"
-                                enctype="multipart/form-data" class="space-y-4">
-                                @csrf
-                                <div>
-                                    <label for="judul"
-                                        class="block text-sm font-medium text-gray-700">Judul/Deskripsi Dokumen</label>
-                                    <input type="text" name="judul" id="judul"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                                    @error('judul')
-                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <label for="file_pernyataan" class="block text-sm font-medium text-gray-700">Pilih
-                                        File (PDF, JPG, PNG)</label>
-                                    <input type="file" name="file_pernyataan" id="file_pernyataan"
-                                        class="mt-1 block w-full text-sm" required>
-                                    @error('file_pernyataan')
-                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <button type="submit"
-                                        class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Upload
-                                        Dokumen</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
+                    
                 </div>
 
                 {{-- Kolom Kanan: Status & Aksi (tidak berubah) --}}

@@ -70,7 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // == RUTE KHUSUS ADMIN ==
-    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () { 
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         // Dashboard untuk statistik
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -107,9 +107,11 @@ Route::middleware('auth')->group(function () {
         // Aksi untuk update status
         Route::post('/tugas/{pengaduan}/update-status', [ReskrimDashboardController::class, 'updateStatus'])->name('tugas.updateStatus');
 
-        // [PENAMBAHAN] Rute untuk upload dan download surat pernyataan
-        Route::post('/tugas/{pengaduan}/upload-surat', [SuratPernyataanController::class, 'store'])->name('tugas.surat.store');
-        Route::get('/surat/{suratPernyataan}/download', [SuratPernyataanController::class, 'download'])->name('surat.download');
+        Route::get('/surat-pernyataan/create', [SuratPernyataanController::class, 'create'])->name('surat-pernyataan.create');
+        Route::post('/surat-pernyataan/preview', [SuratPernyataanController::class, 'preview'])->name('surat-pernyataan.preview');
+        Route::post('/surat-pernyataan/{pengaduan}', [SuratPernyataanController::class, 'store'])->name('surat-pernyataan.store');
+        Route::get('/surat-pernyataan/{suratPernyataan}/download', [SuratPernyataanController::class, 'download'])->name('surat-pernyataan.download');
+        
     });
 });
 

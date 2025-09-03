@@ -74,62 +74,37 @@
                         </div>
                     </div>
 
-                    {{-- [PENAMBAHAN] Kartu Dokumen Pendukung --}}
+                    {{-- [PENAMBAHAN] Surat Pernyataan --}}
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4">Dokumen Pendukung</h3>
-
-                            {{-- Daftar Dokumen yang Sudah Di-upload --}}
-                            <div class="space-y-3 mb-6">
-                                @forelse ($pengaduan->suratPernyataans as $surat)
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-bold text-gray-800">Surat Pernyataan</h3>
+                                <a href="{{ route('reskrim.surat-pernyataan.create', ['pengaduan_id' => $pengaduan->id]) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                    Buat Surat Baru
+                                </a>
+                            </div>
+                    
+                            {{-- Daftar Surat yang Sudah Dibuat --}}
+                            <div class="space-y-3">
+                                @forelse ($pengaduan->suratPernyataan as $surat)
                                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-md border">
                                         <div>
-                                            <p class="font-semibold text-gray-700">{{ $surat->judul }}</p>
-                                            <p class="text-xs text-gray-500">Diunggah oleh {{ $surat->uploader->name }}
+                                            <p class="font-semibold text-gray-700">Surat Pernyataan #{{ $surat->id }}</p>
+                                            <p class="text-xs text-gray-500">Dibuat oleh {{ $surat->uploader->name }}
                                                 pada {{ $surat->created_at->format('d M Y') }}</p>
                                         </div>
-                                        <a href="{{ route('reskrim.surat.download', $surat->id) }}"
-                                            class="text-sm text-indigo-600 hover:text-indigo-900 font-semibold">Download</a>
+                                        <a href="{{ route('reskrim.surat-pernyataan.download', $surat->id) }}"
+                                            class="text-sm text-indigo-600 hover:text-indigo-900 font-semibold" target="_blank">Download</a>
                                     </div>
                                 @empty
-                                    <div class="text-center text-sm text-gray-500 py-4">Belum ada dokumen yang diunggah.
+                                    <div class="text-center text-sm text-gray-500 py-4">
+                                        Belum ada surat pernyataan yang dibuat.
                                     </div>
                                 @endforelse
                             </div>
-
-                            <hr class="my-6">
-
-                            {{-- Form Upload Dokumen Baru --}}
-                            <h4 class="text-md font-semibold text-gray-700 mb-2">Upload Dokumen Baru</h4>
-                            <form action="{{ route('reskrim.tugas.surat.store', $pengaduan->id) }}" method="POST"
-                                enctype="multipart/form-data" class="space-y-4">
-                                @csrf
-                                <div>
-                                    <label for="judul"
-                                        class="block text-sm font-medium text-gray-700">Judul/Deskripsi Dokumen</label>
-                                    <input type="text" name="judul" id="judul"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                                    @error('judul')
-                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <label for="file_pernyataan" class="block text-sm font-medium text-gray-700">Pilih
-                                        File (PDF, JPG, PNG)</label>
-                                    <input type="file" name="file_pernyataan" id="file_pernyataan"
-                                        class="mt-1 block w-full text-sm" required>
-                                    @error('file_pernyataan')
-                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <button type="submit"
-                                        class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Upload
-                                        Dokumen</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
+                    
                 </div>
 
                 {{-- Kolom Kanan: Status & Aksi (tidak berubah) --}}

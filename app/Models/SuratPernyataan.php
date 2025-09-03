@@ -10,11 +10,23 @@ class SuratPernyataan extends Model
 {
     use HasFactory;
 
+    protected $table = 'surat_pernyataans';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'pengaduan_id',
-        'user_id',
-        'judul',
-        'path_file',
+        'dibuat_oleh_reskrim_id',
+        'pihak_terlibat', // Kolom baru untuk data JSON
+        'isi_pernyataan', // Kolom baru untuk isi pernyataan
+        'tempat_dibuat',  // Kolom baru untuk tempat dibuat
+    ];
+
+    protected $casts = [
+        'pihak_terlibat' => 'array', // Ini akan otomatis mengubah JSON dari DB menjadi array PHP
     ];
 
     public function pengaduan(): BelongsTo
@@ -24,6 +36,6 @@ class SuratPernyataan extends Model
 
     public function uploader(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'dibuat_oleh_reskrim_id');
     }
 }
