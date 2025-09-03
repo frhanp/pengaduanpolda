@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\RiwayatStatus;
+use Illuminate\Support\Str;
 
 class Pengaduan extends Model
 {
@@ -54,10 +55,29 @@ class Pengaduan extends Model
         'tanggal_lahir' => 'date',
     ];
 
+    // ---- TAMBAHKAN BLOK boot() DI BAWAH INI ----
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($pengaduan) {
+            // Membuat hash unik saat data pertama kali dibuat
+            do {
+                $hash = strtoupper(Str::random(6));
+            } while (self::where('ticket_hash', $hash)->exists());
+
+            $pengaduan->ticket_hash = $hash;
+        });
+    }
+
     protected function nomorTiket(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn() => 'PGK-' . str_pad($this->id, 6, '0', STR_PAD_LEFT),
+            // Ganti formatnya menjadi: PGK-HASH-ID
+            get: fn () => 'PGK-' . $this->ticket_hash . '-' . str_pad($this->id, 4, '0', STR_PAD_LEFT),
         );
     }
 
@@ -102,4 +122,6 @@ class Pengaduan extends Model
     {
         return $this->hasMany(RiwayatStatus::class)->orderBy('created_at', 'desc');
     }
+
+
 }

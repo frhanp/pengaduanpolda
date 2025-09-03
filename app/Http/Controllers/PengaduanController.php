@@ -226,11 +226,14 @@ class PengaduanController extends Controller
         $keyword = $request->input('keyword');
 
         if ($request->filled('keyword')) {
-            if (preg_match('/^([A-Z]+)-(\d+)$/i', $keyword, $matches)) {
-                $id = (int)$matches[2];
+            // --- UBAH LOGIKA PENCOCOKAN POLA DI SINI ---
+            if (preg_match('/^([A-Z]+)-([A-Z0-9]+)-(\d+)$/i', $keyword, $matches)) {
+                $hash = $matches[2];
+                $id = (int)$matches[3];
 
                 $pengaduans = Pengaduan::with('riwayatStatus')
                     ->where('id', $id)
+                    ->where('ticket_hash', $hash)
                     ->get();
             }
         }
