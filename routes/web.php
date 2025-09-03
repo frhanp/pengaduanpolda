@@ -70,7 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // == RUTE KHUSUS ADMIN ==
-    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () { 
         // Dashboard untuk statistik
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 

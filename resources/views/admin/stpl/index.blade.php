@@ -53,6 +53,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $stpl->tanggal_dibuat->format('d M Y') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             {{-- [PERBAIKAN] Tombol Download --}}
+                                            
                                             <a href="{{ route('admin.stpl.download', $stpl->id) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                 Download
                                             </a>

@@ -1,3 +1,4 @@
+{{-- resources/views/emails/pengaduan-diterima.blade.php --}}
 <!DOCTYPE html>
 <html lang="id">
 
@@ -12,8 +13,19 @@
         <p>Halo, {{ $pengaduan->nama_pelapor }},</p>
         <p>Terima kasih telah membuat laporan. Laporan Anda telah kami terima dan akan segera ditindaklanjuti.</p>
         <p><strong>Nomor Tiket Laporan Anda: {{ $pengaduan->nomor_tiket }}</strong></p>
-        <p>Silakan gunakan Nomor Tiket Laporan Anda untuk melacak status laporan Anda.</p>
-        <hr>
+        {{-- TAMBAHAN KALIMAT --}}
+        <p style="font-size: 14px; color: #555;">Gunakan nomor tiket ini untuk melacak status aduan Anda di website kami.
+        </p>
+
+        <p style="margin-top: 20px;">
+            Anda dapat melacak status laporan Anda kapan saja melalui tautan di bawah ini:
+        </p>
+        <a href="{{ route('lacak.aduan', ['keyword' => $pengaduan->nomor_tiket]) }}"
+            style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">
+            Lacak Laporan Saya
+        </a>
+
+        <hr style="margin-top: 20px; border: none; border-top: 1px solid #ddd;">
         <p>Hormat kami,<br>Tim Polresta Gorontalo Kota</p>
     </div>
 </body>

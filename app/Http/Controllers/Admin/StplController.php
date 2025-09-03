@@ -145,6 +145,6 @@ class StplController extends Controller
         ];
 
         $pdf = Pdf::loadView('admin.stpl.pdf_template', $dataUntukPdf);
-        return $pdf->download('STPL-' . $stpl->nomor_stpl . '.pdf');
+        return $pdf->stream('STPL-' . $stpl->pengaduan->nomor_tiket . '.pdf');
     }
 }

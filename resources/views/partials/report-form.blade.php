@@ -21,6 +21,10 @@
         @endif
 
         <div class="glass p-8 rounded-2xl">
+            <p class="text-sm text-gray-500 mb-4">
+                <span class="text-red-500">*</span> Semua field wajib diisi kecuali Upload Bukti.
+            </p>
+            
             <form action="{{ route('pengaduan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 {{-- Ganti seluruh isi dari <div class="grid md:grid-cols-2 gap-6"> --}}
@@ -29,7 +33,7 @@
                     {{-- Nama Lengkap --}}
                     <div>
                         <label for="nama_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Nama
-                            Lengkap</label>
+                            Lengkap <span class="text-red-500">*</span></label>
                         <input type="text" id="nama_pelapor" name="nama_pelapor" value="{{ old('nama_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('nama_pelapor') border-red-500 @else border-gray-300 @enderror"
                             required>
@@ -41,7 +45,7 @@
                     {{-- No. Handphone --}}
                     <div>
                         <label for="no_hp_pelapor" class="block mb-2 text-sm font-medium text-gray-700">No.
-                            Handphone</label>
+                            Handphone <span class="text-red-500">*</span></label>
                         <input type="tel" id="no_hp_pelapor" name="no_hp_pelapor" value="{{ old('no_hp_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('no_hp_pelapor') border-red-500 @else border-gray-300 @enderror"
                             required>
@@ -52,7 +56,7 @@
 
                     {{-- NIK --}}
                     <div>
-                        <label for="nik" class="block mb-2 text-sm font-medium text-gray-700">NIK</label>
+                        <label for="nik" class="block mb-2 text-sm font-medium text-gray-700">NIK <span class="text-red-500">*</span></label>
                         <input type="text" id="nik" name="nik" value="{{ old('nik') }}"
                             class="w-full p-3 rounded-lg border @error('nik') border-red-500 @else border-gray-300 @enderror"
                             required>
@@ -64,7 +68,7 @@
                     {{-- Foto KTP --}}
                     <div>
                         <label for="foto_ktp" class="block mb-2 text-sm font-medium text-gray-700">Upload Foto
-                            KTP</label>
+                            KTP <span class="text-red-500">*</span></label>
                         <input type="file" id="foto_ktp" name="foto_ktp"
                             class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('foto_ktp') ring-1 ring-red-500 rounded-lg @enderror"
                             required>
@@ -78,7 +82,7 @@
                     </div>
 
                     <div>
-                        <label for="email_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                        <label for="email_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
                         <input type="email" id="email_pelapor" name="email_pelapor" value="{{ old('email_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('email_pelapor') border-red-500 @else border-gray-300 @enderror"
                             required>
@@ -90,7 +94,7 @@
                     {{-- Tempat Lahir --}}
                     <div>
                         <label for="tempat_lahir" class="block mb-2 text-sm font-medium text-gray-700">Tempat
-                            Lahir</label>
+                            Lahir <span class="text-red-500">*</span></label>
                         <input type="text" id="tempat_lahir" name="tempat_lahir" value="{{ old('tempat_lahir') }}"
                             class="w-full p-3 rounded-lg border @error('tempat_lahir') border-red-500 @else border-gray-300 @enderror"
                             required>
@@ -102,7 +106,7 @@
                     {{-- Tanggal Lahir --}}
                     <div>
                         <label for="tanggal_lahir" class="block mb-2 text-sm font-medium text-gray-700">Tanggal
-                            Lahir</label>
+                            Lahir <span class="text-red-500">*</span></label>
                         <input type="date" id="tanggal_lahir" name="tanggal_lahir"
                             value="{{ old('tanggal_lahir') }}"
                             class="w-full p-3 rounded-lg border @error('tanggal_lahir') border-red-500 @else border-gray-300 @enderror"
@@ -114,7 +118,7 @@
 
                     {{-- Jenis Kelamin --}}
                     <div class="md:col-span-2">
-                        <label class="block mb-2 text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Jenis Kelamin <span class="text-red-500">*</span></label>
                         <div class="flex items-center space-x-6 mt-2">
                             <label class="inline-flex items-center">
                                 <input type="radio" name="jenis_kelamin" value="Laki-laki" class="form-radio"
@@ -134,7 +138,7 @@
 
                     {{-- Agama --}}
                     <div>
-                        <label for="agama" class="block mb-2 text-sm font-medium text-gray-700">Agama</label>
+                        <label for="agama" class="block mb-2 text-sm font-medium text-gray-700">Agama <span class="text-red-500">*</span></label>
                         <select id="agama" name="agama"
                             class="w-full p-3 rounded-lg border @error('agama') border-red-500 @else border-gray-300 @enderror"
                             required>
@@ -156,7 +160,7 @@
 
                     {{-- [PENAMBAHAN] Umur (Opsional) --}}
                     <div>
-                        <label for="umur_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Umur</label>
+                        <label for="umur_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Umur <span class="text-red-500">*</span></label>
                         <input type="number" id="umur_pelapor" name="umur_pelapor" value="{{ old('umur_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('umur_pelapor') border-red-500 @else border-gray-300 @enderror">
                         @error('umur_pelapor')
@@ -167,7 +171,7 @@
                     {{-- Pekerjaan (Opsional) --}}
                     <div class="md:col-span-2">
                         <label for="pekerjaan_pelapor"
-                            class="block mb-2 text-sm font-medium text-gray-700">Pekerjaan</label>
+                            class="block mb-2 text-sm font-medium text-gray-700">Pekerjaan <span class="text-red-500">*</span></label>
                         <input type="text" id="pekerjaan_pelapor" name="pekerjaan_pelapor"
                             value="{{ old('pekerjaan_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('pekerjaan_pelapor') border-red-500 @else border-gray-300 @enderror">
@@ -180,7 +184,7 @@
                 {{-- Alamat --}}
                 <div>
                     <div class="flex justify-between items-center mb-2"><label for="alamat_pelapor"
-                            class="text-sm font-medium text-gray-700">Alamat Kejadian</label><button type="button"
+                            class="text-sm font-medium text-gray-700">Alamat Kejadian <span class="text-red-500">*</span></label><button type="button"
                             id="get-location-btn"
                             class="flex items-center text-xs text-blue-600 font-semibold hover:text-blue-800 transition"><svg
                                 class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -203,7 +207,7 @@
                 {{-- Tujuan Polsek --}}
                 <div>
                     <label for="tujuan_polsek" class="block mb-2 text-sm font-medium text-gray-700">Tujuan
-                        Polsek</label>
+                        Polsek <span class="text-red-500">*</span></label>
                     <select id="tujuan_polsek" name="tujuan_polsek"
                         class="w-full p-3 bg-white/50 rounded-lg border @error('tujuan_polsek') border-red-500 @else border-gray-300 @enderror focus:ring-blue-500 focus:border-blue-500 transition"
                         required>
@@ -233,7 +237,7 @@
 
                 {{-- Isi Laporan --}}
                 <div>
-                    <label for="isi_laporan" class="block mb-2 text-sm font-medium text-gray-700">Isi Laporan</label>
+                    <label for="isi_laporan" class="block mb-2 text-sm font-medium text-gray-700">Isi Laporan <span class="text-red-500">*</span></label>
                     <textarea id="isi_laporan" name="isi_laporan" rows="5"
                         class="w-full p-3 bg-white/50 rounded-lg border @error('isi_laporan') border-red-500 @else border-gray-300 @enderror focus:ring-blue-500 focus:border-blue-500 transition"
                         required>{{ old('isi_laporan') }}</textarea>
@@ -244,7 +248,7 @@
 
                 {{-- Peta Lokasi --}}
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-700">Tandai Lokasi Kejadian di Peta</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Tandai Lokasi Kejadian di Peta <span class="text-red-500">*</span></label>
                     <div id="map" class="rounded-lg border border-gray-300"
                         data-laporan="{{ htmlspecialchars(json_encode($laporan ?? [])) }}"></div>
                     <p class="mt-2 text-sm text-gray-500">Koordinat Terpilih: <span id="koordinat"

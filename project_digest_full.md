@@ -1,5 +1,5 @@
 ﻿# Project Digest (Full Content)
-_Generated: 2025-08-31 22:05:59_
+_Generated: 2025-09-02 23:55:41_
 **Root:** D:\Laragon\www\pengaduanpolda
 
 
@@ -74,6 +74,7 @@ app\Http\Requests\ProfileUpdateRequest.php
 app\Http\Requests\StorePengaduanRequest.php
 app\Http\Requests\Auth\LoginRequest.php
 app\Listeners\KirimNotifikasiStatus.php
+app\Mail\PengaduanDiperbaiki.php
 app\Mail\PengaduanReceived.php
 app\Mail\StatusDiperbarui.php
 app\Models\BuktiPengaduan.php
@@ -203,6 +204,7 @@ resources\views\components\primary-button.blade.php
 resources\views\components\responsive-nav-link.blade.php
 resources\views\components\secondary-button.blade.php
 resources\views\components\text-input.blade.php
+resources\views\emails\pengaduan-diperbaiki.blade.php
 resources\views\emails\pengaduan-diterima.blade.php
 resources\views\emails\status-diperbarui.blade.php
 resources\views\lacak\edit.blade.php
@@ -245,19 +247,29 @@ storage\app\public\bukti
 storage\app\public\ktp
 storage\app\public\surat_pernyataan
 storage\app\public\.gitignore
+storage\app\public\bukti\0Smw0Qjs0fcJmrQ4Vbt6rVA1tvUW21hiCVbXC6A7.jpg
 storage\app\public\bukti\3pzuqsT3t9IjifUlv2mZM13RyiYqCgImVjWOvXD5.jpg
+storage\app\public\bukti\8PHi4EmH2byjqrbKapT8nfwUt5c0b1ipiYrZqfc4.jpg
 storage\app\public\bukti\aimkgpv3j76oDLY09OGhrdIkLdMp4kmsffuua8PD.jpg
 storage\app\public\bukti\ctfLLwphZsHXXKiuSgv2tpTe7xPoC2IL9zCpkn8T.jpg
+storage\app\public\bukti\DTx8ktqjkuptHk77mWDbt2mBNqwlIBPwu6E4m0B1.jpg
+storage\app\public\bukti\EFeff1RImCKS9HaJlK4avjDuq5DsSVQOSMs7Tavd.jpg
 storage\app\public\bukti\gfVMiNONZmZyfQS1jX364YPZCPtS8ELoLHG6Pd6X.jpg
+storage\app\public\bukti\LGriaCs8GHCcRBWnBgCJhoin86Pxqfwne2HlhjHr.jpg
+storage\app\public\bukti\Ljwez96fvc1ZNXqmdiM3Seam5FfUm7UEHSlR8scK.jpg
 storage\app\public\bukti\mXiGl5vsT3Qj35lNiyi5hJNkJFXnTi5rRuuB3d8f.jpg
+storage\app\public\bukti\MysPbGsn6J5KNOBCxqS44AofKL9qosvwq5LmC4cS.jpg
 storage\app\public\bukti\nvgx7ISXBJZ74bnuZNRL6PDcvCJ63NcYbMrC6QNR.jpg
 storage\app\public\bukti\qbA8qcnSiGkw6Rx5oqbDmK86dHjRVZCNRHCiM05P.jpg
 storage\app\public\bukti\QeCHQnxQBnBPHyl5NC8haAOqNW4mYOnFyezVay59.jpg
 storage\app\public\bukti\SyEb6A5wuQteqRGFDc4pTvtqNSdwI1ggSj3wC23A.jpg
 storage\app\public\bukti\tNpiHl33OVAL5pjSp0h0dFFGrfX9HC5oyecvoYPL.jpg
+storage\app\public\bukti\u7al5yOd2RvZuCppOYIQG789imraDVeeklDHJopF.jpg
 storage\app\public\bukti\uALkv0tggZqFjArumD3jifd9I8ZyhZj3sNxmGYBa.jpg
 storage\app\public\bukti\uPbab20pVAeRk0WuwIiKb42fJHQA5AE9tHrTSaEg.jpg
+storage\app\public\bukti\yu8q3jkiGkGsFt8K1CMgU7zwTxzvYOZjzneakr0u.jpg
 storage\app\public\bukti\ziFfoH74xDrqxkDCCjaAOnJsxNUu705P0UBNoLPq.jpg
+storage\app\public\ktp\03ou6ORv01yv1twtTVlplzlh8EuD9M7pRRbV3ig8.jpg
 storage\app\public\ktp\1GG1kgFdSPzT1YXUtlDUIlxkAo1tVOFIPP77sQH3.jpg
 storage\app\public\ktp\2WMeL9lZCliPBs5xBgt0YZuj5De2bEluLMwY4Txn.jpg
 storage\app\public\ktp\3IB3m4JsAXdiPq9VqN83aubSWxiD8c0VdRRYpJaO.jpg
@@ -274,10 +286,12 @@ storage\app\public\ktp\KzZADQa7sUduQQ07pdU0tnwlOlpYESf0FFuUaLbE.jpg
 storage\app\public\ktp\lpzjy2eXSbPPfFfPQbFhBI05umHJsS0ut0Z5V2Wr.jpg
 storage\app\public\ktp\mHWkcPdurLoZAl6u3iql06ewgOxlvgqp4PyIDnLE.jpg
 storage\app\public\ktp\ngCov1YEK3Euos2CpzBYIbuyjI2iq7EDxV7JTYVB.jpg
+storage\app\public\ktp\ObBH5ZJlbZNaZj6ymCZpW8zZb669SlPsQeiZUAAB.jpg
 storage\app\public\ktp\pk7D6ctPkR3fFDwPFoZiCy3kvsDAr6lzL8jzcFng.jpg
 storage\app\public\ktp\QoHv94N0rmOLXfvQlvJQvT8iNpmxGdIRB9KWDd0O.jpg
 storage\app\public\ktp\rEKicvs9v4L3eDe5BINoohihKidtJdXIqFj48C3b.jpg
 storage\app\public\ktp\S9596OvQx1SOFG7WPpufY7g4S203SIn2wXMj1a2c.jpg
+storage\app\public\ktp\sbCBKgQfTBXtygQWmKvsYyG7ldM7OSypa3bAlnwW.jpg
 storage\app\public\ktp\T9nfazrEFUXJV7GWbnldCd2j2XM4WlYJoRGvBJwC.jpg
 storage\app\public\ktp\tzRjFgf3t3PderN12HdfFFPQsSJqCAlL0btjgNFo.jpg
 storage\app\public\ktp\uACEpEIsdG7QLSLlin6LSdrbm75VczGwLrzZbZxa.jpg
@@ -287,8 +301,10 @@ storage\app\public\ktp\VKFVfLpW6RAY3RR1lgYrwGsHl1Rcxl3sEUXj9dvv.jpg
 storage\app\public\ktp\vKHblE5WnOH9moWQXZo7t7Ad8G1ENKQdopWGVieh.jpg
 storage\app\public\ktp\VZYS1ihlVEjofFr4m2nnQBnRxZJ5o6RxAVHEmdPm.jpg
 storage\app\public\ktp\wGS2cEOBEwssmhraYGqVnWz56cmqSEtoW6vrqRYb.jpg
+storage\app\public\ktp\WhqShvkdQW4J5glDzXSvLvNxfPNc6KYyF1hsuFV3.jpg
 storage\app\public\ktp\xWdOyJBhP1HhI4nYNEVbp4rl0H2cu5nuK3ZZBZIm.jpg
 storage\app\public\ktp\Yv1dO9DtK8cPEOs3uqBKGPe7nvVknZBJCK0bAHjk.jpg
+storage\app\public\ktp\z331mVOXOfnRsrxfq3QRKKOp8EZyxdgKM46UG0Av.jpg
 storage\app\public\ktp\zBe9qQkYDMIdE2I28o0cIbQGvBhqGnt82ZgtWhPG.jpg
 storage\app\public\surat_pernyataan\AE6afQirE3CRBsushUwd3LxxctsTSPjlYyzHrKe9.pdf
 storage\framework\cache
@@ -305,6 +321,7 @@ storage\framework\views\.gitignore
 storage\framework\views\00b45e5d916604a539e7f0130ddd915d.php
 storage\framework\views\02fe4144fc6f1b35fa65474c171bb74e.php
 storage\framework\views\0368c8d042725db37103eb7ec94bd69c.php
+storage\framework\views\07f23a5c9250599b8309ca9d41ad37fc.php
 storage\framework\views\11613c9a6c1f9dfde169f10bfbe5f231.php
 storage\framework\views\14ff2534a2c50b646f77ccf2d80e123e.php
 storage\framework\views\1dc8c5887b1a72de0f0ca72217ce0bf3.php
@@ -340,6 +357,7 @@ storage\framework\views\9707d3720c51aef55ac3e7d54e856d75.php
 storage\framework\views\9dadd769c40a92cab53b3ab2ed650ab8.php
 storage\framework\views\9f94024b8d530d336f499fb145ede980.php
 storage\framework\views\acd9524593636b7c04201c47dc282caf.php
+storage\framework\views\b29dd44bb7b9365cdfa0ea176e6a27b8.php
 storage\framework\views\b2fa4da7e80592078891f695a65dcd5f.php
 storage\framework\views\b9a05bf63488d6dcb9987b4557aa168a.php
 storage\framework\views\bc4ff6bc0896c8c8fb525d9cbb99edf2.php
@@ -388,11 +406,11 @@ Branch:
 main
 
 Last 5 commits:
-603af78 memunculkan notif di email
-d371c53 add bukti dan email
-87e36db last update
-28a3072 ubah alamat kejadian dan logo
-4ceb944 hilangkan data pengaduan
+36769c1 add bukti dan email di reskrim
+caf1a08 add bukti dan email di view
+746904a ubah verifikasi nik jadi tiket
+415eb47 modifikasi tampilan lacak
+16c63b8 perbaiki copywriting di email
 ```
 
 
@@ -611,63 +629,63 @@ require __DIR__ . '/auth.php';
 ## Routes (from command)
 ```
 
-  GET|HEAD  / ................................................................. landing ΓÇ║ PengaduanController@index
-  GET|HEAD  _debugbar/assets/javascript ............... debugbar.assets.js ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@js
-  GET|HEAD  _debugbar/assets/stylesheets ............ debugbar.assets.css ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@css
-  DELETE    _debugbar/cache/{key}/{tags?} ...... debugbar.cache.delete ΓÇ║ Barryvdh\Debugbar ΓÇ║ CacheController@delete
-  GET|HEAD  _debugbar/clockwork/{id} ..... debugbar.clockwork ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@clockwork
-  GET|HEAD  _debugbar/open ................ debugbar.openhandler ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@handle
-  POST      _debugbar/queries/explain .... debugbar.queries.explain ΓÇ║ Barryvdh\Debugbar ΓÇ║ QueriesController@explain
-  GET|HEAD  admin/dashboard ..................................... admin.dashboard ΓÇ║ Admin\DashboardController@index
-  GET|HEAD  admin/pengaduan ........................ admin.pengaduan.list ΓÇ║ Admin\DashboardController@listPengaduan
-  GET|HEAD  admin/pengaduan/{pengaduan} ..................... admin.pengaduan.show ΓÇ║ Admin\DashboardController@show
-  POST      admin/pengaduan/{pengaduan}/forward ....... admin.pengaduan.forward ΓÇ║ Admin\DashboardController@forward
-  POST      admin/pengaduan/{pengaduan}/kembalikan admin.pengaduan.kembalikan ΓÇ║ Admin\DashboardController@kembalikΓÇª
-  POST      admin/pengaduan/{pengaduan}/verify .......... admin.pengaduan.verify ΓÇ║ Admin\DashboardController@verify
-  GET|HEAD  admin/stpl .............................................. admin.stpl.index ΓÇ║ Admin\StplController@index
-  POST      admin/stpl .............................................. admin.stpl.store ΓÇ║ Admin\StplController@store
-  GET|HEAD  admin/stpl/create/{pengaduan} ......................... admin.stpl.create ΓÇ║ Admin\StplController@create
-  GET|HEAD  admin/stpl/{stpl}/download ........................ admin.stpl.download ΓÇ║ Admin\StplController@download
-  GET|HEAD  admin/stpl/{stpl}/preview ........................... admin.stpl.preview ΓÇ║ Admin\StplController@preview
-  GET|HEAD  confirm-password ........................... password.confirm ΓÇ║ Auth\ConfirmablePasswordController@show
-  POST      confirm-password ............................................. Auth\ConfirmablePasswordController@store
-  GET|HEAD  dashboard ................................................................................... dashboard
-  POST      email/verification-notification verification.send ΓÇ║ Auth\EmailVerificationNotificationController@store
-  GET|HEAD  fitur ...................................................... page.fitur ΓÇ║ PengaduanController@showFitur
-  GET|HEAD  forgot-password ............................ password.request ΓÇ║ Auth\PasswordResetLinkController@create
-  POST      forgot-password ............................... password.email ΓÇ║ Auth\PasswordResetLinkController@store
-  GET|HEAD  kontak ................................................... page.kontak ΓÇ║ PengaduanController@showKontak
-  GET|HEAD  lacak-aduan ................................................... lacak.aduan ΓÇ║ PengaduanController@lacak
-  GET|HEAD  login .............................................. login ΓÇ║ Auth\AuthenticatedSessionController@create
-  POST      login ....................................................... Auth\AuthenticatedSessionController@store
-  POST      logout ........................................... logout ΓÇ║ Auth\AuthenticatedSessionController@destroy
-  PUT       password ............................................. password.update ΓÇ║ Auth\PasswordController@update
-  POST      pengaduan ................................................. pengaduan.store ΓÇ║ PengaduanController@store
-  GET|HEAD  perbaiki-laporan/edit/{pengaduan} ................ laporan.edit.form ΓÇ║ PengaduanController@showEditForm
-  POST      perbaiki-laporan/update/{pengaduan} .......... laporan.update.handle ΓÇ║ PengaduanController@handleUpdate
-  GET|HEAD  perbaiki-laporan/verifikasi/{pengaduan} laporan.verifikasi.form ΓÇ║ PengaduanController@showVerificationΓÇª
-  POST      perbaiki-laporan/verifikasi/{pengaduan} laporan.verifikasi.handle ΓÇ║ PengaduanController@handleVerificaΓÇª
-  GET|HEAD  peta-rawan ................................................. peta.rawan ΓÇ║ PengaduanController@petaRawan
-  GET|HEAD  profil ................................................... page.profil ΓÇ║ PengaduanController@showProfil
-  GET|HEAD  profile ......................................................... profile.edit ΓÇ║ ProfileController@edit
-  PATCH     profile ..................................................... profile.update ΓÇ║ ProfileController@update
-  DELETE    profile ................................................... profile.destroy ΓÇ║ ProfileController@destroy
-  GET|HEAD  register .............................................. register ΓÇ║ Auth\RegisteredUserController@create
-  POST      register .......................................................... Auth\RegisteredUserController@store
-  POST      reset-password ...................................... password.store ΓÇ║ Auth\NewPasswordController@store
-  GET|HEAD  reset-password/{token} ............................. password.reset ΓÇ║ Auth\NewPasswordController@create
-  GET|HEAD  reskrim/dashboard ............................... reskrim.dashboard ΓÇ║ Reskrim\DashboardController@index
-  GET|HEAD  reskrim/surat/{suratPernyataan}/download reskrim.surat.download ΓÇ║ Reskrim\SuratPernyataanController@doΓÇª
-  GET|HEAD  reskrim/tugas .............................. reskrim.tugas.list ΓÇ║ Reskrim\DashboardController@listTugas
-  GET|HEAD  reskrim/tugas/{pengaduan} ....................... reskrim.tugas.show ΓÇ║ Reskrim\DashboardController@show
-  POST      reskrim/tugas/{pengaduan}/update-status reskrim.tugas.updateStatus ΓÇ║ Reskrim\DashboardController@updatΓÇª
-  POST      reskrim/tugas/{pengaduan}/upload-surat reskrim.tugas.surat.store ΓÇ║ Reskrim\SuratPernyataanController@sΓÇª
-  GET|HEAD  storage/{path} .......................................................................... storage.local
-  GET|HEAD  up .................................................................................................... 
-  GET|HEAD  verify-email ............................. verification.notice ΓÇ║ Auth\EmailVerificationPromptController
-  GET|HEAD  verify-email/{id}/{hash} ............................. verification.verify ΓÇ║ Auth\VerifyEmailController
+  GET|HEAD  / .......................................................................................... landing ΓÇ║ PengaduanController@index
+  GET|HEAD  _debugbar/assets/javascript ........................................ debugbar.assets.js ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@js
+  GET|HEAD  _debugbar/assets/stylesheets ..................................... debugbar.assets.css ΓÇ║ Barryvdh\Debugbar ΓÇ║ AssetController@css
+  DELETE    _debugbar/cache/{key}/{tags?} ............................... debugbar.cache.delete ΓÇ║ Barryvdh\Debugbar ΓÇ║ CacheController@delete
+  GET|HEAD  _debugbar/clockwork/{id} .............................. debugbar.clockwork ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@clockwork
+  GET|HEAD  _debugbar/open ......................................... debugbar.openhandler ΓÇ║ Barryvdh\Debugbar ΓÇ║ OpenHandlerController@handle
+  POST      _debugbar/queries/explain ............................. debugbar.queries.explain ΓÇ║ Barryvdh\Debugbar ΓÇ║ QueriesController@explain
+  GET|HEAD  admin/dashboard .............................................................. admin.dashboard ΓÇ║ Admin\DashboardController@index
+  GET|HEAD  admin/pengaduan ................................................. admin.pengaduan.list ΓÇ║ Admin\DashboardController@listPengaduan
+  GET|HEAD  admin/pengaduan/{pengaduan} .............................................. admin.pengaduan.show ΓÇ║ Admin\DashboardController@show
+  POST      admin/pengaduan/{pengaduan}/forward ................................ admin.pengaduan.forward ΓÇ║ Admin\DashboardController@forward
+  POST      admin/pengaduan/{pengaduan}/kembalikan ....................... admin.pengaduan.kembalikan ΓÇ║ Admin\DashboardController@kembalikan
+  POST      admin/pengaduan/{pengaduan}/verify ................................... admin.pengaduan.verify ΓÇ║ Admin\DashboardController@verify
+  GET|HEAD  admin/stpl ....................................................................... admin.stpl.index ΓÇ║ Admin\StplController@index
+  POST      admin/stpl ....................................................................... admin.stpl.store ΓÇ║ Admin\StplController@store
+  GET|HEAD  admin/stpl/create/{pengaduan} .................................................. admin.stpl.create ΓÇ║ Admin\StplController@create
+  GET|HEAD  admin/stpl/{stpl}/download ................................................. admin.stpl.download ΓÇ║ Admin\StplController@download
+  GET|HEAD  admin/stpl/{stpl}/preview .................................................... admin.stpl.preview ΓÇ║ Admin\StplController@preview
+  GET|HEAD  confirm-password .................................................... password.confirm ΓÇ║ Auth\ConfirmablePasswordController@show
+  POST      confirm-password ...................................................................... Auth\ConfirmablePasswordController@store
+  GET|HEAD  dashboard ............................................................................................................ dashboard
+  POST      email/verification-notification ......................... verification.send ΓÇ║ Auth\EmailVerificationNotificationController@store
+  GET|HEAD  fitur ............................................................................... page.fitur ΓÇ║ PengaduanController@showFitur
+  GET|HEAD  forgot-password ..................................................... password.request ΓÇ║ Auth\PasswordResetLinkController@create
+  POST      forgot-password ........................................................ password.email ΓÇ║ Auth\PasswordResetLinkController@store
+  GET|HEAD  kontak ............................................................................ page.kontak ΓÇ║ PengaduanController@showKontak
+  GET|HEAD  lacak-aduan ............................................................................ lacak.aduan ΓÇ║ PengaduanController@lacak
+  GET|HEAD  login ....................................................................... login ΓÇ║ Auth\AuthenticatedSessionController@create
+  POST      login ................................................................................ Auth\AuthenticatedSessionController@store
+  POST      logout .................................................................... logout ΓÇ║ Auth\AuthenticatedSessionController@destroy
+  PUT       password ...................................................................... password.update ΓÇ║ Auth\PasswordController@update
+  POST      pengaduan .......................................................................... pengaduan.store ΓÇ║ PengaduanController@store
+  GET|HEAD  perbaiki-laporan/edit/{pengaduan} ......................................... laporan.edit.form ΓÇ║ PengaduanController@showEditForm
+  POST      perbaiki-laporan/update/{pengaduan} ................................... laporan.update.handle ΓÇ║ PengaduanController@handleUpdate
+  GET|HEAD  perbaiki-laporan/verifikasi/{pengaduan} ..................... laporan.verifikasi.form ΓÇ║ PengaduanController@showVerificationForm
+  POST      perbaiki-laporan/verifikasi/{pengaduan} ..................... laporan.verifikasi.handle ΓÇ║ PengaduanController@handleVerification
+  GET|HEAD  peta-rawan .......................................................................... peta.rawan ΓÇ║ PengaduanController@petaRawan
+  GET|HEAD  profil ............................................................................ page.profil ΓÇ║ PengaduanController@showProfil
+  GET|HEAD  profile .................................................................................. profile.edit ΓÇ║ ProfileController@edit
+  PATCH     profile .............................................................................. profile.update ΓÇ║ ProfileController@update
+  DELETE    profile ............................................................................ profile.destroy ΓÇ║ ProfileController@destroy
+  GET|HEAD  register ....................................................................... register ΓÇ║ Auth\RegisteredUserController@create
+  POST      register ................................................................................... Auth\RegisteredUserController@store
+  POST      reset-password ............................................................... password.store ΓÇ║ Auth\NewPasswordController@store
+  GET|HEAD  reset-password/{token} ...................................................... password.reset ΓÇ║ Auth\NewPasswordController@create
+  GET|HEAD  reskrim/dashboard ........................................................ reskrim.dashboard ΓÇ║ Reskrim\DashboardController@index
+  GET|HEAD  reskrim/surat/{suratPernyataan}/download ................... reskrim.surat.download ΓÇ║ Reskrim\SuratPernyataanController@download
+  GET|HEAD  reskrim/tugas ....................................................... reskrim.tugas.list ΓÇ║ Reskrim\DashboardController@listTugas
+  GET|HEAD  reskrim/tugas/{pengaduan} ................................................ reskrim.tugas.show ΓÇ║ Reskrim\DashboardController@show
+  POST      reskrim/tugas/{pengaduan}/update-status .................. reskrim.tugas.updateStatus ΓÇ║ Reskrim\DashboardController@updateStatus
+  POST      reskrim/tugas/{pengaduan}/upload-surat ..................... reskrim.tugas.surat.store ΓÇ║ Reskrim\SuratPernyataanController@store
+  GET|HEAD  storage/{path} ................................................................................................... storage.local
+  GET|HEAD  up ............................................................................................................................. 
+  GET|HEAD  verify-email ...................................................... verification.notice ΓÇ║ Auth\EmailVerificationPromptController
+  GET|HEAD  verify-email/{id}/{hash} ...................................................... verification.verify ΓÇ║ Auth\VerifyEmailController
 
-                                                                                                Showing [55] routes
+                                                                                                                         Showing [55] routes
 
 ```
 
@@ -686,6 +704,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Events\StatusDiubah;
 
 class DashboardController extends Controller
 {
@@ -821,11 +840,12 @@ class DashboardController extends Controller
         }
         $request->validate(['catatan' => 'required|string|min:10']);
         $pengaduan->update(['status' => 'Dikembalikan', 'catatan_pengembalian' => $request->catatan]);
-        $pengaduan->riwayatStatus()->create([
+        $riwayat = $pengaduan->riwayatStatus()->create([
             'status'     => 'Dikembalikan',
             'catatan'    => $request->catatan,
-            'updated_by' => Auth::id(),
+            'updated_by' => Auth:: id(),
         ]);
+        event(new StatusDiubah($pengaduan, $riwayat));
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan telah dikembalikan.');
     }
 
@@ -842,11 +862,13 @@ class DashboardController extends Controller
         if ($pengaduan->status !== 'Baru') { /* ... (logika tidak berubah) ... */
         }
         $pengaduan->update(['status' => 'Diverifikasi', 'verified_by_admin_id' => Auth::id()]);
-        $pengaduan->riwayatStatus()->create([
+        $riwayat = $pengaduan->riwayatStatus()->create([
             'status'     => 'Diverifikasi',
             'catatan'    => 'Laporan telah diverifikasi oleh admin.',
             'updated_by' => Auth::id(),
         ]);
+
+        event(new StatusDiubah($pengaduan, $riwayat));
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan berhasil diverifikasi.');
     }
 
@@ -880,11 +902,12 @@ class DashboardController extends Controller
         ]);
 
         $userReskrim = User::find($request->assigned_to_reskrim_id);
-        $pengaduan->riwayatStatus()->create([
+        $riwayat = $pengaduan->riwayatStatus()->create([
             'status'     => 'Diteruskan ke Reskrim',
             'catatan'    => 'Laporan diteruskan ke tim Reskrim: ' . $userReskrim->name,
             'updated_by' => Auth::id(),
         ]);
+        event(new StatusDiubah($pengaduan, $riwayat));
 
         return redirect()->route('admin.pengaduan.show', $pengaduan)->with('success', 'Laporan berhasil diteruskan.');
     }
@@ -1418,6 +1441,7 @@ use App\Models\Pengaduan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Events\StatusDiubah;
 
 class DashboardController extends Controller
 {
@@ -1546,11 +1570,13 @@ class DashboardController extends Controller
             'status' => $request->status,
         ]);
 
-        $pengaduan->riwayatStatus()->create([
+        $riwayat = $pengaduan->riwayatStatus()->create([
             'status'     => $request->status,
             'catatan'    => 'Status laporan diperbarui oleh tim Reskrim.',
             'updated_by' => Auth::id(),
         ]);
+
+        event(new StatusDiubah($pengaduan, $riwayat));
 
         // [PERBAIKAN] Arahkan kembali ke rute yang benar
         return redirect()->route('reskrim.tugas.show', $pengaduan)->with('success', 'Status laporan berhasil diperbarui.');
@@ -1627,6 +1653,7 @@ use App\Http\Requests\StorePengaduanRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PengaduanReceived;
+use App\Mail\PengaduanDiperbaiki;
 
 class PengaduanController extends Controller
 {
@@ -1660,19 +1687,20 @@ class PengaduanController extends Controller
      */
     public function handleVerification(Request $request, Pengaduan $pengaduan)
     {
-        $request->validate(['nik' => 'required|numeric|digits:16']);
+        // Validasi input nomor tiket
+        $request->validate(['nomor_tiket' => 'required|string']);
 
-        // Bandingkan NIK yang diinput dengan NIK di database
-        if ($request->nik === $pengaduan->nik) {
-            // Jika cocok, beri "izin" di session untuk mengedit laporan ini
+        // Bandingkan nomor tiket yang diinput dengan nomor tiket virtual dari pengaduan
+        if ($request->nomor_tiket === $pengaduan->nomor_tiket) {
+            // Jika cocok, beri "izin" di session
             $request->session()->put('can_edit_pengaduan_' . $pengaduan->id, true);
 
-            // Arahkan ke halaman form perbaikan (akan kita buat di langkah 3)
+            // Arahkan ke halaman form perbaikan
             return redirect()->route('laporan.edit.form', $pengaduan->id);
         }
 
         // Jika tidak cocok, kembalikan dengan pesan error
-        return back()->with('error', 'NIK yang Anda masukkan tidak sesuai.');
+        return back()->with('error', 'Nomor tiket yang Anda masukkan tidak sesuai.');
     }
 
     public function petaRawan()
@@ -1744,15 +1772,32 @@ class PengaduanController extends Controller
             $path = $request->file('foto_ktp')->store('ktp', 'public');
             $validatedData['foto_ktp'] = $path;
         }
+        // ---- PERUBAIKAN LOGIKA ----
+        // 1. Tambahkan status baru dan hapus catatan ke data yang akan diupdate
+        $validatedData['status'] = 'Baru';
+        $validatedData['catatan_pengembalian'] = null;
 
-        // Update data pengaduan di database
+        // 2. Lakukan update HANYA SEKALI untuk semua perubahan
         $pengaduan->update($validatedData);
 
-        // Kembalikan status menjadi 'Baru' dan hapus catatan
-        $pengaduan->update([
-            'status' => 'Baru',
-            'catatan_pengembalian' => null,
+        // 3. Catat ke riwayat
+        $pengaduan->riwayatStatus()->create([
+            'status'  => 'Baru',
+            'catatan' => 'Laporan diperbaiki dan dikirim ulang oleh pelapor.',
         ]);
+
+        // 4. Kirim email notifikasi ke pelapor
+        Mail::to($pengaduan->email_pelapor)->send(new PengaduanDiperbaiki($pengaduan));
+        // ---- BATAS PERUBAIKAN ----
+
+        // // Update data pengaduan di database
+        // $pengaduan->update($validatedData);
+
+        // // Kembalikan status menjadi 'Baru' dan hapus catatan
+        // $pengaduan->update([
+        //     'status' => 'Baru',
+        //     'catatan_pengembalian' => null,
+        // ]);
 
         // Hapus "izin" dari session setelah selesai
         $request->session()->forget('can_edit_pengaduan_' . $pengaduan->id);
@@ -1823,14 +1868,16 @@ class PengaduanController extends Controller
     public function lacak(Request $request)
     {
         $pengaduans = collect();
+        $keyword = $request->input('keyword');
 
-        if ($request->filled('nama_pelapor')) {
-            $namaPelapor = $request->input('nama_pelapor');
+        if ($request->filled('keyword')) {
+            if (preg_match('/^([A-Z]+)-(\d+)$/i', $keyword, $matches)) {
+                $id = (int)$matches[2];
 
-            // [PERBAIKAN] Ganti 'ILIKE' menjadi 'LIKE'
-            $pengaduans = Pengaduan::where('nama_pelapor', 'LIKE', '%' . $namaPelapor . '%')
-                ->latest()
-                ->get();
+                $pengaduans = Pengaduan::with('riwayatStatus')
+                    ->where('id', $id)
+                    ->get();
+            }
         }
 
         return view('lacak', compact('pengaduans'));
@@ -2058,7 +2105,7 @@ class Pengaduan extends Model
     protected function nomorTiket(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn() => 'PDC-' . str_pad($this->id, 6, '0', STR_PAD_LEFT),
+            get: fn() => 'PGK-' . str_pad($this->id, 6, '0', STR_PAD_LEFT),
         );
     }
 
@@ -2101,7 +2148,7 @@ class Pengaduan extends Model
 
     public function riwayatStatus()
     {
-        return $this->hasMany(RiwayatStatus::class);
+        return $this->hasMany(RiwayatStatus::class)->orderBy('created_at', 'desc');
     }
 }
 
@@ -3152,6 +3199,9 @@ class SuratPernyataan extends Model
                                 <dt class="font-medium text-gray-500">No. HP</dt>
                                 <dd class="text-gray-900">{{ $pengaduan->no_hp_pelapor }}</dd>
 
+                                <dt class="text-sm font-medium text-gray-500">Email Pelapor</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ $pengaduan->email_pelapor }}</dd>
+
                                 <dt class="font-medium text-gray-500">Umur</dt>
                                 <dd class="text-gray-900">{{ $pengaduan->umur_pelapor ?? '-' }}</dd>
 
@@ -3187,6 +3237,37 @@ class SuratPernyataan extends Model
                             <p class="text-gray-500 text-sm">Tidak ada foto KTP yang diunggah.</p>
                         @endif
                     </div>
+
+                    @if ($pengaduan->bukti->isNotEmpty())
+                        <div class="md:col-span-2">
+                            <dt class="text-sm font-medium text-gray-500">Bukti Tambahan</dt>
+                            <dd class="mt-2 text-sm text-gray-900">
+                                <ul role="list" class="border border-gray-200 rounded-md divide-y divide-gray-200">
+                                    @foreach ($pengaduan->bukti as $item)
+                                        <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                                            <div class="w-0 flex-1 flex items-center">
+                                                {{-- Icon Lampiran --}}
+                                                <svg class="flex-shrink-0 h-5 w-5 text-gray-400"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.497a1.5 1.5 0 012.121-2.121l-1.414-1.414a1 1 0 111.414-1.414l1.414 1.414a3.5 3.5 0 11-4.95-4.95l.497-.497h.001l7-7a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                                <span
+                                                    class="ml-2 flex-1 w-0 truncate">{{ basename($item->file_path) }}</span>
+                                            </div>
+                                            <div class="ml-4 flex-shrink-0">
+                                                <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank"
+                                                    class="font-medium text-blue-600 hover:text-blue-500">Lihat</a>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </dd>
+                        </div>
+                    @endif
+
 
                     {{-- Box Status (tidak berubah) --}}
                     <div class="bg-white p-6 shadow-sm sm:rounded-lg">
@@ -4251,7 +4332,7 @@ class SuratPernyataan extends Model
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-gray-50 to-blue-50">
             <div>
                 <a href="/" class="text-4xl font-bold text-blue-700 tracking-tight">
-                    Polres Gorontalo Kota
+                    Polresta Gorontalo Kota 
                 </a>
             </div>
 
@@ -4455,24 +4536,46 @@ $classes = ($active ?? false)
 
 <input @disabled($disabled) {{ $attributes->merge(['class' => 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm']) }}>
 
-===== resources\views\emails\pengaduan-diterima.blade.php =====
+===== resources\views\emails\pengaduan-diperbaiki.blade.php =====
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <title>Perbaikan Laporan Terkirim</title>
+</head>
+<body style="font-family: Arial, sans-serif;">
+    <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+        <h2>Perbaikan Laporan Anda Telah Terkirim</h2>
+        <p>Halo, {{ $pengaduan->nama_pelapor }},</p>
+        <p>Terima kasih telah mengirimkan perbaikan untuk laporan Anda dengan nomor tiket <strong>{{ $pengaduan->nomor_tiket }}</strong>.</p>
+        <p>Laporan Anda kini telah berstatus "Baru" dan akan kembali ditinjau oleh admin kami.</p>
+        <hr>
+        <p>Hormat kami,<br>Tim Polresta Gorontalo Kota</p>
+    </div>
+</body>
+</html>
+
+===== resources\views\emails\pengaduan-diterima.blade.php =====
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
     <title>Laporan Diterima</title>
 </head>
+
 <body style="font-family: Arial, sans-serif;">
     <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
         <h2>Laporan Anda Telah Diterima</h2>
         <p>Halo, {{ $pengaduan->nama_pelapor }},</p>
         <p>Terima kasih telah membuat laporan. Laporan Anda telah kami terima dan akan segera ditindaklanjuti.</p>
         <p><strong>Nomor Tiket Laporan Anda: {{ $pengaduan->nomor_tiket }}</strong></p>
-        <p>Silakan gunakan nomor tiket ini untuk melacak status laporan Anda.</p>
+        <p>Silakan gunakan Nomor Tiket Laporan Anda untuk melacak status laporan Anda.</p>
         <hr>
-        <p>Hormat kami,<br>Tim PoldaCare</p>
+        <p>Hormat kami,<br>Tim Polresta Gorontalo Kota</p>
     </div>
 </body>
+
 </html>
 
 ===== resources\views\emails\status-diperbarui.blade.php =====
@@ -4499,7 +4602,7 @@ $classes = ($active ?? false)
 
         <p style="margin-top: 20px;">Anda dapat melacak detail laporan Anda kapan saja melalui website kami.</p>
         <hr>
-        <p>Hormat kami,<br>Tim PoldaCare</p>
+        <p>Hormat kami,<br>Tim Polresta Gorontalo Kota</p>
     </div>
 </body>
 
@@ -4772,29 +4875,32 @@ $classes = ($active ?? false)
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold text-blue-700">Verifikasi Identitas Anda</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto mt-4">
-                    Untuk keamanan, silakan masukkan kembali NIK yang Anda gunakan saat melapor untuk melanjutkan proses perbaikan laporan.
+                    Untuk keamanan, silakan masukkan kembali NIK yang Anda gunakan saat melapor untuk melanjutkan proses
+                    perbaikan laporan.
                 </p>
             </div>
 
             <div class="glass p-8 rounded-2xl">
+                {{-- resources/views/lacak/verifikasi.blade.php --}}
+
                 <form action="{{ route('laporan.verifikasi.handle', $pengaduan->id) }}" method="POST" class="space-y-4">
                     @csrf
                     <div>
-                        <label for="nik" class="block mb-2 text-sm font-medium text-gray-700">Nomor Induk Kependudukan (NIK)</label>
-                        <input type="text" id="nik" name="nik"
-                               class="w-full p-3 bg-white/50 rounded-lg border @error('nik') border-red-500 @else border-gray-300 @enderror focus:ring-blue-500 focus:border-blue-500 transition"
-                               placeholder="Masukkan 16 digit NIK Anda..." required>
-                        {{-- Menampilkan error validasi NIK jika ada --}}
-                        @error('nik')
+                        <label for="nomor_tiket" class="block mb-2 text-sm font-medium text-gray-700">Nomor Tiket</label>
+                        <input type="text" id="nomor_tiket" name="nomor_tiket"
+                            class="w-full p-3 bg-white/50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition"
+                            placeholder="Ketik nomor tiket Anda di sini..." required>
+
+                        {{-- Menambahkan pesan error untuk konsistensi --}}
+                        @error('nomor_tiket')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
-                        <button type="submit"
-                                class="w-full px-6 py-3 font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 transition">
-                            Lanjutkan
-                        </button>
-                    </div>
+
+                    <button type="submit"
+                        class="w-full justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Verifikasi & Lanjutkan
+                    </button>
                 </form>
             </div>
         </div>
@@ -5006,8 +5112,7 @@ $classes = ($active ?? false)
     <!-- Header -->
     <header class="sticky top-0 z-50 glass">
         <div class="max-w-7xl mx-auto flex items-center justify-between p-6">
-            <a href="/" class="text-3xl font-bold text-blue-700 tracking-tight">Polres 
-                Gorontalo Kota</a>
+            <a href="/" class="text-3xl font-bold text-blue-700 tracking-tight">Polresta Gorontalo Kota</a>
             <nav class="hidden lg:flex space-x-8 items-center">
                 <a href="{{ route('lacak.aduan') }}"
                class="text-gray-700 font-medium hover:text-blue-600 transition relative group">Lacak Aduan<span
@@ -5053,7 +5158,7 @@ $classes = ($active ?? false)
 
     <!-- Footer -->
     <footer class="p-6 text-center text-gray-600 bg-gray-100 glass">
-        Â© {{ date('Y') }} PoldaCare. Semua hak dilindungi.
+        Â© {{ date('Y') }} Polresta Gorontalo Kota. Semua hak dilindungi.
     </footer>
 
     @stack('scripts')
@@ -5094,11 +5199,11 @@ $classes = ($active ?? false)
         @if (Auth::check())
             @if (Auth::user()->role->value === 'admin')
                 <a href="{{ route('admin.dashboard') }}" class="text-2xl font-bold text-gray-800">
-                    Polres Gorontalo Kota
+                    Polresta Gorontalo Kota
                 </a>
             @else
                 <a href="{{ route('reskrim.dashboard') }}" class="text-2xl font-bold text-gray-800">
-                    Polres Gorontalo Kota
+                    Polresta Gorontalo Kota
                 </a>
             @endif
         @endif
@@ -6049,6 +6154,8 @@ $classes = ($active ?? false)
                                     <dd class="text-gray-900">{{ $pengaduan->nama_pelapor }}</dd>
                                     <dt class="font-medium text-gray-500">No. HP</dt>
                                     <dd class="text-gray-900">{{ $pengaduan->no_hp_pelapor }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">Email Pelapor</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $pengaduan->email_pelapor }}</dd>
                                     <dt class="font-medium text-gray-500">Umur</dt>
                                     <dd class="text-gray-900">{{ $pengaduan->umur_pelapor ?? '-' }}</dd>
                                     <dt class="font-medium text-gray-500">Pekerjaan</dt>
@@ -6148,6 +6255,46 @@ $classes = ($active ?? false)
                             {{ $pengaduan->status }}
                         </span>
                     </div>
+                    <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Foto KTP Pelapor</h3>
+                        @if ($pengaduan->foto_ktp)
+                            <a href="{{ asset('storage/' . $pengaduan->foto_ktp) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $pengaduan->foto_ktp) }}" alt="Foto KTP"
+                                    class="w-full h-auto rounded-lg border hover:opacity-90 transition">
+                            </a>
+                        @else
+                            <p class="text-gray-500 text-sm">Tidak ada foto KTP yang diunggah.</p>
+                        @endif
+                    </div>
+                    @if ($pengaduan->bukti->isNotEmpty())
+                        <div class="md:col-span-2">
+                            <dt class="text-sm font-medium text-gray-500">Bukti Tambahan</dt>
+                            <dd class="mt-2 text-sm text-gray-900">
+                                <ul role="list" class="border border-gray-200 rounded-md divide-y divide-gray-200">
+                                    @foreach ($pengaduan->bukti as $item)
+                                        <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                                            <div class="w-0 flex-1 flex items-center">
+                                                {{-- Icon Lampiran --}}
+                                                <svg class="flex-shrink-0 h-5 w-5 text-gray-400"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.497a1.5 1.5 0 012.121-2.121l-1.414-1.414a1 1 0 111.414-1.414l1.414 1.414a3.5 3.5 0 11-4.95-4.95l.497-.497h.001l7-7a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                                <span
+                                                    class="ml-2 flex-1 w-0 truncate">{{ basename($item->file_path) }}</span>
+                                            </div>
+                                            <div class="ml-4 flex-shrink-0">
+                                                <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank"
+                                                    class="font-medium text-blue-600 hover:text-blue-500">Lihat</a>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </dd>
+                        </div>
+                    @endif
 
                     @if ($pengaduan->status !== 'Selesai')
                         <div class="bg-white p-6 shadow-sm sm:rounded-lg">
@@ -6331,7 +6478,7 @@ $classes = ($active ?? false)
                 <div>
                     <h2 class="text-3xl md:text-4xl font-bold text-blue-700">Lacak Aduan Anda</h2>
                     <p class="text-gray-600 max-w-2xl mx-auto mt-4 text-lg">
-                        Masukkan nama lengkap yang Anda gunakan saat melapor untuk melihat status aduan Anda.
+                        Masukkan nomor tiket yang Anda terima di email untuk melihat status aduan Anda.
                     </p>
                 </div>
 
@@ -6347,11 +6494,10 @@ $classes = ($active ?? false)
             <div class="glass p-8 rounded-2xl mb-8">
                 <form action="{{ route('lacak.aduan') }}" method="GET" class="flex items-center gap-4">
                     <div class="flex-grow">
-                        <label for="nama_pelapor" class="sr-only">Nama Pelapor</label>
-                        <input type="text" id="nama_pelapor" name="nama_pelapor"
-                            value="{{ request('nama_pelapor') }}"
+                        <label for="keyword" class="sr-only">Nomor Tiket</label>
+                        <input type="text" id="keyword" name="keyword" value="{{ request('keyword') }}"
                             class="w-full p-3 bg-white/50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition"
-                            placeholder="Ketik nama lengkap Anda di sini..." required>
+                            placeholder="Ketik nomor tiket Anda di sini (contoh: PGK-000001)..." required>
                     </div>
                     <button type="submit"
                         class="px-6 py-3 font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 transition">
@@ -6360,98 +6506,92 @@ $classes = ($active ?? false)
                 </form>
             </div>
 
-            @if (request()->filled('nama_pelapor'))
-                <h3 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pencarian untuk "{{ request('nama_pelapor') }}"
+            {{-- Ganti seluruh blok ini dari @if sampai @endif --}}
+            @if (request()->filled('keyword'))
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pencarian untuk "{{ request('keyword') }}"
                 </h3>
-                <div class="space-y-6">
-                    @forelse ($pengaduans as $pengaduan)
-                        <div
-                            class="bg-white p-6 rounded-lg shadow-md border-l-4 
-                            @if ($pengaduan->status == 'Diteruskan ke Penyidik' || $pengaduan->status == 'Selesai') border-green-500
-                            @elseif($pengaduan->status == 'Diproses' || $pengaduan->status == 'Diteruskan ke Reskrim') border-purple-500
-                            @elseif($pengaduan->status == 'Diverifikasi') border-yellow-500
-                            @elseif($pengaduan->status == 'Dikembalikan') border-red-500
-                            @else border-blue-500 @endif">
 
-                            {{-- ====================================================== --}}
-                            {{-- [PERUBAHAN UTAMA] Tampilan Kartu Hasil Pencarian     --}}
-                            {{-- ====================================================== --}}
-                            <div class="flex flex-col sm:flex-row justify-between">
-                                {{-- Kolom Kiri: Detail Laporan --}}
-                                <div class="space-y-3">
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">ID Laporan</p>
-                                        <p class="font-semibold text-gray-800">: #{{ $pengaduan->id }}</p>
+                @if ($pengaduans->isNotEmpty())
+                    <div class="space-y-8">
+                        @foreach ($pengaduans as $pengaduan)
+                            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                                <div class="flex justify-between items-start">
+                                    {{-- Ganti div ini --}}
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Nomor Tiket:
+                                            {{ $pengaduan->nomor_tiket }}</h3>
+
+                                        {{-- Detail Laporan Tambahan --}}
+                                        <div class="mt-3 space-y-2 text-sm text-gray-600">
+                                            <p><span class="font-semibold w-32 inline-block">Nama Pelapor</span>:
+                                                {{ $pengaduan->nama_pelapor }}</p>
+                                            <p><span class="font-semibold w-32 inline-block">Jenis Kasus</span>:
+                                                {{ Str::limit($pengaduan->isi_laporan, 50) }}</p>
+                                            <p><span class="font-semibold w-32 inline-block">Dilaporkan pada</span>:
+                                                {{ $pengaduan->created_at->translatedFormat('d F Y') }}</p>
+                                            <p><span class="font-semibold w-32 inline-block">Waktu</span>:
+                                                {{ $pengaduan->created_at->format('H:i') }} WITA</p>
+                                        </div>
                                     </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Nama Pelapor</p>
-                                        <p class="font-semibold text-gray-800">: {{ $pengaduan->nama_pelapor }}</p>
-                                    </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Jenis Kasus</p>
-                                        <p class="font-semibold text-gray-800">:
-                                            {{ Str::limit($pengaduan->isi_laporan, 50) }}</p>
-                                    </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Dilaporkan pada Tanggal</p>
-                                        <p class="font-semibold text-gray-800">:
-                                            {{ $pengaduan->created_at->translatedFormat('d F Y') }}</p>
-                                    </div>
-                                    <div class="flex items-baseline">
-                                        <p class="w-40 text-sm text-gray-500">Waktu</p>
-                                        <p class="font-semibold text-gray-800">:
-                                            {{ $pengaduan->created_at->format('H:i') }} WITA</p>
-                                    </div>
+                                    @if ($pengaduan->status == 'Dikembalikan')
+                                        <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}"
+                                            class="text-sm bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition">
+                                            Perbaiki Laporan
+                                        </a>
+                                    @endif
                                 </div>
+                                <hr class="my-4">
 
-                                {{-- Kolom Kanan: Status --}}
-                                <div class="mt-4 sm:mt-0 sm:text-right">
-                                    <p class="text-sm text-gray-500 mb-1">Status:</p>
-                                    @php
-                                        $statusClass = '';
-                                        if ($pengaduan->status == 'Baru') {
-                                            $statusClass = 'bg-blue-100 text-blue-800';
-                                        } elseif ($pengaduan->status == 'Diverifikasi') {
-                                            $statusClass = 'bg-yellow-100 text-yellow-800';
-                                        } elseif ($pengaduan->status == 'Diteruskan ke Reskrim') {
-                                            $statusClass = 'bg-indigo-100 text-indigo-800';
-                                        } elseif ($pengaduan->status == 'Diproses') {
-                                            $statusClass = 'bg-purple-100 text-purple-800';
-                                        } elseif ($pengaduan->status == 'Diteruskan ke Penyidik') {
-                                            $statusClass = 'bg-teal-100 text-teal-800';
-                                        } elseif ($pengaduan->status == 'Dikembalikan') {
-                                            $statusClass = 'bg-red-100 text-red-800';
-                                        } elseif ($pengaduan->status == 'Selesai') {
-                                            $statusClass = 'bg-green-100 text-green-800';
-                                        }
-                                    @endphp
-                                    <span
-                                        class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full {{ $statusClass }}">
-                                        {{ $pengaduan->status }}
-                                    </span>
+                                {{-- Timeline Riwayat Status --}}
+                                <div class="relative border-l-2 border-blue-200 ml-3 mt-6">
+
+                                    {{-- Loop untuk setiap riwayat status (sekarang yang terbaru di atas) --}}
+                                    @foreach ($pengaduan->riwayatStatus as $riwayat)
+                                        <div class="mb-8 ml-6">
+                                            <span
+                                                class="absolute flex items-center justify-center w-6 h-6 bg-blue-500 rounded-full -left-3 ring-8 ring-white">
+                                                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </span>
+                                            <h4 class="font-semibold text-gray-900">{{ $riwayat->status }}</h4>
+                                            <time
+                                                class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $riwayat->created_at->format('d M Y, H:i') }}</time>
+                                            @if ($riwayat->catatan)
+                                                <p class="text-base font-normal text-gray-600">{{ $riwayat->catatan }}
+                                                </p>
+                                            @endif
+                                        </div>
+                                    @endforeach
+
+                                    {{-- Riwayat Awal (Saat Laporan Dibuat) SEKARANG DI BAWAH --}}
+                                    <div class="mb-8 ml-6">
+                                        <span
+                                            class="absolute flex items-center justify-center w-6 h-6 bg-blue-500 rounded-full -left-3 ring-8 ring-white">
+                                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                        </span>
+                                        <h4 class="font-semibold text-gray-900">Laporan Dibuat</h4>
+                                        <time
+                                            class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $pengaduan->created_at->format('d M Y, H:i') }}</time>
+                                        <p class="text-base font-normal text-gray-600">Laporan Anda berhasil dikirim dan
+                                            menunggu verifikasi admin.</p>
+                                    </div>
+
                                 </div>
                             </div>
-
-                            @if ($pengaduan->status == 'Dikembalikan' && $pengaduan->catatan_pengembalian)
-                                <div class="mt-4 pt-4 border-t border-gray-200">
-                                    <p class="text-sm font-bold text-red-700">Catatan dari Petugas:</p>
-                                    <p class="text-sm text-gray-600 italic">"{{ $pengaduan->catatan_pengembalian }}"
-                                    </p>
-                                    <div class="mt-4 text-right">
-                                        <a href="{{ route('laporan.verifikasi.form', $pengaduan->id) }}"
-                                            class="inline-block px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
-                                            Perbaiki Laporan Ini
-                                        </a>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    @empty
-                        <div class="text-center py-10 bg-gray-50 rounded-lg">
-                            <p class="text-gray-600">Tidak ada aduan yang ditemukan dengan nama tersebut.</p>
-                        </div>
-                    @endforelse
-                </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-10 bg-gray-50 rounded-lg">
+                        <p class="text-gray-600">Tidak ada aduan yang ditemukan dengan nama tersebut.</p>
+                    </div>
+                @endif
             @endif
         </div>
     </section>
