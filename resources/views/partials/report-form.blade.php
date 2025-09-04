@@ -69,7 +69,7 @@
                     <div>
                         <label for="foto_ktp" class="block mb-2 text-sm font-medium text-gray-700">Upload Foto
                             KTP <span class="text-red-500">*</span></label>
-                        <input type="file" id="foto_ktp" name="foto_ktp"
+                        <input type="file" id="foto_ktp" name="foto_ktp" value="{{ old('foto_ktp') }}"
                             class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('foto_ktp') ring-1 ring-red-500 rounded-lg @enderror"
                             required>
                         @error('foto_ktp')
@@ -78,12 +78,12 @@
                     </div>
                     <div>
                         <label for="bukti" class="block mb-2 text-sm font-medium text-gray-700">Upload Bukti (Bisa lebih dari satu)</label>
-                        <input type="file" id="bukti" name="bukti[]" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" multiple>
+                        <input type="file" id="bukti" name="bukti[]" value="{{ old('bukti') }}" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" multiple>
                     </div>
 
                     <div>
                         <label for="email_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-                        <input type="email" id="email_pelapor" name="email_pelapor" value="{{ old('email_pelapor') }}"
+                        <input type="email" id="email_pelapor" name="email_pelapor" value="{{ old('email_pelapor') }}" 
                             class="w-full p-3 rounded-lg border @error('email_pelapor') border-red-500 @else border-gray-300 @enderror"
                             required>
                         @error('email_pelapor')
@@ -253,7 +253,7 @@
                         data-laporan="{{ htmlspecialchars(json_encode($laporan ?? [])) }}"></div>
                     <p class="mt-2 text-sm text-gray-500">Koordinat Terpilih: <span id="koordinat"
                             class="font-semibold">Belum dipilih</span></p>
-                    <input type="hidden" name="latitude" id="latitude" required><input type="hidden"
+                    <input type="hidden" name="latitude" id="latitude"  required><input type="hidden"
                         name="longitude" id="longitude" required>
                     @error('latitude')
                         <p class="text-sm text-red-600 mt-2">Lokasi di peta wajib ditandai.</p>

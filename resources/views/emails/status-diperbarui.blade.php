@@ -18,6 +18,16 @@
                 <p><strong>Catatan:</strong> {{ $riwayat->catatan }}</p>
             @endif
         </div>
+        <p style="font-size: 14px; color: #555;">Gunakan nomor tiket ini untuk melacak status aduan Anda di website kami.
+        </p>
+
+        <p style="margin-top: 20px;">
+            Anda dapat melacak status laporan Anda kapan saja melalui tautan di bawah ini:
+        </p>
+        <a href="{{ route('lacak.aduan', ['keyword' => $pengaduan->nomor_tiket]) }}"
+            style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">
+            Lacak Laporan Saya
+        </a>
 
         <p style="margin-top: 20px;">Anda dapat melacak detail laporan Anda kapan saja melalui website kami.</p>
         <hr>
