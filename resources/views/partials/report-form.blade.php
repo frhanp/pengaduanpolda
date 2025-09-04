@@ -36,7 +36,7 @@
                             Lengkap <span class="text-red-500">*</span></label>
                         <input type="text" id="nama_pelapor" name="nama_pelapor" value="{{ old('nama_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('nama_pelapor') border-red-500 @else border-gray-300 @enderror"
-                            required>
+                            required placeholder="Wajib diisi" title="Wajib diisi">
                         @error('nama_pelapor')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -48,7 +48,7 @@
                             Handphone <span class="text-red-500">*</span></label>
                         <input type="tel" id="no_hp_pelapor" name="no_hp_pelapor" value="{{ old('no_hp_pelapor') }}"
                             class="w-full p-3 rounded-lg border @error('no_hp_pelapor') border-red-500 @else border-gray-300 @enderror"
-                            required>
+                            required placeholder="Wajib diisi" title="Wajib diisi">
                         @error('no_hp_pelapor')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -59,9 +59,9 @@
                         <label for="nik" class="block mb-2 text-sm font-medium text-gray-700">NIK <span class="text-red-500">*</span></label>
                         <input type="text" id="nik" name="nik" value="{{ old('nik') }}"
                             class="w-full p-3 rounded-lg border @error('nik') border-red-500 @else border-gray-300 @enderror"
-                            required>
+                            required placeholder="Wajib diisi" title="Wajib diisi">
                         @error('nik')
-                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                            <p class="text-sm text-red-600 mt-2">NIK HARUS ANGKA DAN 16 DIGIT</p>
                         @enderror
                     </div>
 
@@ -71,7 +71,7 @@
                             KTP <span class="text-red-500">*</span></label>
                         <input type="file" id="foto_ktp" name="foto_ktp" value="{{ old('foto_ktp') }}"
                             class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('foto_ktp') ring-1 ring-red-500 rounded-lg @enderror"
-                            required>
+                            required title="Wajib diisi">
                         @error('foto_ktp')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -85,7 +85,7 @@
                         <label for="email_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
                         <input type="email" id="email_pelapor" name="email_pelapor" value="{{ old('email_pelapor') }}" 
                             class="w-full p-3 rounded-lg border @error('email_pelapor') border-red-500 @else border-gray-300 @enderror"
-                            required>
+                            required placeholder="Wajib diisi" title="Wajib diisi">
                         @error('email_pelapor')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -97,7 +97,7 @@
                             Lahir <span class="text-red-500">*</span></label>
                         <input type="text" id="tempat_lahir" name="tempat_lahir" value="{{ old('tempat_lahir') }}"
                             class="w-full p-3 rounded-lg border @error('tempat_lahir') border-red-500 @else border-gray-300 @enderror"
-                            required>
+                            required placeholder="Wajib diisi" title="Wajib diisi">
                         @error('tempat_lahir')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -110,7 +110,7 @@
                         <input type="date" id="tanggal_lahir" name="tanggal_lahir"
                             value="{{ old('tanggal_lahir') }}"
                             class="w-full p-3 rounded-lg border @error('tanggal_lahir') border-red-500 @else border-gray-300 @enderror"
-                            required>
+                            required title="Wajib diisi">
                         @error('tanggal_lahir')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -120,13 +120,13 @@
                     <div class="md:col-span-2">
                         <label class="block mb-2 text-sm font-medium text-gray-700">Jenis Kelamin <span class="text-red-500">*</span></label>
                         <div class="flex items-center space-x-6 mt-2">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="jenis_kelamin" value="Laki-laki" class="form-radio"
+                            <label class="inline-flex items-center" title="Wajib diisi">
+                                <input type="radio" name="jenis_kelamin" value="Laki-laki" class="form-radio" required
                                     @if (old('jenis_kelamin') == 'Laki-laki') checked @endif>
                                 <span class="ml-2">Laki-laki</span>
                             </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="jenis_kelamin" value="Perempuan" class="form-radio"
+                            <label class="inline-flex items-center" title="Wajib diisi">
+                                <input type="radio" name="jenis_kelamin" value="Perempuan" class="form-radio" required
                                     @if (old('jenis_kelamin') == 'Perempuan') checked @endif>
                                 <span class="ml-2">Perempuan</span>
                             </label>
@@ -141,7 +141,7 @@
                         <label for="agama" class="block mb-2 text-sm font-medium text-gray-700">Agama <span class="text-red-500">*</span></label>
                         <select id="agama" name="agama"
                             class="w-full p-3 rounded-lg border @error('agama') border-red-500 @else border-gray-300 @enderror"
-                            required>
+                            required title="Wajib diisi">
                             <option value="" disabled selected>Pilih Agama</option>
                             <option value="Islam" @if (old('agama') == 'Islam') selected @endif>Islam</option>
                             <option value="Kristen Protestan" @if (old('agama') == 'Kristen Protestan') selected @endif>Kristen
@@ -162,7 +162,8 @@
                     <div>
                         <label for="umur_pelapor" class="block mb-2 text-sm font-medium text-gray-700">Umur <span class="text-red-500">*</span></label>
                         <input type="number" id="umur_pelapor" name="umur_pelapor" value="{{ old('umur_pelapor') }}"
-                            class="w-full p-3 rounded-lg border @error('umur_pelapor') border-red-500 @else border-gray-300 @enderror">
+                            class="w-full p-3 rounded-lg border @error('umur_pelapor') border-red-500 @else border-gray-300 @enderror"
+                            required placeholder="Wajib diisi" title="Wajib diisi">
                         @error('umur_pelapor')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -174,7 +175,8 @@
                             class="block mb-2 text-sm font-medium text-gray-700">Pekerjaan <span class="text-red-500">*</span></label>
                         <input type="text" id="pekerjaan_pelapor" name="pekerjaan_pelapor"
                             value="{{ old('pekerjaan_pelapor') }}"
-                            class="w-full p-3 rounded-lg border @error('pekerjaan_pelapor') border-red-500 @else border-gray-300 @enderror">
+                            class="w-full p-3 rounded-lg border @error('pekerjaan_pelapor') border-red-500 @else border-gray-300 @enderror"
+                            required placeholder="Wajib diisi" title="Wajib diisi">
                         @error('pekerjaan_pelapor')
                             <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                         @enderror
@@ -197,7 +199,7 @@
                             </svg>Gunakan Lokasi Saya</button></div>
                     <textarea id="alamat_pelapor" name="alamat_pelapor" rows="3"
                         class="w-full p-3 bg-white/50 rounded-lg border @error('alamat_pelapor') border-red-500 @else border-gray-300 @enderror focus:ring-blue-500 focus:border-blue-500 transition"
-                        placeholder="Ketik alamat atau gunakan lokasi saat ini...">{{ old('alamat_pelapor') }}</textarea>
+                        placeholder="Wajib diisi" title="Wajib diisi">{{ old('alamat_pelapor') }}</textarea>
                     <p id="location-status" class="text-xs text-gray-500 mt-1 h-4"></p>
                     @error('alamat_pelapor')
                         <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
@@ -210,7 +212,7 @@
                         Polsek <span class="text-red-500">*</span></label>
                     <select id="tujuan_polsek" name="tujuan_polsek"
                         class="w-full p-3 bg-white/50 rounded-lg border @error('tujuan_polsek') border-red-500 @else border-gray-300 @enderror focus:ring-blue-500 focus:border-blue-500 transition"
-                        required>
+                        required title="Wajib diisi">
                         <option value="" disabled selected>Pilih Tujuan Laporan</option>
                         <option value="Polres Kota Gorontalo" @if (old('tujuan_polsek') == 'Polres Kota Gorontalo') selected @endif>Polres
                             Kota Gorontalo</option>
@@ -240,7 +242,7 @@
                     <label for="isi_laporan" class="block mb-2 text-sm font-medium text-gray-700">Isi Laporan <span class="text-red-500">*</span></label>
                     <textarea id="isi_laporan" name="isi_laporan" rows="5"
                         class="w-full p-3 bg-white/50 rounded-lg border @error('isi_laporan') border-red-500 @else border-gray-300 @enderror focus:ring-blue-500 focus:border-blue-500 transition"
-                        required>{{ old('isi_laporan') }}</textarea>
+                        required placeholder="Wajib diisi" title="Wajib diisi">{{ old('isi_laporan') }}</textarea>
                     @error('isi_laporan')
                         <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                     @enderror
@@ -253,8 +255,9 @@
                         data-laporan="{{ htmlspecialchars(json_encode($laporan ?? [])) }}"></div>
                     <p class="mt-2 text-sm text-gray-500">Koordinat Terpilih: <span id="koordinat"
                             class="font-semibold">Belum dipilih</span></p>
-                    <input type="hidden" name="latitude" id="latitude"  required><input type="hidden"
-                        name="longitude" id="longitude" required>
+                    <input type="hidden" name="latitude" id="latitude"  required title="Wajib diisi"><input type="hidden"
+                        name="longitude" id="longitude" required title="Wajib diisi">
+                        
                     @error('latitude')
                         <p class="text-sm text-red-600 mt-2">Lokasi di peta wajib ditandai.</p>
                     @enderror
@@ -267,3 +270,23 @@
         </div>
     </div>
 </section>
+
+<style>
+/* Hover merah untuk field wajib */
+input[required]:hover,
+select[required]:hover,
+textarea[required]:hover {
+    border-color: red !important;
+}
+/* Fokus juga merah agar konsisten */
+input[required]:focus,
+select[required]:focus,
+textarea[required]:focus {
+    border-color: red !important;
+    outline: none;
+}
+/* Radio: warna label memerah saat hover input */
+input[type="radio"][required]:hover + span {
+    color: red;
+}
+</style>
