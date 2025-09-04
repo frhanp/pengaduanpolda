@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Reskrim;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Pengaduan;
 use App\Models\SuratPernyataan;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Pengaduan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class SuratPernyataanController extends Controller
 {
@@ -20,7 +19,6 @@ class SuratPernyataanController extends Controller
         $request->validate(['pengaduan_id' => 'required|exists:pengaduans,id']);
         $pengaduan = Pengaduan::findOrFail($request->pengaduan_id);
 
-        // Keamanan: Pastikan reskrim hanya bisa membuat surat untuk unit kerjanya
         if ($pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
             abort(403, 'Akses Ditolak');
         }
@@ -33,80 +31,101 @@ class SuratPernyataanController extends Controller
      */
     public function store(Request $request, Pengaduan $pengaduan)
     {
+        // [PERUBAHAN] Menambahkan validasi untuk pejabat_mengetahui dan memecah ttl
         $validatedData = $request->validate([
-            'tempat_dibuat'   => 'required|string|max:255',
-            'isi_pernyataan'  => 'required|string',
-            'pihak'           => 'required|array|min:2|max:4',
-            'pihak.*.nama'    => 'required|string|max:255',
-            'pihak.*.ttl'     => 'required|string|max:255',
-            'pihak.*.pekerjaan' => 'required|string|max:255',
-            'pihak.*.alamat'  => 'required|string',
-            'pihak.*.agama'   => 'required|string|max:255',
-            
+            'tempat_dibuat'       => 'required|string|max:255',
+            'pejabat_mengetahui'  => 'required|string|max:255',
+            'isi_pernyataan'      => 'required|array|min:1',
+            'isi_pernyataan.*'    => 'required|string',
+            'pihak'               => 'required|array|min:2|max:4',
+            'pihak.*.nama'        => 'required|string|max:255',
+            'pihak.*.tempat_lahir' => 'required|string|max:255',
+            'pihak.*.tanggal_lahir' => 'required|date',
+            'pihak.*.pekerjaan'     => 'required|string|max:255',
+            'pihak.*.alamat'      => 'required|string',
+            'pihak.*.agama'       => 'required|string|max:255',
+            'saksi'               => 'nullable|array',
+            'saksi.*.nama'        => 'required_with:saksi|string|max:255',
         ]);
 
-        // Keamanan: Pastikan reskrim hanya bisa membuat surat untuk unit kerjanya
         if ($pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
             abort(403, 'Akses Ditolak');
         }
 
-        // Simpan data ke database
+        // [PERUBAHAN] Gabungkan tempat dan tanggal lahir menjadi satu string 'ttl' sebelum disimpan
+        $pihakData = array_map(function ($p) {
+            $p['ttl'] = $p['tempat_lahir'] . ', ' . \Carbon\Carbon::parse($p['tanggal_lahir'])->translatedFormat('d F Y');
+            unset($p['tempat_lahir'], $p['tanggal_lahir']); // Hapus field individual
+            return $p;
+        }, $validatedData['pihak']);
+
+        $isiPernyataanString = implode("\n", $validatedData['isi_pernyataan']);
+
         $surat = SuratPernyataan::create([
             'pengaduan_id'           => $pengaduan->id,
             'dibuat_oleh_reskrim_id' => Auth::id(),
-            'pihak_terlibat'         => $validatedData['pihak'],
-            'isi_pernyataan'         => $validatedData['isi_pernyataan'],
+            'pihak_terlibat'         => $pihakData, // Simpan data pihak yang sudah digabung
+            'saksi_terlibat'         => $validatedData['saksi'] ?? [],
+            'isi_pernyataan'         => $isiPernyataanString,
             'tempat_dibuat'          => $validatedData['tempat_dibuat'],
+            'pejabat_mengetahui'     => $validatedData['pejabat_mengetahui'], // Simpan nama pejabat
         ]);
 
         return redirect()->route('reskrim.tugas.show', $pengaduan->id)
                          ->with('success', 'Surat Pernyataan berhasil dibuat.');
     }
 
+    /**
+     * Menghasilkan dan mengunduh file PDF dari Surat Pernyataan.
+     */
     public function download(SuratPernyataan $suratPernyataan)
     {
-        // Keamanan: Pastikan reskrim hanya bisa mengakses surat dari unit kerjanya
         if ($suratPernyataan->pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
             abort(403, 'AKSES DITOLAK');
         }
-
-        // Render view PDF dengan data yang ada
         $pdf = Pdf::loadView('reskrim.surat-pernyataan.pdf_template', compact('suratPernyataan'));
-        
-        // Unduh PDF dengan nama file yang dinamis
         return $pdf->download('Surat-Pernyataan-' . $suratPernyataan->pengaduan->id . '.pdf');
     }
 
-    /**
-     * Menampilkan pratinjau Surat Pernyataan tanpa menyimpannya.
-     */
     public function preview(Request $request)
     {
+        // [PERUBAHAN] Menambahkan validasi untuk pejabat_mengetahui dan memecah ttl
         $validatedData = $request->validate([
-            'pengaduan_id'    => 'required|exists:pengaduans,id',
-            'tempat_dibuat'   => 'required|string|max:255',
-            'isi_pernyataan'  => 'required|string',
-            'pihak'           => 'required|array|min:2|max:4',
-            'pihak.*.nama'    => 'required|string|max:255',
-            'pihak.*.ttl'     => 'required|string|max:255',
-            'pihak.*.pekerjaan' => 'required|string|max:255',
-            'pihak.*.alamat'  => 'required|string',
-            'pihak.*.agama'   => 'required|string|max:255',
-        ]);
-
-        // Buat instance model sementara tanpa menyimpannya ke database
-        $suratPernyataan = new SuratPernyataan([
-            'pihak_terlibat' => $validatedData['pihak'],
-            'isi_pernyataan' => $validatedData['isi_pernyataan'],
-            'tempat_dibuat'  => $validatedData['tempat_dibuat'],
+            'pengaduan_id'        => 'required|exists:pengaduans,id',
+            'tempat_dibuat'       => 'required|string|max:255',
+            'pejabat_mengetahui'  => 'required|string|max:255',
+            'isi_pernyataan'      => 'required|array|min:1',
+            'isi_pernyataan.*'    => 'required|string',
+            'pihak'               => 'required|array|min:2|max:4',
+            'pihak.*.nama'        => 'required|string|max:255',
+            'pihak.*.tempat_lahir' => 'required|string|max:255',
+            'pihak.*.tanggal_lahir' => 'required|date',
+            'pihak.*.pekerjaan'     => 'required|string|max:255',
+            'pihak.*.alamat'      => 'required|string',
+            'pihak.*.agama'       => 'required|string|max:255',
+            'saksi'               => 'nullable|array',
+            'saksi.*.nama'        => 'required_with:saksi|string|max:255',
         ]);
         
-        // Atur tanggal secara manual untuk pratinjau
+        // [PERUBAHAN] Gabungkan tempat dan tanggal lahir untuk pratinjau
+        $pihakData = array_map(function ($p) {
+            $p['ttl'] = $p['tempat_lahir'] . ', ' . \Carbon\Carbon::parse($p['tanggal_lahir'])->translatedFormat('d F Y');
+            return $p;
+        }, $validatedData['pihak']);
+
+        $isiPernyataanString = implode("\n", $validatedData['isi_pernyataan']);
+
+        $suratPernyataan = new SuratPernyataan([
+            'pihak_terlibat' => $pihakData, // Kirim data yang sudah digabung ke view
+            'saksi_terlibat' => $validatedData['saksi'] ?? [],
+            'isi_pernyataan' => $isiPernyataanString,
+            'tempat_dibuat'  => $validatedData['tempat_dibuat'],
+            'pejabat_mengetahui' => $validatedData['pejabat_mengetahui'], // Kirim nama pejabat ke view
+        ]);
+        
         $suratPernyataan->created_at = now();
 
         $pdf = Pdf::loadView('reskrim.surat-pernyataan.pdf_template', compact('suratPernyataan'));
-        
-        // Tampilkan PDF langsung di browser
         return $pdf->stream('preview-surat-pernyataan.pdf');
     }
 }

@@ -23,10 +23,14 @@ class SuratPernyataan extends Model
         'pihak_terlibat', // Kolom baru untuk data JSON
         'isi_pernyataan', // Kolom baru untuk isi pernyataan
         'tempat_dibuat',  // Kolom baru untuk tempat dibuat
+        'pejabat_mengetahui', // Kolom baru untuk pejabat mengetahui
+        'saksi_terlibat', // Kolom baru untuk data JSON
     ];
 
     protected $casts = [
         'pihak_terlibat' => 'array', // Ini akan otomatis mengubah JSON dari DB menjadi array PHP
+        'saksi_terlibat' => 'array', // Ini akan otomatis mengubah JSON dari DB menjadi array PHP
+        'pejabat_mengetahui' => 'string', // Ini akan otomatis mengubah JSON dari DB menjadi string PHP
     ];
 
     public function pengaduan(): BelongsTo

@@ -1,5 +1,5 @@
 ﻿# Project Digest (Full Content)
-_Generated: 2025-09-03 10:32:12_
+_Generated: 2025-09-03 12:20:41_
 **Root:** D:\Laragon\www\pengaduanpolda
 
 
@@ -130,6 +130,7 @@ database\migrations\2025_08_31_141150_create_bukti_pengaduans_table.php
 database\migrations\2025_08_31_145212_add_email_pelapor_to_pengaduans_table.php
 database\migrations\2025_08_31_214555_create_riwayat_status_table.php
 database\migrations\2025_09_03_084152_add_ticket_hash_to_pengaduans_table.php
+database\migrations\2025_09_03_114850_add_saksi_terlibat_to_surat_pernyataans_table.php
 database\seeders\DatabaseSeeder.php
 database\seeders\PengaduanSeeder.php
 database\seeders\UnitUserSeeder.php
@@ -419,11 +420,11 @@ Branch:
 main
 
 Last 5 commits:
+f6fb44c surat pernyataan v1
 da5eed3 tambah logo stpl
 bfd9f36 hash tiket
 19b7204 perubahan pdf dan bintang merah
 36769c1 add bukti dan email di reskrim
-caf1a08 add bukti dan email di view
 ```
 
 
@@ -625,8 +626,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/tugas/{pengaduan}/update-status', [ReskrimDashboardController::class, 'updateStatus'])->name('tugas.updateStatus');
 
         Route::get('/surat-pernyataan/create', [SuratPernyataanController::class, 'create'])->name('surat-pernyataan.create');
+        Route::post('/surat-pernyataan/preview', [SuratPernyataanController::class, 'preview'])->name('surat-pernyataan.preview');
         Route::post('/surat-pernyataan/{pengaduan}', [SuratPernyataanController::class, 'store'])->name('surat-pernyataan.store');
         Route::get('/surat-pernyataan/{suratPernyataan}/download', [SuratPernyataanController::class, 'download'])->name('surat-pernyataan.download');
+        
     });
 });
 
@@ -689,6 +692,7 @@ require __DIR__ . '/auth.php';
   GET|HEAD  reset-password/{token} .................................... password.reset ΓÇ║ Auth\NewPasswordController@create
   GET|HEAD  reskrim/dashboard ...................................... reskrim.dashboard ΓÇ║ Reskrim\DashboardController@index
   GET|HEAD  reskrim/surat-pernyataan/create ... reskrim.surat-pernyataan.create ΓÇ║ Reskrim\SuratPernyataanController@create
+  POST      reskrim/surat-pernyataan/preview reskrim.surat-pernyataan.preview ΓÇ║ Reskrim\SuratPernyataanController@preview
   POST      reskrim/surat-pernyataan/{pengaduan} reskrim.surat-pernyataan.store ΓÇ║ Reskrim\SuratPernyataanController@store
   GET|HEAD  reskrim/surat-pernyataan/{suratPernyataan}/download reskrim.surat-pernyataan.download ΓÇ║ Reskrim\SuratPernyataΓÇª
   GET|HEAD  reskrim/tugas ..................................... reskrim.tugas.list ΓÇ║ Reskrim\DashboardController@listTugas
@@ -699,7 +703,7 @@ require __DIR__ . '/auth.php';
   GET|HEAD  verify-email .................................... verification.notice ΓÇ║ Auth\EmailVerificationPromptController
   GET|HEAD  verify-email/{id}/{hash} .................................... verification.verify ΓÇ║ Auth\VerifyEmailController
 
-                                                                                                       Showing [56] routes
+                                                                                                       Showing [57] routes
 
 ```
 
@@ -1604,11 +1608,10 @@ namespace App\Http\Controllers\Reskrim;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Pengaduan;
 use App\Models\SuratPernyataan;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Pengaduan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class SuratPernyataanController extends Controller
 {
@@ -1620,7 +1623,6 @@ class SuratPernyataanController extends Controller
         $request->validate(['pengaduan_id' => 'required|exists:pengaduans,id']);
         $pengaduan = Pengaduan::findOrFail($request->pengaduan_id);
 
-        // Keamanan: Pastikan reskrim hanya bisa membuat surat untuk unit kerjanya
         if ($pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
             abort(403, 'Akses Ditolak');
         }
@@ -1634,25 +1636,29 @@ class SuratPernyataanController extends Controller
     public function store(Request $request, Pengaduan $pengaduan)
     {
         $validatedData = $request->validate([
-            'tempat_dibuat'   => 'required|string|max:255',
-            'isi_pernyataan'  => 'required|string',
-            'pihak'           => 'required|array|min:2|max:4',
-            'pihak.*.nama'    => 'required|string|max:255',
-            'pihak.*.ttl'     => 'required|string|max:255',
-            'pihak.*.pekerjaan' => 'required|string|max:255',
-            'pihak.*.alamat'  => 'required|string',
+            'tempat_dibuat'     => 'required|string|max:255',
+            'isi_pernyataan'    => 'required|string',
+            'pihak'             => 'required|array|min:2|max:4',
+            'pihak.*.nama'      => 'required|string|max:255',
+            'pihak.*.ttl'       => 'required|string|max:255',
+            'pihak.*.pekerjaan'   => 'required|string|max:255',
+            'pihak.*.alamat'    => 'required|string',
+            'pihak.*.agama'     => 'required|string|max:255',
+            'saksi'             => 'nullable|array', // Saksi opsional
+            'saksi.*.nama'      => 'required_with:saksi|string|max:255',
+            'saksi.*.pekerjaan'   => 'required_with:saksi|string|max:255',
+            'saksi.*.alamat'    => 'required_with:saksi|string',
         ]);
 
-        // Keamanan: Pastikan reskrim hanya bisa membuat surat untuk unit kerjanya
         if ($pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
             abort(403, 'Akses Ditolak');
         }
 
-        // Simpan data ke database
         $surat = SuratPernyataan::create([
             'pengaduan_id'           => $pengaduan->id,
             'dibuat_oleh_reskrim_id' => Auth::id(),
             'pihak_terlibat'         => $validatedData['pihak'],
+            'saksi_terlibat'         => $validatedData['saksi'] ?? [],
             'isi_pernyataan'         => $validatedData['isi_pernyataan'],
             'tempat_dibuat'          => $validatedData['tempat_dibuat'],
         ]);
@@ -1661,18 +1667,50 @@ class SuratPernyataanController extends Controller
                          ->with('success', 'Surat Pernyataan berhasil dibuat.');
     }
 
+    /**
+     * Menghasilkan dan mengunduh file PDF dari Surat Pernyataan.
+     */
     public function download(SuratPernyataan $suratPernyataan)
     {
-        // Keamanan: Pastikan reskrim hanya bisa mengakses surat dari unit kerjanya
         if ($suratPernyataan->pengaduan->tujuan_polsek !== Auth::user()->unit_kerja) {
             abort(403, 'AKSES DITOLAK');
         }
-
-        // Render view PDF dengan data yang ada
         $pdf = Pdf::loadView('reskrim.surat-pernyataan.pdf_template', compact('suratPernyataan'));
-        
-        // Unduh PDF dengan nama file yang dinamis
         return $pdf->download('Surat-Pernyataan-' . $suratPernyataan->pengaduan->id . '.pdf');
+    }
+
+    /**
+     * Menampilkan pratinjau Surat Pernyataan tanpa menyimpannya.
+     */
+    public function preview(Request $request)
+    {
+        $validatedData = $request->validate([
+            'pengaduan_id'    => 'required|exists:pengaduans,id',
+            'tempat_dibuat'   => 'required|string|max:255',
+            'isi_pernyataan'  => 'required|string',
+            'pihak'           => 'required|array|min:2|max:4',
+            'pihak.*.nama'    => 'required|string|max:255',
+            'pihak.*.ttl'     => 'required|string|max:255',
+            'pihak.*.pekerjaan' => 'required|string|max:255',
+            'pihak.*.alamat'  => 'required|string',
+            'pihak.*.agama'   => 'required|string|max:255',
+            'saksi'           => 'nullable|array',
+            'saksi.*.nama'    => 'required_with:saksi|string|max:255',
+            'saksi.*.pekerjaan' => 'required_with:saksi|string|max:255',
+            'saksi.*.alamat'  => 'required_with:saksi|string',
+        ]);
+
+        $suratPernyataan = new SuratPernyataan([
+            'pihak_terlibat' => $validatedData['pihak'],
+            'saksi_terlibat' => $validatedData['saksi'] ?? [],
+            'isi_pernyataan' => $validatedData['isi_pernyataan'],
+            'tempat_dibuat'  => $validatedData['tempat_dibuat'],
+        ]);
+        
+        $suratPernyataan->created_at = now();
+
+        $pdf = Pdf::loadView('reskrim.surat-pernyataan.pdf_template', compact('suratPernyataan'));
+        return $pdf->stream('preview-surat-pernyataan.pdf');
     }
 }
 
@@ -2361,10 +2399,12 @@ class SuratPernyataan extends Model
         'pihak_terlibat', // Kolom baru untuk data JSON
         'isi_pernyataan', // Kolom baru untuk isi pernyataan
         'tempat_dibuat',  // Kolom baru untuk tempat dibuat
+        'saksi_terlibat', // Kolom baru untuk data JSON
     ];
 
     protected $casts = [
         'pihak_terlibat' => 'array', // Ini akan otomatis mengubah JSON dari DB menjadi array PHP
+        'saksi_terlibat' => 'array', // Ini akan otomatis mengubah JSON dari DB menjadi array PHP
     ];
 
     public function pengaduan(): BelongsTo
@@ -6096,7 +6136,6 @@ $classes = ($active ?? false)
 </x-app-layout>
 
 ===== resources\views\reskrim\surat-pernyataan\create.blade.php =====
-{{-- resources/views/reskrim/surat-pernyataan/create.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -6109,79 +6148,128 @@ $classes = ($active ?? false)
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                    <form action="{{ route('reskrim.surat-pernyataan.store', $pengaduan->id) }}" method="POST" 
-                          x-data="{ 
+                    <form id="suratPernyataanForm" action="{{ route('reskrim.surat-pernyataan.store', $pengaduan->id) }}" method="POST"
+                          x-data="{
                             pihak: [
-                                { nama: '', ttl: '', pekerjaan: '', alamat: '' }, 
-                                { nama: '', ttl: '', pekerjaan: '', alamat: '' }
+                                { nama: '', ttl: '', pekerjaan: '', alamat: '', agama: '' },
+                                { nama: '', ttl: '', pekerjaan: '', alamat: '', agama: '' }
                             ],
+                            saksi: [],
                             maxPihak: 4,
                             addPihak() {
                                 if (this.pihak.length < this.maxPihak) {
-                                    this.pihak.push({ nama: '', ttl: '', pekerjaan: '', alamat: '' });
+                                    this.pihak.push({ nama: '', ttl: '', pekerjaan: '', alamat: '', agama: '' });
                                 }
                             },
                             removePihak(index) {
-                                this.pihak.splice(index, 1);
+                                if (this.pihak.length > 2) {
+                                    this.pihak.splice(index, 1);
+                                }
+                            },
+                            addSaksi() {
+                                this.saksi.push({ nama: '', ttl: '', pekerjaan: '', alamat: '', agama: '' });
+                            },
+                            removeSaksi(index) {
+                                this.saksi.splice(index, 1);
                             }
                           }">
                         @csrf
                         <input type="hidden" name="pengaduan_id" value="{{ $pengaduan->id }}">
 
                         <div class="space-y-8">
-                            {{-- Blok Pihak Terlibat --}}
+                            {{-- BAGIAN PIHAK TERLIBAT --}}
                             <div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-4">Pihak yang Terlibat</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Pihak yang Membuat Pernyataan</h3>
                                 <div class="space-y-6">
-                                    <template x-for="(p, index) in pihak" :key="index">
+                                    <template x-for="(p, index) in pihak" :key="'pihak-'+index">
                                         <div class="border border-gray-200 p-4 rounded-lg relative">
                                             <div class="flex justify-between items-center mb-2">
                                                 <h4 class="font-semibold text-gray-700" x-text="'Pihak ke-' + (index + 1)"></h4>
                                                 <button type="button" @click="removePihak(index)" x-show="index > 1" class="text-red-500 hover:text-red-700 text-sm">Hapus</button>
                                             </div>
-
                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
-                                                    <label :for="'nama-' + index" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                                                    <input type="text" :name="'pihak['+index+'][nama]'" :id="'nama-' + index" x-model="p.nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                                    <label :for="'pihak-nama-' + index" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                                                    <input type="text" :name="'pihak['+index+'][nama]'" :id="'pihak-nama-' + index" x-model="p.nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                                 </div>
                                                 <div>
-                                                    <label :for="'ttl-' + index" class="block text-sm font-medium text-gray-700">Tempat, Tanggal Lahir</label>
-                                                    <input type="text" :name="'pihak['+index+'][ttl]'" :id="'ttl-' + index" x-model="p.ttl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                                    <label :for="'pihak-ttl-' + index" class="block text-sm font-medium text-gray-700">Tempat, Tanggal Lahir</label>
+                                                    <input type="text" :name="'pihak['+index+'][ttl]'" :id="'pihak-ttl-' + index" x-model="p.ttl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                                 </div>
                                                 <div>
-                                                    <label :for="'pekerjaan-' + index" class="block text-sm font-medium text-gray-700">Pekerjaan</label>
-                                                    <input type="text" :name="'pihak['+index+'][pekerjaan]'" :id="'pekerjaan-' + index" x-model="p.pekerjaan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                                    <label :for="'pihak-pekerjaan-' + index" class="block text-sm font-medium text-gray-700">Pekerjaan</label>
+                                                    <input type="text" :name="'pihak['+index+'][pekerjaan]'" :id="'pihak-pekerjaan-' + index" x-model="p.pekerjaan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                                </div>
+                                                <div>
+                                                    <label :for="'pihak-agama-' + index" class="block text-sm font-medium text-gray-700">Agama</label>
+                                                    <input type="text" :name="'pihak['+index+'][agama]'" :id="'pihak-agama-' + index" x-model="p.agama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                                 </div>
                                                 <div class="md:col-span-2">
-                                                    <label :for="'alamat-' + index" class="block text-sm font-medium text-gray-700">Alamat</label>
-                                                    <textarea :name="'pihak['+index+'][alamat]'" :id="'alamat-' + index" x-model="p.alamat" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required></textarea>
+                                                    <label :for="'pihak-alamat-' + index" class="block text-sm font-medium text-gray-700">Alamat</label>
+                                                    <textarea :name="'pihak['+index+'][alamat]'" :id="'pihak-alamat-' + index" x-model="p.alamat" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </template>
                                 </div>
                                 <button type="button" @click="addPihak" :disabled="pihak.length >= maxPihak" class="mt-4 text-sm text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">
-                                    + Tambah Pihak Lain
+                                    + Tambah Pihak
                                 </button>
                             </div>
 
-                            {{-- Isi Pernyataan --}}
+                            <hr>
+
+                            {{-- BAGIAN SAKSI-SAKSI --}}
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Saksi-Saksi (Opsional)</h3>
+                                <div class="space-y-6">
+                                    <template x-for="(s, index) in saksi" :key="'saksi-'+index">
+                                        <div class="border border-gray-200 p-4 rounded-lg relative">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-semibold text-gray-700" x-text="'Saksi ke-' + (index + 1)"></h4>
+                                                <button type="button" @click="removeSaksi(index)" class="text-red-500 hover:text-red-700 text-sm">Hapus</button>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                 <div>
+                                                    <label :for="'saksi-nama-' + index" class="block text-sm font-medium text-gray-700">Nama Lengkap Saksi</label>
+                                                    <input type="text" :name="'saksi['+index+'][nama]'" :id="'saksi-nama-' + index" x-model="s.nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                                </div>
+                                                <div>
+                                                    <label :for="'saksi-pekerjaan-' + index" class="block text-sm font-medium text-gray-700">Pekerjaan Saksi</label>
+                                                    <input type="text" :name="'saksi['+index+'][pekerjaan]'" :id="'saksi-pekerjaan-' + index" x-model="s.pekerjaan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label :for="'saksi-alamat-' + index" class="block text-sm font-medium text-gray-700">Alamat Saksi</label>
+                                                    <textarea :name="'saksi['+index+'][alamat]'" :id="'saksi-alamat-' + index" x-model="s.alamat" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button type="button" @click="addSaksi" class="mt-4 text-sm text-blue-600 hover:text-blue-800">
+                                    + Tambah Saksi
+                                </button>
+                            </div>
+
+                            <hr>
+
+                            {{-- Isi Pernyataan & Tempat Dibuat --}}
                             <div>
                                 <label for="isi_pernyataan" class="block text-sm font-medium text-gray-700">Isi Pernyataan Bersama</label>
                                 <textarea id="isi_pernyataan" name="isi_pernyataan" rows="8" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>{{ old('isi_pernyataan') }}</textarea>
                             </div>
 
-                            {{-- Tempat Dibuat --}}
                             <div>
                                 <label for="tempat_dibuat" class="block text-sm font-medium text-gray-700">Tempat Surat Dibuat</label>
                                 <input type="text" id="tempat_dibuat" name="tempat_dibuat" value="{{ old('tempat_dibuat', 'Gorontalo') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                             </div>
-
                         </div>
 
-                        <div class="mt-8 flex justify-end">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
+                        <div class="mt-8 flex justify-end space-x-4">
+                            <button type="button" onclick="previewSurat()" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                                Preview Surat
+                            </button>
+                            <button type="submit" onclick="submitUntukSimpan()" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
                                 Simpan Surat Pernyataan
                             </button>
                         </div>
@@ -6191,68 +6279,272 @@ $classes = ($active ?? false)
             </div>
         </div>
     </div>
+    
+    @push('scripts')
+    <script>
+        function previewSurat() {
+            const form = document.getElementById('suratPernyataanForm');
+            form.target = '_blank';
+            form.action = '{{ route("reskrim.surat-pernyataan.preview") }}';
+            form.submit();
+        }
+
+        function submitUntukSimpan() {
+            const form = document.getElementById('suratPernyataanForm');
+            form.target = '_self';
+            form.action = '{{ route("reskrim.surat-pernyataan.store", $pengaduan->id) }}';
+        }
+    </script>
+    @endpush
 </x-app-layout>
 
 ===== resources\views\reskrim\surat-pernyataan\pdf_template.blade.php =====
 {{-- resources/views/reskrim/surat-pernyataan/pdf_template.blade.php --}}
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Surat Pernyataan</title>
     <style>
-        body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 2cm; }
-        .judul { text-align: center; font-weight: bold; text-decoration: underline; font-size: 14pt; margin-bottom: 30px; }
-        .pembuka { margin-bottom: 20px; }
-        .pihak-title { font-weight: bold; }
-        .pihak-table { width: 100%; margin-bottom: 15px; }
-        .pihak-table td { vertical-align: top; padding: 1px 0; }
-        .pihak-table .label { width: 150px; }
-        .isi-pernyataan { text-align: justify; margin-top: 20px; }
-        .penutup { margin-top: 30px; }
-        .ttd-container { margin-top: 40px; width: 100%; }
-        .ttd-box { float: left; width: 50%; text-align: center; }
-        .nama-ttd { margin-top: 60px; font-weight: bold; text-decoration: underline; }
+        /* F4/Folio 210 x 330 mm */
+        @page {
+            size: 210mm 330mm;
+            margin: 1.6cm;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.35;
+        }
+
+        .text-center { text-align: center; }
+        .font-bold { font-weight: bold; }
+        .underline { text-decoration: underline; }
+        p { margin: 0 0 4px 0; }
+
+        .judul {
+            font-size: 14pt;
+            margin-bottom: 12px;
+        }
+
+        .pembuka { margin-bottom: 8px; }
+
+        /* ==== Identitas Pihak ==== */
+        .pihak-table {
+            width: 100%;
+            margin-left: 8px;
+            border-collapse: collapse;
+            margin-bottom: 4px;
+        }
+        .pihak-table td { vertical-align: top; padding: 0; }
+        .pihak-table .nomor { width: 5%; }
+        .pihak-table .label { width: 22%; }
+        .pihak-table .separator { width: 4%; }
+        .pihak-table .value { width: 69%; }
+
+        /* ==== Isi Pernyataan ==== */
+        .subjudul {
+            margin: 8px 0 6px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .isi-pernyataan ol {
+            margin: 0 0 0 18px;
+            padding: 0;
+        }
+        .isi-pernyataan li {
+            margin: 3px 0;
+            text-align: justify;
+        }
+
+        .penutup {
+            margin-top: 10px;
+            text-align: justify;
+            text-indent: 36px;
+        }
+
+        /* ==== Tanda Tangan Pihak ==== */
+        .ttd-table {
+            width: 100%;
+            margin-top: 14px;
+            border-collapse: collapse;
+        }
+        .ttd-table td {
+            width: 50%;
+            text-align: center;
+            vertical-align: top;
+            padding: 0 8px;
+        }
+        .space-ttd { height: 48px; }
+        .nama-ttd {
+            margin-top: 0;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        /* ==== Saksi & Mengetahui ==== */
+        .footer-grid {
+            width: 100%;
+            margin-top: 12px;
+        }
+        .footer-grid td { vertical-align: top; }
+        .saksi-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .saksi-table td { padding: 2px 0; }
+        
+        .avoid-break { page-break-inside: avoid; }
     </style>
 </head>
+
 <body>
-    <div class="judul">SURAT PERNYATAAN</div>
+    @php
+        // Mengambil data pihak dan saksi dari kolom yang sudah terpisah
+        $pihak = $suratPernyataan->pihak_terlibat ?? [];
+        $saksi = $suratPernyataan->saksi_terlibat ?? [];
+    @endphp
+
+    <div class="judul text-center font-bold underline">SURAT PERNYATAAN</div>
 
     <div class="pembuka">
-        <p>Pada hari ini, {{ $suratPernyataan->created_at->translatedFormat('l') }} tanggal {{ $suratPernyataan->created_at->translatedFormat('d F Y') }}, kami yang bertanda tangan di bawah ini:</p>
+        <p>Yang bertanda tangan di bawah ini :</p>
     </div>
 
-    @foreach($suratPernyataan->pihak_terlibat as $index => $pihak)
-    <div class="pihak-title">
-        {{ $index == 0 ? 'PIHAK PERTAMA' : ($index == 1 ? 'PIHAK KEDUA' : ($index == 2 ? 'PIHAK KETIGA' : 'PIHAK KEEMPAT')) }}
-    </div>
-    <table class="pihak-table">
-        <tr><td class="label">Nama</td><td>: {{ $pihak['nama'] }}</td></tr>
-        <tr><td class="label">Tempat/Tgl Lahir</td><td>: {{ $pihak['ttl'] }}</td></tr>
-        <tr><td class="label">Pekerjaan</td><td>: {{ $pihak['pekerjaan'] }}</td></tr>
-        <tr><td class="label">Alamat</td><td>: {{ $pihak['alamat'] }}</td></tr>
-    </table>
+    {{-- Loop untuk menampilkan data PIHAK --}}
+    @foreach ($pihak as $index => $ph)
+        <table class="pihak-table avoid-break">
+            <tr>
+                <td class="nomor">{{ $index + 1 }}.</td>
+                <td class="label">Nama</td>
+                <td class="separator">:</td>
+                <td class="value"><strong>{{ strtoupper($ph['nama']) }}</strong></td>
+            </tr>
+            <tr>
+                <td></td> <td class="label">Umur</td> <td class="separator">:</td>
+                <td class="value">{{ $ph['ttl'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td></td> <td class="label">Pekerjaan</td> <td class="separator">:</td>
+                <td class="value">{{ $ph['pekerjaan'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td></td> <td class="label">Agama</td> <td class="separator">:</td>
+                <td class="value">{{ $ph['agama'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td></td> <td class="label">Alamat</td> <td class="separator">:</td>
+                <td class="value">{{ $ph['alamat'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="3">(Pihak {{ ['Pertama', 'Kedua', 'Ketiga', 'Keempat'][$index] ?? '...' }})</td>
+            </tr>
+        </table>
     @endforeach
 
+    <div class="subjudul">Dengan ini menyatakan sebagai berikut :</div>
+
     <div class="isi-pernyataan">
-        <p>Dengan ini menyatakan dengan sebenarnya bahwa:</p>
-        <p style="text-indent: 40px;">{{ $suratPernyataan->isi_pernyataan }}</p>
-    </div>
-    
-    <div class="penutup">
-        <p>Demikian Surat Pernyataan Bersama ini kami buat dalam keadaan sadar dan tanpa ada paksaan dari pihak manapun.</p>
+        <p>{{ $suratPernyataan->isi_pernyataan }}</p>
     </div>
 
-    <div class="ttd-container">
-        @foreach($suratPernyataan->pihak_terlibat as $index => $pihak)
-        <div class="ttd-box">
-            <p>{{ $index == 0 ? 'PIHAK PERTAMA' : ($index == 1 ? 'PIHAK KEDUA' : ($index == 2 ? 'PIHAK KETIGA' : 'PIHAK KEEMPAT')) }},</p>
-            <p class="nama-ttd">{{ $pihak['nama'] }}</p>
-        </div>
-        @endforeach
+    <div class="penutup">
+        <p>Demikian surat pernyataan kami buat dengan sebenarnya tanpa ada paksaan dari pihak manapun juga melainkan
+            dari diri sendiri dan apabila Saya (Pihak Pertama) melanggar pernyataan ini maka Saya siap diproses sesuai
+            hukum yang berlaku.</p>
     </div>
+
+    <p class="text-center" style="margin-top: 10px;">
+        {{ $suratPernyataan->tempat_dibuat }}, {{ $suratPernyataan->created_at->translatedFormat('d F Y') }}
+    </p>
+    <p class="text-center">Yang membuat pernyataan</p>
+    @php $pihak = array_slice($pihak, 0, 2); @endphp
+
+
+    {{-- TTD untuk PIHAK --}}
+    <table class="ttd-table avoid-break">
+        <tr>
+            @foreach($pihak as $index => $p)
+                @if($index < 2)
+                <td>
+                    <p>Pihak {{ ['Pertama', 'Kedua'][$index] }}</p>
+                    <div class="space-ttd"></div>
+                    <p class="nama-ttd">{{ strtoupper($p['nama']) }}</p>
+                </td>
+                @endif
+            @endforeach
+        </tr>
+         @if(count($pihak) > 2)
+        <tr>
+             @foreach($pihak as $index => $p)
+                @if($index >= 2)
+                <td>
+                    <p>Pihak {{ ['Ketiga', 'Keempat'][$index-2] }}</p>
+                    <div class="space-ttd"></div>
+                    <p class="nama-ttd">{{ strtoupper($p['nama']) }}</p>
+                </td>
+                @endif
+            @endforeach
+            @if(count($pihak) == 3)
+                <td></td>
+            @endif
+        </tr>
+        @endif
+    </table>
+    
+    <br>
+
+    {{-- Bagian bawah: SAKSI (kiri) & MENGETAHUI (kanan) --}}
+    <table class="footer-grid avoid-break">
+        <tr>
+            <td style="width:55%;">
+                <p style="margin-bottom:2px;">SAKSI-SAKSI :</p>
+                <table class="saksi-table">
+                    @if (!empty($saksi))
+                        @foreach ($saksi as $i => $s)
+                            <tr>
+                                <td style="width:22px;">{{ $i + 1 }}.</td>
+                                <td>
+                                    <div class="nama-ttd" style="text-decoration:none; font-weight:normal;">
+                                        {{ strtoupper($s['nama'] ?? '') }}:
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td style="width:22px;">1.</td>
+                            <td>
+                                <div class="nama-ttd" style="text-decoration:none; font-weight:normal;">
+                                    ..........................:
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>
+                                <div class="nama-ttd" style="text-decoration:none; font-weight:normal;">
+                                    ..........................:
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                </table>
+            </td>
+            <td style="width:45%; text-align:center;">
+                <p>Mengetahui</p>
+                <p>KA SPKT</p>
+                <div class="space-ttd"></div>
+                <p class="nama-ttd">DONI FERI SETIAWAN SH</p>
+            </td>
+        </tr>
+    </table>
 
 </body>
+
 </html>
 
 ===== resources\views\reskrim\tugas\index.blade.php =====
