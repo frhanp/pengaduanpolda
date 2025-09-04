@@ -281,7 +281,7 @@
                             <td style="width:22px;">1.</td>
                             <td>
                                 <div class="nama-ttd" style="text-decoration:none; font-weight:normal;">
-                                    (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+                                    ...........:
                                 </div>
                             </td>
                         </tr>
@@ -289,7 +289,7 @@
                             <td>2.</td>
                             <td>
                                 <div class="nama-ttd" style="text-decoration:none; font-weight:normal;">
-                                    (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+                                    ...........:
                                 </div>
                             </td>
                         </tr>
